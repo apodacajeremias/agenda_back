@@ -14,28 +14,24 @@ import py.podac.tech.agenda.security.token.TokenRepository;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-  private final TokenRepository tokenRepository;
+	private final TokenRepository tokenRepository;
 
-  @Override
-  public void logout(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Authentication authentication
-  ) {
-    final String authHeader = request.getHeader("Authorization");
-    final String jwt;
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-      return;
-    }
-    jwt = authHeader.substring(7);
-    var storedToken = tokenRepository.findByToken(jwt)
-        .orElse(null);
-    System.err.println("Logout de -> " + storedToken.token);
-    if (storedToken != null) {
-      storedToken.setExpired(true);
-      storedToken.setRevoked(true);
-      tokenRepository.save(storedToken);
-      SecurityContextHolder.clearContext();
-    }
-  }
+	@Override
+	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+		final String authHeader = request.getHeader("Authorization");
+		final String jwt;
+		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+			return;
+		}
+		jwt = authHeader.substring(7);
+		var storedToken = tokenRepository.findByToken(jwt).orElse(null);
+
+		if (storedToken != null) {
+			storedToken.setExpired(true);
+			storedToken.setRevoked(true);
+			tokenRepository.save(storedToken);
+			SecurityContextHolder.clearContext();
+			System.err.println("Logout de -> " + storedToken.token);
+		}
+	}
 }

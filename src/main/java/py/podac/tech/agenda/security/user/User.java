@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,6 +21,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,7 +29,9 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import py.podac.tech.agenda.model.entities.Persona;
+import py.podac.tech.agenda.security.token.Token;
 
 @Data
 @Builder
@@ -55,10 +59,12 @@ public class User implements UserDetails {
 	@OneToOne
 	@JoinColumn
 	@JsonBackReference
+	@ToString.Exclude
 	private Persona persona;
 
-//	@OneToMany(mappedBy = "user")
-//	private List<Token> tokens;
+	@OneToMany(mappedBy = "user")
+	@JsonManagedReference
+	private List<Token> tokens;
 
 	@Override
 	@JsonIgnore

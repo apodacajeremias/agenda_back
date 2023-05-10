@@ -2,6 +2,8 @@ package py.podac.tech.agenda.security.token;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,6 +19,7 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import py.podac.tech.agenda.security.user.User;
 
 @Data
@@ -27,7 +30,8 @@ import py.podac.tech.agenda.security.user.User;
 @Table
 public class Token {
 
-	@Id @GeneratedValue(strategy = GenerationType.UUID)
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID ID;
 
 	@Column(unique = true)
@@ -43,5 +47,7 @@ public class Token {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
+	@JsonBackReference
+	@ToString.Exclude
 	public User user;
 }

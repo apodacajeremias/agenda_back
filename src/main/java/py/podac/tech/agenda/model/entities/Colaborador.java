@@ -18,31 +18,30 @@ import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.model.ModelCustom;
 import py.podac.tech.agenda.security.user.User;
 
-@Data @SuperBuilder
+@Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@Entity @Table
+@Entity
+@Table
 @DynamicUpdate
 public class Colaborador extends ModelCustom<User> {
-	
+
 	@Column(nullable = false, unique = true)
 	private String registroContribuyente;
-	
+
 	@Column
 	private String registroProfesional;
-	
+
 	@Column
 	private String profesion;
-	
-	@OneToOne @JoinColumn
+
+	@OneToOne
+	@JoinColumn
 	@JsonBackReference
+	@ToString.Exclude
 	private Persona persona;
-	
-	
 
-	
-
-		
 }

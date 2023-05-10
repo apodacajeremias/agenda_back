@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
@@ -74,7 +75,7 @@ public class Persona extends ModelCustom<User> {
 	@JsonManagedReference
 	private Colaborador colaborador;
 
-	@OneToOne(mappedBy = "persona")
+	@OneToOne(mappedBy = "persona", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private User user;
 

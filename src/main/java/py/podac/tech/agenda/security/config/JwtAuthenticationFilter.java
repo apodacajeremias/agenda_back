@@ -48,6 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 						null, userDetails.getAuthorities());
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authToken);
+			} else {
+				System.err.println("TOKEN NO VALIDO");
+				return;
 			}
 		}
 		filterChain.doFilter(request, response);

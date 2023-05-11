@@ -6,11 +6,10 @@ import java.time.Period;
 public class Edad {
 
 	private Edad() {
-
 	}
 
 	public static int calcular(LocalDate fechaNacimiento) {
-		return Period.between(fechaNacimiento, LocalDate.now()).getYears();
+		return (fechaNacimiento == null) ? 0 : Period.between(fechaNacimiento, LocalDate.now()).getYears();
 	}
 
 }

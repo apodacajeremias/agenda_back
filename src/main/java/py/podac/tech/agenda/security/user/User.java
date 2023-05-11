@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -39,6 +41,7 @@ import py.podac.tech.agenda.security.token.Token;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
+@DynamicInsert
 @DynamicUpdate
 public class User implements UserDetails {
 
@@ -47,7 +50,6 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID ID;
 	private String email;
-	@JsonIgnore
 	private String password;
 	private boolean changePassword;
 	private LocalDate lastPasswordChange;
@@ -56,14 +58,15 @@ public class User implements UserDetails {
 	@Default
 	private Role role = Role.USER;
 
-	@OneToOne
-	@JoinColumn
-	@JsonBackReference
-	@ToString.Exclude
-	private Persona persona;
+//	@OneToOne(mappedBy = "user", cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+//	@JoinColumn
+//	@JsonBackReference
+//	@ToString.Exclude
+//	private Persona persona;
 
 	@OneToMany(mappedBy = "user")
 	@JsonManagedReference
+	@ToString.Exclude
 	private List<Token> tokens;
 
 	@Override

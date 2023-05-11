@@ -36,44 +36,49 @@ public class PersonaController {
 
 	@PostMapping
 	private ResponseEntity<Persona> guardar(@RequestBody Persona guardar) {
-		System.err.println("Guardando Persona: " + guardar.toString());
+		System.out.println("Guardando Persona: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
 	private ResponseEntity<List<Persona>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
 		if (activo == null) {
-			System.err.println("Buscando Persona: Todos");
+			System.out.println("Buscando Persona: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
 		} else if (activo) {
-			System.err.println("Buscando Persona: Solo activos");
+			System.out.println("Buscando Persona: Solo activos");
 			return ResponseEntity.ok(service.buscarActivos());
 		} else if (!activo) {
-			System.err.println("Buscando Persona: Solo inactivos");
+			System.out.println("Buscando Persona: Solo inactivos");
 			return ResponseEntity.ok(service.buscarInactivos());
 		} else {
-			System.err.println("Buscando Persona: Todos");
+			System.out.println("Buscando Persona: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
 		}
 	}
 
+	// TODO: VERIFICAR SI USUARIO Y COLABORADOR ESTAN NULOS PARA PODER FUNDIR
+	// CORRECTAMENTE
 	@PutMapping("/{ID}")
 	private ResponseEntity<Persona> actualizar(@PathVariable UUID ID, @RequestBody Persona actualizar) {
-		System.err.println("Actualizando Persona: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
-		Persona existente = service.buscar(actualizar.getID());
+		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar);
+		Persona existente = service.buscar(ID);
+		System.err.println("La informacion existente es -> \n" + existente);
+		System.err.println("La informacion que vamos actualizar es -> \n" + actualizar);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
+		System.err.println("La variable que mandamos actualizar es -> \n" + existente);
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{ID}")
 	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.err.println("Eliminando Persona: " + ID);
+		System.out.println("Eliminando Persona: " + ID);
 		return ResponseEntity.ok(service.eliminar(ID));
 	}
 
 	@GetMapping("/{ID}")
 	private ResponseEntity<Persona> buscar(@PathVariable UUID ID) {
-		System.err.println("Buscando Persona: " + ID);
+		System.out.println("Buscando Persona: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}
 }

@@ -17,11 +17,12 @@ public class AuthenticationResponse {
 
 	private User user;
 
-	private Persona persona;
-
-	public Persona getPersona() {
-		user.getPersona().setUser(null);
-		this.persona = user.getPersona();
-		return persona;
-	}
+	// TODO: DEVOLVER AL FRONT SOLAMENTE LA PERSONA
+//	private Persona persona;
+//
+//	public Persona getPersona() {
+//		user.getPersona().setUser(null);
+//		this.persona = user.getPersona();
+//		return persona;
+//	}
 }

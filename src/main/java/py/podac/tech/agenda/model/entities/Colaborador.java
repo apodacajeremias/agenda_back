@@ -1,9 +1,11 @@
 package py.podac.tech.agenda.model.entities;
 
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -26,6 +28,7 @@ import py.podac.tech.agenda.security.user.User;
 @ToString(callSuper = true)
 @Entity
 @Table
+@DynamicInsert
 @DynamicUpdate
 public class Colaborador extends ModelCustom<User> {
 
@@ -38,10 +41,10 @@ public class Colaborador extends ModelCustom<User> {
 	@Column
 	private String profesion;
 
-	@OneToOne
-	@JoinColumn
-	@JsonBackReference
-	@ToString.Exclude
-	private Persona persona;
+//	@OneToOne(mappedBy = "colaborador", cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+//	@JoinColumn
+//	@JsonBackReference
+//	@ToString.Exclude
+//	private Persona persona;
 
 }

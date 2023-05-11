@@ -35,19 +35,19 @@ public class UserController {
 
 	@PostMapping
 	private ResponseEntity<User> guardar(@RequestBody User guardar) {
-		System.err.println("Guardando User: " + guardar.toString());
+		System.out.println("Guardando User: " + guardar.toString());
 		return ResponseEntity.ok(repo.save(guardar));
 	}
 
 	@GetMapping
 	private ResponseEntity<List<User>> buscarActivos() {
-		System.err.println("Buscando User: 	Todos");
+		System.out.println("Buscando User: 	Todos");
 		return ResponseEntity.ok(repo.findAll());
 	}
 
 	@PutMapping("/{ID}")
 	private ResponseEntity<User> actualizar(@PathVariable UUID ID, @RequestBody User actualizar) {
-		System.err.println("Actualizando User: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
+		System.out.println("Actualizando User: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
 		User existente = repo.findById(actualizar.getID()).orElseThrow();
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(repo.save(existente)); // Hibernate solo cambia datos modificados
@@ -55,14 +55,14 @@ public class UserController {
 
 	@DeleteMapping("/{ID}")
 	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.err.println("Eliminando User: " + ID);
+		System.out.println("Eliminando User: " + ID);
 		repo.deleteById(ID);
 		return ResponseEntity.ok(Boolean.TRUE);
 	}
 
 	@GetMapping("/{ID}")
 	private ResponseEntity<User> buscar(@PathVariable UUID ID) {
-		System.err.println("Buscando User: " + ID);
+		System.out.println("Buscando User: " + ID);
 		return ResponseEntity.ok(repo.findById(ID).orElseThrow());
 	}
 }

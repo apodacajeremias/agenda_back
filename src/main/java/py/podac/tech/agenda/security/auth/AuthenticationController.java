@@ -21,22 +21,22 @@ public class AuthenticationController {
 	
 	@PostMapping
 	public ResponseEntity<AuthenticationResponse> verificar(@RequestBody Token token){
-		System.err.println("Verificando -> "+ token.getToken());
-		System.err.println(token);
+		System.out.println("Verificando -> "+ token.getToken());
+		System.out.println(token);
 		
 		return ResponseEntity.ok(service.verify(token.getToken()));
 	}
 
 	@PostMapping("/register")
 	public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-		System.err.println("Registrando -> " + request);
+		System.out.println("Registrando -> " + request);
 		return ResponseEntity.ok(service.register(request));
 	}
 
 	@PostMapping(value = "/authenticate", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-		System.err.println("Autenticando -> " + request);
+		System.out.println("Autenticando -> " + request);
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 

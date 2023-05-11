@@ -2,6 +2,7 @@ package py.podac.tech.agenda.model.entities;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -32,6 +33,7 @@ import py.podac.tech.agenda.security.user.User;
 @ToString(callSuper = true)
 @Entity
 @Table
+@DynamicInsert
 @DynamicUpdate
 public class Persona extends ModelCustom<User> {
 
@@ -71,12 +73,12 @@ public class Persona extends ModelCustom<User> {
 
 	// La entidad Persona mapea en Colaborador
 	// a traves del campo 'persona'
-	@OneToOne(mappedBy = "persona")
-	@JsonManagedReference
+	@OneToOne(cascade = CascadeType.ALL)
+//	@JsonManagedReference
 	private Colaborador colaborador;
 
-	@OneToOne(mappedBy = "persona", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@OneToOne()
+//	@JsonManagedReference
 	private User user;
 
 	public int getEdad() {

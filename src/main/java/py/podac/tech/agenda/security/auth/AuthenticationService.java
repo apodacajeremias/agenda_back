@@ -32,7 +32,7 @@ public class AuthenticationService {
 		var savedUser = repository.save(user);
 		var jwtToken = jwtService.generateToken(user);
 		saveUserToken(savedUser, jwtToken);
-		System.err.println("Registro exitoso -> " + request);
+		System.out.println("Registro exitoso -> " + request);
 		return AuthenticationResponse.builder().token(jwtToken).user(user).build();
 	}
 
@@ -43,7 +43,7 @@ public class AuthenticationService {
 		var jwtToken = jwtService.generateToken(user);
 		revokeAllUserTokens(user);
 		saveUserToken(user, jwtToken);
-		System.err.println("Autenticacion exitosa -> " + request);
+		System.out.println("Autenticacion exitosa -> " + request);
 		return AuthenticationResponse.builder().token(jwtToken).user(user).build();
 	}
 

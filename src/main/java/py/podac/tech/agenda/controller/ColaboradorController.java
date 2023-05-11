@@ -36,27 +36,27 @@ public class ColaboradorController {
 
 	@PostMapping
 	private ResponseEntity<Colaborador> guardar(@RequestBody Colaborador guardar) {
-		System.err.println("Guardando Colaborador: " + guardar.toString());
+		System.out.println("Guardando Colaborador: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
 	private ResponseEntity<List<Colaborador>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
 		if (activo) {
-			System.err.println("Buscando Colaborador: Solo activos");
+			System.out.println("Buscando Colaborador: Solo activos");
 			return ResponseEntity.ok(service.buscarActivos());
 		} else if (!activo) {
-			System.err.println("Buscando Colaborador: Solo inactivos");
+			System.out.println("Buscando Colaborador: Solo inactivos");
 			return ResponseEntity.ok(service.buscarInactivos());
 		} else {
-			System.err.println("Buscando Colaborador: Todos");
+			System.out.println("Buscando Colaborador: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
 		}
 	}
 
 	@PutMapping("/{ID}")
 	private ResponseEntity<Colaborador> actualizar(@PathVariable UUID ID, @RequestBody Colaborador actualizar) {
-		System.err.println("Actualizando Colaborador: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
+		System.out.println("Actualizando Colaborador: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
 		Colaborador existente = service.buscar(actualizar.getID());
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
@@ -64,13 +64,13 @@ public class ColaboradorController {
 
 	@DeleteMapping("/{ID}")
 	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.err.println("Eliminando Colaborador: " + ID);
+		System.out.println("Eliminando Colaborador: " + ID);
 		return ResponseEntity.ok(service.eliminar(ID));
 	}
 
 	@GetMapping("/{ID}")
 	private ResponseEntity<Colaborador> buscar(@PathVariable UUID ID) {
-		System.err.println("Buscando Colaborador: " + ID);
+		System.out.println("Buscando Colaborador: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}
 }

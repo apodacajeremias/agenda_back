@@ -31,7 +31,7 @@ public class LogoutService implements LogoutHandler {
 			storedToken.setRevoked(true);
 			tokenRepository.save(storedToken);
 			SecurityContextHolder.clearContext();
-			System.err.println("Logout de -> " + storedToken.token);
+			System.out.println("Logout de -> " + storedToken.token);
 		}
 	}
 }

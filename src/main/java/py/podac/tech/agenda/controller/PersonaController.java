@@ -34,6 +34,8 @@ public class PersonaController {
 //	DELETE 	/orders/{id} (delete an order)
 //	GET 	/orders/{id} (get a single order)
 
+	// TODO: Recibir Persona, verificar si tiene un usuario anexado para encriptar
+	// contrasena
 	@PostMapping
 	private ResponseEntity<Persona> guardar(@RequestBody Persona guardar) {
 		System.out.println("Guardando Persona: " + guardar.toString());
@@ -41,7 +43,8 @@ public class PersonaController {
 	}
 
 	@GetMapping
-	private ResponseEntity<List<Persona>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
+	private ResponseEntity<List<Persona>> buscarPorEstado(
+			@RequestParam(required = false, defaultValue = "true") Boolean activo) {
 		if (activo == null) {
 			System.out.println("Buscando Persona: Todos");
 			return ResponseEntity.ok(service.buscarTodos());

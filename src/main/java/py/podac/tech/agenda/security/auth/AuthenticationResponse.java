@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import py.podac.tech.agenda.security.user.User;
+import py.podac.tech.agenda.model.entities.Persona;
 
 @Data
 @Builder
@@ -14,7 +14,7 @@ public class AuthenticationResponse {
 
 	private String token;
 
-	private User user;
+	private Persona persona;
 
 	// TODO: DEVOLVER AL FRONT SOLAMENTE LA PERSONA
 //	private Persona persona;

@@ -26,9 +26,13 @@ public class AuthenticationService {
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
 
+	// TODO: Adaptar metodo para que reciba una Persona
 	public AuthenticationResponse register(RegisterRequest request) {
+		// Se construye el usuario
 		var user = User.builder().changePassword(false).email(request.getEmail())
 				.password(passwordEncoder.encode(request.getPassword())).role(Role.USER).build();
+		// En vez de salvar solo el usuario, salvar toda la persona asociada pero con
+		// password encriptada
 		var savedUser = repository.save(user);
 		var jwtToken = jwtService.generateToken(user);
 		saveUserToken(savedUser, jwtToken);

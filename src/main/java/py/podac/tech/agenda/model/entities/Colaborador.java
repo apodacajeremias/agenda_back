@@ -35,11 +35,4 @@ public class Colaborador extends ModelCustom<User> {
 
 	@Column
 	private String profesion;
-
-//	@OneToOne(mappedBy = "colaborador", cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
-//	@JoinColumn
-//	@JsonBackReference
-//	@ToString.Exclude
-//	private Persona persona;
-
 }

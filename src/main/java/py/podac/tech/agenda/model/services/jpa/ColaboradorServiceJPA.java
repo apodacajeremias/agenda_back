@@ -70,7 +70,7 @@ public class ColaboradorServiceJPA implements IColaboradorService {
 
 	@Override
 	public Colaborador buscarUltimo() {
-		return this.repo.findTopByOrderByFechaCreacionDesc();
+		return this.repo.findTopByOrderByFechaCreacionDesc().orElseThrow();
 	}
 
 }

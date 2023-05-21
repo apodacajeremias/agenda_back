@@ -15,13 +15,4 @@ public class AuthenticationResponse {
 	private String token;
 
 	private Persona persona;
-
-	// TODO: DEVOLVER AL FRONT SOLAMENTE LA PERSONA
-//	private Persona persona;
-//
-//	public Persona getPersona() {
-//		user.getPersona().setUser(null);
-//		this.persona = user.getPersona();
-//		return persona;
-//	}
 }

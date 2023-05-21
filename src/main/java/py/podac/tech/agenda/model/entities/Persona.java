@@ -69,14 +69,10 @@ public class Persona extends ModelCustom<User> {
 	@Column
 	private String fotoPerfil;
 
-	// La entidad Persona mapea en Colaborador
-	// a traves del campo 'persona'
 	@OneToOne(cascade = CascadeType.ALL)
-//	@JsonManagedReference
 	private Colaborador colaborador;
 
-	@OneToOne()
-//	@JsonManagedReference
+	@OneToOne(cascade = CascadeType.ALL)
 	private User user;
 
 	public int getEdad() {

@@ -72,7 +72,12 @@ public class PersonaServiceJPA implements IPersonaService {
 
 	@Override
 	public Persona buscarUltimo() {
-		return this.repo.findTopByOrderByFechaCreacionDesc();
+		return this.repo.findTopByOrderByFechaCreacionDesc().orElseThrow();
+	}
+
+	@Override
+	public Persona buscarPorEmailDeUsuario(String email) {
+		return this.repo.findByUserEmail(email).orElseThrow();
 	}
 
 }

@@ -15,11 +15,15 @@ public class AuditorAwareImpl implements AuditorAware<User> {
 	@Override
 	public Optional<User> getCurrentAuditor() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		final User USUARIO = (User) auth.getPrincipal();
-		if (auth == null || !auth.isAuthenticated() || USUARIO == null) {
-			return null;
+		System.out.println(auth.getPrincipal());
+		if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+			return Optional.empty();
 		}
-		return Optional.ofNullable(USUARIO);
+		final User USUARIO = (User) auth.getPrincipal();
+		if (USUARIO == null) {
+			return Optional.empty();
+		}
+		return Optional.of(USUARIO);
 	}
 
 }

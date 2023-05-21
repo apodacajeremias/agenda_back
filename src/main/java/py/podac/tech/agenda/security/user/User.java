@@ -44,20 +44,18 @@ public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID ID;
+
 	private String email;
+
 	private String password;
+
 	private boolean changePassword;
+
 	private LocalDate lastPasswordChange;
 
 	@Enumerated(EnumType.STRING)
 	@Default
-	private Role role = Role.USER;
-
-//	@OneToOne(mappedBy = "user", cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
-//	@JoinColumn
-//	@JsonBackReference
-//	@ToString.Exclude
-//	private Persona persona;
+	private Role role = Role.USUARIO;
 
 	@OneToMany(mappedBy = "user")
 	@JsonManagedReference

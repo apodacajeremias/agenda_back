@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import py.podac.tech.agenda.controller.utils.Beans;
+import py.podac.tech.agenda.model.services.interfaces.IUserService;
 import py.podac.tech.agenda.security.user.User;
-import py.podac.tech.agenda.security.user.UserRepository;
 
 @RestController
 @RequestMapping("/users")
@@ -25,7 +25,7 @@ import py.podac.tech.agenda.security.user.UserRepository;
 public class UserController {
 
 	@Autowired
-	UserRepository repo;
+	IUserService service;
 
 //	POST 	/orders (post/add a new order in the set of orders)
 //	GET 	/orders (get a list of orders)
@@ -35,34 +35,33 @@ public class UserController {
 
 	@PostMapping
 	private ResponseEntity<User> guardar(@RequestBody User guardar) {
-		System.out.println("Guardando User: " + guardar.toString());
-		return ResponseEntity.ok(repo.save(guardar));
+		System.out.println("Guardando Usuario: " + guardar.toString());
+		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
 	private ResponseEntity<List<User>> buscarActivos() {
-		System.out.println("Buscando User: 	Todos");
-		return ResponseEntity.ok(repo.findAll());
+		System.out.println("Buscando Usuarios: 	Todos");
+		return ResponseEntity.ok(service.buscarActivos());
 	}
 
 	@PutMapping("/{ID}")
 	private ResponseEntity<User> actualizar(@PathVariable UUID ID, @RequestBody User actualizar) {
-		System.out.println("Actualizando User: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
-		User existente = repo.findById(actualizar.getID()).orElseThrow();
+		System.out.println("Actualizando Usuario: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
+		User existente = service.buscar(actualizar.getID());
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(repo.save(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{ID}")
 	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.out.println("Eliminando User: " + ID);
-		repo.deleteById(ID);
-		return ResponseEntity.ok(Boolean.TRUE);
+		System.out.println("Eliminando Usuario: " + ID);
+		return ResponseEntity.ok(service.eliminar(ID));
 	}
 
 	@GetMapping("/{ID}")
 	private ResponseEntity<User> buscar(@PathVariable UUID ID) {
-		System.out.println("Buscando User: " + ID);
-		return ResponseEntity.ok(repo.findById(ID).orElseThrow());
+		System.out.println("Buscando Usuario: " + ID);
+		return ResponseEntity.ok(service.buscar(ID));
 	}
 }

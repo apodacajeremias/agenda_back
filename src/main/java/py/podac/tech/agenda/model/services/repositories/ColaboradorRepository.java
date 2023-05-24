@@ -10,4 +10,6 @@ import py.podac.tech.agenda.model.services.RepositoryCustom;
 
 @Repository
 public interface ColaboradorRepository extends JpaRepository<Colaborador, UUID>, RepositoryCustom<Colaborador> {
+	boolean existsByRegistroContribuyente(String registroProfesional);
+	boolean existsByRegistroProfesional(String registroProfesional);
 }

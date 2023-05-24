@@ -66,10 +66,7 @@ public class PersonaController {
 	private ResponseEntity<Persona> actualizar(@PathVariable UUID ID, @RequestBody Persona actualizar) {
 		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar);
 		Persona existente = service.buscar(ID);
-		System.err.println("La informacion existente es -> \n" + existente);
-		System.err.println("La informacion que vamos actualizar es -> \n" + actualizar);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		System.err.println("La variable que mandamos actualizar es -> \n" + existente);
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 

@@ -22,12 +22,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import py.podac.tech.agenda.model.interfaces.PasswordMatches;
+import py.podac.tech.agenda.model.interfaces.ValidEmail;
 import py.podac.tech.agenda.security.token.Token;
 
 @Data
@@ -38,6 +42,7 @@ import py.podac.tech.agenda.security.token.Token;
 @Table(name = "_user")
 @DynamicInsert
 @DynamicUpdate
+@PasswordMatches
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -45,11 +50,22 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID ID;
 
+	@NotNull
+	@NotEmpty
+	@ValidEmail
 	private String email;
 
+	@NotNull
+	@NotEmpty
 	private String password;
 
+	@NotNull
+	@NotEmpty
+	private String matchingPassword;
+
 	private boolean changePassword;
+
+	private boolean enabled;
 
 	private LocalDate lastPasswordChange;
 
@@ -61,6 +77,11 @@ public class User implements UserDetails {
 	@JsonManagedReference
 	@ToString.Exclude
 	private List<Token> tokens;
+
+	public User(UUID iD) {
+		super();
+		ID = iD;
+	}
 
 	@Override
 	@JsonIgnore
@@ -95,7 +116,7 @@ public class User implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
 	}
 
 }

@@ -1,6 +1,7 @@
 package py.podac.tech.agenda.model.entities;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -13,7 +14,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -21,6 +25,8 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.controller.utils.Edad;
 import py.podac.tech.agenda.model.ModelCustom;
+import py.podac.tech.agenda.model.enums.Genero;
+import py.podac.tech.agenda.model.interfaces.ValidEmail;
 import py.podac.tech.agenda.security.user.User;
 
 @Data
@@ -35,9 +41,13 @@ import py.podac.tech.agenda.security.user.User;
 @DynamicUpdate
 public class Persona extends ModelCustom<User> {
 
+	@NotNull
+	@NotEmpty
 	@Column(nullable = false)
 	private String nombre;
 
+	@NotNull
+	@NotEmpty
 	@Column(nullable = false)
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate fechaNacimiento;
@@ -45,9 +55,14 @@ public class Persona extends ModelCustom<User> {
 	@Transient
 	private int edad;
 
+	@NotNull
+	@NotEmpty
 	@Column(nullable = false)
-	private String genero;
+	@Default
+	private Genero genero = Genero.OTRO;
 
+	@NotNull
+	@NotEmpty
 	@Column(nullable = false, unique = true)
 	private String documentoIdentidad;
 
@@ -58,6 +73,7 @@ public class Persona extends ModelCustom<User> {
 	private String celular;
 
 	@Column
+	@ValidEmail
 	private String correo;
 
 	@Column
@@ -74,6 +90,10 @@ public class Persona extends ModelCustom<User> {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private User user;
+
+	public Persona(UUID ID) {
+		super(ID);
+	}
 
 	public int getEdad() {
 		return Edad.calcular(fechaNacimiento);

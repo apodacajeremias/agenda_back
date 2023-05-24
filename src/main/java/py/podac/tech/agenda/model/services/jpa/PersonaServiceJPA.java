@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import py.podac.tech.agenda.model.entities.Colaborador;
 import py.podac.tech.agenda.model.entities.Persona;
+import py.podac.tech.agenda.model.services.interfaces.IColaboradorService;
 import py.podac.tech.agenda.model.services.interfaces.IPersonaService;
+import py.podac.tech.agenda.model.services.interfaces.IUserService;
 import py.podac.tech.agenda.model.services.repositories.PersonaRepository;
+import py.podac.tech.agenda.security.user.User;
 
 @Service
 @Primary
@@ -20,8 +23,27 @@ public class PersonaServiceJPA implements IPersonaService {
 	@Autowired
 	private PersonaRepository repo;
 
+	@Autowired
+	IColaboradorService colaboradorService;
+
+	@Autowired
+	IUserService userService;
+
 	@Override
-	@Transactional()
+	public Persona registrar(Persona registrar) throws Exception {
+		if (registrar.getColaborador() != null) {
+			var colaboradorGuardado = colaboradorService.registrar(registrar.getColaborador());
+			registrar.setColaborador(new Colaborador(colaboradorGuardado.getID()));
+		}
+		if (registrar.getUser() != null) {
+			var usuarioGuardado = userService.registrar(registrar.getUser());
+			registrar.setUser(new User(usuarioGuardado.getID()));
+
+		}
+		return guardar(registrar);
+	}
+
+	@Override
 	public Persona guardar(Persona guardar) {
 		return this.repo.save(guardar);
 	}
@@ -67,7 +89,7 @@ public class PersonaServiceJPA implements IPersonaService {
 
 	@Override
 	public Persona buscar(UUID ID) {
-		return this.repo.findById(ID).orElse(null);
+		return this.repo.findById(ID).orElseThrow();
 	}
 
 	@Override

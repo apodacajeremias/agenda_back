@@ -66,6 +66,10 @@ public abstract class ModelCustom<T> {
 	@ReadOnlyProperty
 	private LocalDateTime fechaModificacion;
 
+	public ModelCustom(UUID ID) {
+		this.ID = ID;
+	}
+
 	public UUID getID() {
 		return ID;
 	}

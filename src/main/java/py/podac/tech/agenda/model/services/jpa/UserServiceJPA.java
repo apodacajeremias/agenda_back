@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import py.podac.tech.agenda.model.exceptions.UserAlreadyExistException;
@@ -27,15 +26,13 @@ public class UserServiceJPA implements IUserService {
 	@Autowired
 	private VerificationTokenRepository tokenRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
 	@Override
 	public User registrar(User user) throws Exception {
 		if (existeEmail(user.getEmail())) {
 			throw new UserAlreadyExistException("Ya existe una cuenta con ese correo:" + user.getEmail());
 		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		// LLAMAR AL ENCODER ACA GENERA REDUNDANCIA EN EL CONTEXTO DE SPRING
+//		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return guardar(user);
 	}
 
@@ -75,12 +72,12 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public List<User> buscarActivos() {
-		return this.repo.findByActivoIsTrue();
+		return this.repo.findByEnabledIsTrue();
 	}
 
 	@Override
 	public List<User> buscarInactivos() {
-		return this.repo.findByActivoIsFalse();
+		return this.repo.findByEnabledIsFalse();
 	}
 
 	@Override
@@ -95,7 +92,8 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public User buscarUltimo() {
-		return this.repo.findTopByOrderByFechaCreacionDesc().orElseThrow();
+		System.err.println("FUNCIONA NO IMPLEMENTADA");
+		return null;
 	}
 
 	@Override

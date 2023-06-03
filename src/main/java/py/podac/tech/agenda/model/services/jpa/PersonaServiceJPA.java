@@ -6,19 +6,21 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import py.podac.tech.agenda.model.entities.Colaborador;
 import py.podac.tech.agenda.model.entities.Persona;
 import py.podac.tech.agenda.model.services.interfaces.IColaboradorService;
 import py.podac.tech.agenda.model.services.interfaces.IPersonaService;
 import py.podac.tech.agenda.model.services.interfaces.IUserService;
 import py.podac.tech.agenda.model.services.repositories.PersonaRepository;
-import py.podac.tech.agenda.security.user.User;
 
 @Service
 @Primary
 public class PersonaServiceJPA implements IPersonaService {
+
+//	@Autowired
+//	private Validator validator;
 
 	@Autowired
 	private PersonaRepository repo;
@@ -29,17 +31,25 @@ public class PersonaServiceJPA implements IPersonaService {
 	@Autowired
 	IUserService userService;
 
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	@Override
 	public Persona registrar(Persona registrar) throws Exception {
-		if (registrar.getColaborador() != null) {
-			var colaboradorGuardado = colaboradorService.registrar(registrar.getColaborador());
-			registrar.setColaborador(new Colaborador(colaboradorGuardado.getID()));
-		}
-		if (registrar.getUser() != null) {
-			var usuarioGuardado = userService.registrar(registrar.getUser());
-			registrar.setUser(new User(usuarioGuardado.getID()));
-
-		}
+//		Set<ConstraintViolation<Persona>> violations = validator.validate(registrar);
+//		 Set<ConstraintViolation<Colaborador>> violations = validator.validate(registrar.getColaborador();
+//		 Set<ConstraintViolation<User>> violations = validator.validate(registrar.getUser());
+//		if (registrar.getColaborador() != null) {
+//			var colaboradorGuardado = colaboradorService.registrar(registrar.getColaborador());
+//			registrar.setColaborador(new Colaborador(colaboradorGuardado.getID()));
+//		}
+//		if (registrar.getUser() != null) {
+//			registrar.getUser().setPassword(passwordEncoder.encode(registrar.getUser().getPassword()));
+//			registrar.getUser().setMatchingPassword(passwordEncoder.encode(registrar.getUser().getMatchingPassword()));
+//			var usuarioGuardado = userService.registrar(registrar.getUser());
+//			registrar.setUser(new User(usuarioGuardado.getID()));
+//
+//		}
 		return guardar(registrar);
 	}
 

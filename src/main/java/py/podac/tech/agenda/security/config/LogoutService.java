@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import py.podac.tech.agenda.security.token.TokenRepository;
+import py.podac.tech.agenda.model.services.repositories.TokenRepository;
 
 @Service
 @RequiredArgsConstructor

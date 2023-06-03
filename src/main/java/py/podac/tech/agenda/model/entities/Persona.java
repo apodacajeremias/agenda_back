@@ -46,8 +46,6 @@ public class Persona extends ModelCustom<User> {
 	@Column(nullable = false)
 	private String nombre;
 
-	@NotNull
-	@NotEmpty
 	@Column(nullable = false)
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate fechaNacimiento;
@@ -55,8 +53,6 @@ public class Persona extends ModelCustom<User> {
 	@Transient
 	private int edad;
 
-	@NotNull
-	@NotEmpty
 	@Column(nullable = false)
 	@Default
 	private Genero genero = Genero.OTRO;

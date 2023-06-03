@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -41,6 +42,9 @@ public class Colaborador extends ModelCustom<User> {
 
 	@Column
 	private String profesion;
+	
+	@OneToOne(mappedBy = "colaborador")
+	private Persona persona;
 
 	public Colaborador(UUID ID) {
 		super(ID);

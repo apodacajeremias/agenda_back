@@ -21,7 +21,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import py.podac.tech.agenda.model.entities.Persona;
 import py.podac.tech.agenda.model.interfaces.PasswordMatches;
 import py.podac.tech.agenda.model.interfaces.ValidEmail;
 import py.podac.tech.agenda.security.token.Token;
@@ -61,6 +64,7 @@ public class User implements UserDetails {
 
 	@NotNull
 	@NotEmpty
+	@Transient
 	private String matchingPassword;
 
 	private boolean changePassword;
@@ -72,6 +76,9 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	@Default
 	private Role role = Role.USUARIO;
+
+	@OneToOne(mappedBy = "user")
+	private Persona persona;
 
 	@OneToMany(mappedBy = "user")
 	@JsonManagedReference

@@ -18,9 +18,6 @@ import py.podac.tech.agenda.model.services.repositories.PersonaRepository;
 @Primary
 public class PersonaServiceJPA implements IPersonaService {
 
-//	@Autowired
-//	private Validator validator;
-
 	@Autowired
 	private PersonaRepository repo;
 
@@ -102,10 +99,4 @@ public class PersonaServiceJPA implements IPersonaService {
 	public Persona buscarUltimo() {
 		return this.repo.findTopByOrderByFechaCreacionDesc().orElseThrow();
 	}
-
-	@Override
-	public Persona buscarPorEmailDeUsuario(String email) {
-		return this.repo.findByUserEmail(email).orElseThrow();
-	}
-
 }

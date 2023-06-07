@@ -31,7 +31,7 @@ import py.podac.tech.agenda.security.user.User;
 @DynamicUpdate
 public class Grupo extends ModelCustom<User> {
 
-	@ManyToMany(cascade = CascadeType.ALL) // TODO; QUITAR CASCADE ALL
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	private List<Persona> personas;
 
 	@ManyToOne

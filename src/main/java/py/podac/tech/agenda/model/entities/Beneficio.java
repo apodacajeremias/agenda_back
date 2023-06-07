@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -40,7 +41,7 @@ public class Beneficio extends ModelCustom<User> {
 	@Enumerated(EnumType.STRING)
 	private TipoDescuento tipoDescuento = TipoDescuento.VALOR;
 	private double descuento;
-	@ManyToMany(mappedBy = "beneficios")
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "beneficios")
 	private List<Promocion> promociones;
 
 }

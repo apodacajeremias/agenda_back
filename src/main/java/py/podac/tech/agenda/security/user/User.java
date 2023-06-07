@@ -36,6 +36,7 @@ import lombok.ToString;
 import py.podac.tech.agenda.model.entities.Persona;
 import py.podac.tech.agenda.model.interfaces.PasswordMatches;
 import py.podac.tech.agenda.model.interfaces.ValidEmail;
+import py.podac.tech.agenda.model.interfaces.ValidPassword;
 import py.podac.tech.agenda.security.token.Token;
 
 @Data
@@ -61,11 +62,13 @@ public class User implements UserDetails {
 
 	@NotNull
 	@NotEmpty
+	@ValidPassword
 	private String password;
 
 	@NotNull
 	@NotEmpty
 	@Transient
+	@ValidPassword
 	private String matchingPassword;
 
 	private boolean changePassword;

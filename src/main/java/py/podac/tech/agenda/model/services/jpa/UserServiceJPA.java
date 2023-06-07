@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import py.podac.tech.agenda.model.exceptions.UserAlreadyExistException;
 import py.podac.tech.agenda.model.services.interfaces.IUserService;
 import py.podac.tech.agenda.model.services.repositories.PasswordResetTokenRepository;
@@ -23,6 +24,7 @@ import py.podac.tech.agenda.security.user.reset.PasswordResetToken;
 
 @Service
 @Primary
+@RequiredArgsConstructor
 public class UserServiceJPA implements IUserService {
 
 	@Autowired
@@ -34,8 +36,7 @@ public class UserServiceJPA implements IUserService {
 	@Autowired
 	private PasswordResetTokenRepository passwordTokenRepository;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public User registrar(User user) throws Exception {

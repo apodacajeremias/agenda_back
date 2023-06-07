@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -34,7 +35,7 @@ public class Promocion extends ModelCustom<User> {
 	private LocalDate fin;
 	private double valor;
 	private TipoDescuento tipoDescuento;
-	@ManyToMany(mappedBy = "promociones")
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	private List<Beneficio> beneficios;
 
 }

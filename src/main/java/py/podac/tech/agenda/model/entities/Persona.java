@@ -81,10 +81,10 @@ public class Persona extends ModelCustom<User> {
 	@Column
 	private String fotoPerfil;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Colaborador colaborador;
 
-	@ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "personas")
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH }, mappedBy = "personas")
 	private List<Grupo> grupos;
 
 	public Persona(UUID ID) {

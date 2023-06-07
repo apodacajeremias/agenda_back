@@ -1,5 +1,7 @@
 package py.podac.tech.agenda.model.services.jpa;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,14 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import py.podac.tech.agenda.model.exceptions.UserAlreadyExistException;
 import py.podac.tech.agenda.model.services.interfaces.IUserService;
+import py.podac.tech.agenda.model.services.repositories.PasswordResetTokenRepository;
 import py.podac.tech.agenda.model.services.repositories.UserRepository;
 import py.podac.tech.agenda.model.services.repositories.VerificationTokenRepository;
 import py.podac.tech.agenda.security.user.User;
 import py.podac.tech.agenda.security.user.VerificationToken;
+import py.podac.tech.agenda.security.user.reset.PasswordResetToken;
 
 @Service
 @Primary
@@ -24,7 +29,13 @@ public class UserServiceJPA implements IUserService {
 	private UserRepository repo;
 
 	@Autowired
-	private VerificationTokenRepository tokenRepository;
+	private VerificationTokenRepository verificationTokenRepository;
+
+	@Autowired
+	private PasswordResetTokenRepository passwordTokenRepository;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Override
 	public User registrar(User user) throws Exception {
@@ -98,18 +109,19 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public User buscarPorEmail(String email) {
-		return this.repo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+		return this.repo.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found by email" + email));
 	}
 
 	@Override
 	public User getUser(String verificationToken) {
-		User user = tokenRepository.findByToken(verificationToken).getUser();
+		User user = verificationTokenRepository.findByToken(verificationToken).getUser();
 		return user;
 	}
 
 	@Override
 	public VerificationToken getVerificationToken(String VerificationToken) {
-		return tokenRepository.findByToken(VerificationToken);
+		return verificationTokenRepository.findByToken(VerificationToken);
 	}
 
 	@Override
@@ -120,7 +132,45 @@ public class UserServiceJPA implements IUserService {
 	@Override
 	public void createVerificationToken(User user, String token) {
 		VerificationToken myToken = new VerificationToken(token, user);
-		tokenRepository.save(myToken);
+		verificationTokenRepository.save(myToken);
+	}
+
+	@Override
+	public void createPasswordResetTokenForUser(User user, String token) {
+		PasswordResetToken myToken = new PasswordResetToken(token, user);
+		passwordTokenRepository.save(myToken);
+	}
+
+	@Override
+	public String validatePasswordResetToken(String token) {
+		final PasswordResetToken passToken = passwordTokenRepository.findByToken(token);
+		return !isTokenFound(passToken) ? "auth.message.invalidToken"
+				: isTokenExpired(passToken) ? "auth.message.expired" : null;
+	}
+
+	private boolean isTokenFound(PasswordResetToken passToken) {
+		return passToken != null;
+	}
+
+	private boolean isTokenExpired(PasswordResetToken passToken) {
+		final Calendar cal = Calendar.getInstance();
+		return passToken.getExpiryDate().before(cal.getTime());
+	}
+
+	@Override
+	public User getUserByPasswordResetToken(String token) {
+		return this.passwordTokenRepository.findByToken(token).getUser();
+	}
+
+	@Override
+	public void changeUserPassword(User user, String password) throws Exception {
+		if (user == null || user.getID() == null) {
+			throw new Exception("No se ha encontrado el ID del usuario para realizar el cambio de contrasena");
+		}
+		user.setChangePassword(false);
+		user.setLastPasswordChange(LocalDate.now());
+		user.setPassword(passwordEncoder.encode(password));
+		this.repo.save(user);
 	}
 
 }

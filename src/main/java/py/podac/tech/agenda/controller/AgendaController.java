@@ -17,54 +17,58 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import py.podac.tech.agenda.controller.utils.Beans;
-import py.podac.tech.agenda.model.entities.Colaborador;
-import py.podac.tech.agenda.model.services.interfaces.IColaboradorService;
+import py.podac.tech.agenda.model.entities.Agenda;
+import py.podac.tech.agenda.model.services.interfaces.IAgendaService;
 
 @RestController
-@RequestMapping("/colaboradores")
+@RequestMapping("/agendas")
 @CrossOrigin
-public class ColaboradorController {
+public class AgendaController {
 
 	@Autowired
-	IColaboradorService service;
+	IAgendaService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(@RequestBody Colaborador guardar) {
-		System.out.println("Guardando Colaborador: " + guardar.toString());
+	private ResponseEntity<?> guardar(@RequestBody Agenda guardar) {
+		System.out.println("Guardando Agenda: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
-	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
-		if (activo) {
-			System.out.println("Buscando Colaborador: Solo activos");
+	private ResponseEntity<List<?>> buscarPorEstado(
+			@RequestParam(required = false) Boolean activo) {
+		if (activo == null) {
+			System.out.println("Buscando Agenda: Todos");
+			return ResponseEntity.ok(service.buscarTodos());
+		} else if (activo) {
+			System.out.println("Buscando Agenda: Solo activos");
 			return ResponseEntity.ok(service.buscarActivos());
 		} else if (!activo) {
-			System.out.println("Buscando Colaborador: Solo inactivos");
+			System.out.println("Buscando Agenda: Solo inactivos");
 			return ResponseEntity.ok(service.buscarInactivos());
 		} else {
-			System.out.println("Buscando Colaborador: Todos");
+			System.out.println("Buscando Agenda: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
 		}
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Colaborador actualizar) {
-		System.out.println("Actualizando Colaborador: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
-		Colaborador existente = service.buscar(actualizar.getID());
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Agenda actualizar) {
+		System.out.println("Actualizando Agenda: " + ID + " -> " + actualizar);
+		Agenda existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{ID}")
 	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.out.println("Eliminando Colaborador: " + ID);
+		System.out.println("Eliminando Agenda: " + ID);
 		return ResponseEntity.ok(service.eliminar(ID));
 	}
 
 	@GetMapping("/{ID}")
 	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
-		System.out.println("Buscando Colaborador: " + ID);
+		System.out.println("Buscando Agenda: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}
 }

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -77,7 +78,7 @@ public class User implements UserDetails {
 	@Default
 	private Role role = Role.USUARIO;
 
-	@OneToOne(mappedBy = "user")
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
 	private Persona persona;
 
 	@OneToMany(mappedBy = "user")
@@ -121,9 +122,11 @@ public class User implements UserDetails {
 		return true;
 	}
 
+	// TODO: DEVOLVER LA VARIABLE SOLAMENTE CUANDO SE LOGRE ACTIVAR LA CUENTA A
+	// TRAVES DE CORREO DE MANERA OFICIAL Y 100% FUNCIONAL
 	@Override
 	public boolean isEnabled() {
-		return enabled;
+		return enabled == false ? true : true;
 	}
 
 }

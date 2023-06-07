@@ -43,6 +43,9 @@ public abstract class ModelCustom<T> {
 	@Default
 	private boolean activo = true;
 
+	@Column(nullable = false)
+	private String nombre = "N/A";
+
 	@CreatedBy
 	@ManyToOne
 	@JoinColumn(updatable = false)

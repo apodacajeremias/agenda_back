@@ -27,26 +27,20 @@ public class UserController {
 	@Autowired
 	IUserService service;
 
-//	POST 	/orders (post/add a new order in the set of orders)
-//	GET 	/orders (get a list of orders)
-//	PUT 	/orders/{id} (replace an order)
-//	DELETE 	/orders/{id} (delete an order)
-//	GET 	/orders/{id} (get a single order)
-
 	@PostMapping
-	private ResponseEntity<User> guardar(@RequestBody User guardar) {
+	private ResponseEntity<?> guardar(@RequestBody User guardar) {
 		System.out.println("Guardando Usuario: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
-	private ResponseEntity<List<User>> buscarActivos() {
+	private ResponseEntity<List<?>> buscarActivos() {
 		System.out.println("Buscando Usuarios: 	Todos");
 		return ResponseEntity.ok(service.buscarActivos());
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<User> actualizar(@PathVariable UUID ID, @RequestBody User actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody User actualizar) {
 		System.out.println("Actualizando Usuario: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
 		User existente = service.buscar(actualizar.getID());
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
@@ -60,7 +54,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{ID}")
-	private ResponseEntity<User> buscar(@PathVariable UUID ID) {
+	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
 		System.out.println("Buscando Usuario: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}

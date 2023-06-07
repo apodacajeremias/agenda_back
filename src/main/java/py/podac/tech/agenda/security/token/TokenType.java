@@ -1,5 +1,7 @@
 package py.podac.tech.agenda.security.token;
 
 public enum TokenType {
-  BEARER
+	// TODO: UNIFICIAR VERIFICATIONTOKEN Y PASSWORDRESETTOKEN EN LA ENTIDAD
+	// TOKEN.JAVA
+	BEARER, VERIFICATION, RESET_PASSWORD
 }

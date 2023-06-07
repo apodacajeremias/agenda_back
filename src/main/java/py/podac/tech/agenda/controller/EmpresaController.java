@@ -17,54 +17,58 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import py.podac.tech.agenda.controller.utils.Beans;
-import py.podac.tech.agenda.model.entities.Colaborador;
-import py.podac.tech.agenda.model.services.interfaces.IColaboradorService;
+import py.podac.tech.agenda.model.entities.Empresa;
+import py.podac.tech.agenda.model.services.interfaces.IEmpresaService;
 
 @RestController
-@RequestMapping("/colaboradores")
+@RequestMapping("/empresas")
 @CrossOrigin
-public class ColaboradorController {
+public class EmpresaController {
 
 	@Autowired
-	IColaboradorService service;
+	IEmpresaService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(@RequestBody Colaborador guardar) {
-		System.out.println("Guardando Colaborador: " + guardar.toString());
+	private ResponseEntity<?> guardar(@RequestBody Empresa guardar) {
+		System.out.println("Guardando Empresa: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
-	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
-		if (activo) {
-			System.out.println("Buscando Colaborador: Solo activos");
+	private ResponseEntity<List<?>> buscarPorEstado(
+			@RequestParam(required = false) Boolean activo) {
+		if (activo == null) {
+			System.out.println("Buscando Empresa: Todos");
+			return ResponseEntity.ok(service.buscarTodos());
+		} else if (activo) {
+			System.out.println("Buscando Empresa: Solo activos");
 			return ResponseEntity.ok(service.buscarActivos());
 		} else if (!activo) {
-			System.out.println("Buscando Colaborador: Solo inactivos");
+			System.out.println("Buscando Empresa: Solo inactivos");
 			return ResponseEntity.ok(service.buscarInactivos());
 		} else {
-			System.out.println("Buscando Colaborador: Todos");
+			System.out.println("Buscando Empresa: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
 		}
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Colaborador actualizar) {
-		System.out.println("Actualizando Colaborador: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
-		Colaborador existente = service.buscar(actualizar.getID());
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Empresa actualizar) {
+		System.out.println("Actualizando Empresa: " + ID + " -> " + actualizar);
+		Empresa existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{ID}")
 	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.out.println("Eliminando Colaborador: " + ID);
+		System.out.println("Eliminando Empresa: " + ID);
 		return ResponseEntity.ok(service.eliminar(ID));
 	}
 
 	@GetMapping("/{ID}")
 	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
-		System.out.println("Buscando Colaborador: " + ID);
+		System.out.println("Buscando Empresa: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}
 }

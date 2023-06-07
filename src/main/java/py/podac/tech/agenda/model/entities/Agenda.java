@@ -43,6 +43,8 @@ public class Agenda extends ModelCustom<User> {
 	@Column
 	@DateTimeFormat(iso = ISO.TIME)
 	private LocalTime hora;
+	
+	private String observacion;
 
 	@Column
 	@Enumerated(EnumType.STRING)
@@ -59,5 +61,6 @@ public class Agenda extends ModelCustom<User> {
 
 	@ManyToOne(optional = false)
 	private Persona persona;
+	
 
 }

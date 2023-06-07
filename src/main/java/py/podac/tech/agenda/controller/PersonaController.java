@@ -37,14 +37,14 @@ public class PersonaController {
 	// TODO: Recibir Persona, verificar si tiene un usuario anexado para encriptar
 	// contrasena
 	@PostMapping
-	private ResponseEntity<Persona> guardar(@RequestBody Persona guardar) {
+	private ResponseEntity<?> guardar(@RequestBody Persona guardar) {
 		System.out.println("Guardando Persona: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
-	private ResponseEntity<List<Persona>> buscarPorEstado(
-			@RequestParam(required = false, defaultValue = "true") Boolean activo) {
+	private ResponseEntity<List<?>> buscarPorEstado(
+			@RequestParam(required = false) Boolean activo) {
 		if (activo == null) {
 			System.out.println("Buscando Persona: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
@@ -63,7 +63,7 @@ public class PersonaController {
 	// TODO: VERIFICAR SI USUARIO Y COLABORADOR ESTAN NULOS PARA PODER FUNDIR
 	// CORRECTAMENTE
 	@PutMapping("/{ID}")
-	private ResponseEntity<Persona> actualizar(@PathVariable UUID ID, @RequestBody Persona actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Persona actualizar) {
 		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar);
 		Persona existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
@@ -77,7 +77,7 @@ public class PersonaController {
 	}
 
 	@GetMapping("/{ID}")
-	private ResponseEntity<Persona> buscar(@PathVariable UUID ID) {
+	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
 		System.out.println("Buscando Persona: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}

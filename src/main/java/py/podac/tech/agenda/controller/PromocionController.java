@@ -17,58 +17,63 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import py.podac.tech.agenda.controller.utils.Beans;
-import py.podac.tech.agenda.model.entities.Grupo;
-import py.podac.tech.agenda.model.services.interfaces.IGrupoService;
+import py.podac.tech.agenda.model.entities.Promocion;
+import py.podac.tech.agenda.model.services.interfaces.IPromocionService;
 
 @RestController
-@RequestMapping("/grupos")
+@RequestMapping("/promociones")
 @CrossOrigin
-public class GrupoController {
+public class PromocionController {
 
 	@Autowired
-	IGrupoService service;
+	IPromocionService service;
+
+//	POST 	/orders (post/add a new order in the set of orders)
+//	GET 	/orders (get a list of orders)
+//	PUT 	/orders/{id} (replace an order)
+//	DELETE 	/orders/{id} (delete an order)
+//	GET 	/orders/{id} (get a single order)
 
 	@PostMapping
-	private ResponseEntity<?> guardar(@RequestBody Grupo guardar) {
-		System.out.println("Guardando Grupo: " + guardar.toString());
+	private ResponseEntity<?> guardar(@RequestBody Promocion guardar) {
+		System.out.println("Guardando Promocion: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
-	private ResponseEntity<List<?>> buscarPorEstado(
-			@RequestParam(required = false) Boolean activo) {
+	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
 		if (activo == null) {
-			System.out.println("Buscando Grupo: Todos");
+			System.out.println("Buscando Promocion: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
 		} else if (activo) {
-			System.out.println("Buscando Grupo: Solo activos");
+			System.out.println("Buscando Promocion: Solo activos");
 			return ResponseEntity.ok(service.buscarActivos());
 		} else if (!activo) {
-			System.out.println("Buscando Grupo: Solo inactivos");
+			System.out.println("Buscando Promocion: Solo inactivos");
 			return ResponseEntity.ok(service.buscarInactivos());
 		} else {
-			System.out.println("Buscando Grupo: Todos");
+			System.out.println("Buscando Promocion: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
 		}
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Grupo actualizar) {
-		System.out.println("Actualizando Grupo: " + ID + " -> " + actualizar);
-		Grupo existente = service.buscar(ID);
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Promocion actualizar) {
+		System.out.println("Actualizando Promocion: " + ID + " -> " + actualizar);
+		Promocion existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{ID}")
 	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.out.println("Eliminando Grupo: " + ID);
+		System.out.println("Eliminando Promocion: " + ID);
 		return ResponseEntity.ok(service.eliminar(ID));
 	}
 
 	@GetMapping("/{ID}")
 	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
-		System.out.println("Buscando Grupo: " + ID);
+		System.out.println("Buscando Promocion: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}
 }

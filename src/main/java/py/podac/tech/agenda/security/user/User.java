@@ -25,8 +25,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;
@@ -55,18 +53,12 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID ID;
 
-	@NotNull
-	@NotEmpty
 	@ValidEmail
 	private String email;
 
-	@NotNull
-	@NotEmpty
 	@ValidPassword
 	private String password;
 
-	@NotNull
-	@NotEmpty
 	@Transient
 	@ValidPassword
 	private String matchingPassword;
@@ -81,7 +73,7 @@ public class User implements UserDetails {
 	@Default
 	private Role role = Role.USUARIO;
 
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Persona persona;
 
 	@OneToMany(mappedBy = "user")

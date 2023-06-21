@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import py.podac.tech.agenda.model.exceptions.UserAlreadyExistException;
 import py.podac.tech.agenda.model.services.interfaces.IUserService;
 import py.podac.tech.agenda.model.services.repositories.PasswordResetTokenRepository;
@@ -24,7 +22,6 @@ import py.podac.tech.agenda.security.user.reset.PasswordResetToken;
 
 @Service
 @Primary
-@RequiredArgsConstructor
 public class UserServiceJPA implements IUserService {
 
 	@Autowired
@@ -36,7 +33,10 @@ public class UserServiceJPA implements IUserService {
 	@Autowired
 	private PasswordResetTokenRepository passwordTokenRepository;
 
-	private final PasswordEncoder passwordEncoder;
+	// TODO: CAMBIAR EL MODO EN EL QUE SE ENCRIPTA LA CONTRASENA, ESTO DEBE SER
+	// FUERA DEL SERVICE
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public User registrar(User user) throws Exception {
@@ -144,7 +144,7 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public String validatePasswordResetToken(String token) {
-		final PasswordResetToken passToken = passwordTokenRepository.findByToken(token);
+		final PasswordResetToken passToken = passwordTokenRepository.findByToken(token).orElseThrow();
 		return !isTokenFound(passToken) ? "auth.message.invalidToken"
 				: isTokenExpired(passToken) ? "auth.message.expired" : null;
 	}
@@ -160,7 +160,7 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public User getUserByPasswordResetToken(String token) {
-		return this.passwordTokenRepository.findByToken(token).getUser();
+		return this.passwordTokenRepository.findByToken(token).orElseThrow().getUser();
 	}
 
 	@Override
@@ -170,8 +170,27 @@ public class UserServiceJPA implements IUserService {
 		}
 		user.setChangePassword(false);
 		user.setLastPasswordChange(LocalDate.now());
-		user.setPassword(passwordEncoder.encode(password));
+//		user.setPassword(passwordEncoder.encode(password));
 		this.repo.save(user);
+	}
+
+	@Override
+	public VerificationToken generateNewVerificationToken(final String existingVerificationToken) {
+		VerificationToken vToken = verificationTokenRepository.findByToken(existingVerificationToken);
+		vToken.updateToken(UUID.randomUUID().toString());
+		vToken = verificationTokenRepository.save(vToken);
+		return vToken;
+	}
+
+	@Override
+	public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
+//		return passwordEncoder.matches(oldPassword, user.getPassword());
+		return false;
+	}
+
+	@Override
+	public void activarCuenta(UUID ID) throws Exception {
+		this.repo.enableUser(ID);
 	}
 
 }

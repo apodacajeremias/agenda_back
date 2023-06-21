@@ -30,7 +30,6 @@ import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.controller.utils.Edad;
 import py.podac.tech.agenda.model.ModelCustom;
 import py.podac.tech.agenda.model.enums.Genero;
-import py.podac.tech.agenda.model.interfaces.ValidEmail;
 import py.podac.tech.agenda.security.user.User;
 
 @Data
@@ -67,10 +66,6 @@ public class Persona extends ModelCustom<User> {
 
 	@Column
 	private String celular;
-
-	@Column
-	@ValidEmail
-	private String correo;
 
 	@Column
 	private String direccion;

@@ -32,8 +32,8 @@ public class AuthenticationService {
 	 * @return
 	 * @throws Exception
 	 */
-	public AuthenticationResponse register(User user) throws Exception {
-		// Verificar si posee informacin de Persona
+	public AuthenticationResponse registrar(User user) throws Exception {
+		// Verificar si posee informacion de Persona
 		if (user.getPersona() == null)
 			throw new Exception("El User pretendido para administrador no posee informacion de Persona");
 		// Verificar si Persona posee informacion de Colaborador
@@ -41,7 +41,7 @@ public class AuthenticationService {
 			throw new Exception("La Persona pretendida para administrador no posee informacion de Colaborador");
 
 		/*
-		 * El campo ROLE que debe ser Role.ADMINISTRADOR, debido al medio por el cual se
+		 * El campo ROLE debe ser Role.ADMINISTRADOR, debido al medio por el cual se
 		 * registra
 		 */
 		user.setRole(Role.ADMINISTRADOR);

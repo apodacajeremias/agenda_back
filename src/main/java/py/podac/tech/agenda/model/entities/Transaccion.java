@@ -52,6 +52,6 @@ public class Transaccion extends ModelCustom<User> {
 	private Grupo grupo;
 	@ManyToOne(optional = true)
 	private Beneficio beneficio;
-	@OneToMany
+	@OneToMany(mappedBy = "transaccion")
 	private List<TransaccionDetalle> detalles;
 }

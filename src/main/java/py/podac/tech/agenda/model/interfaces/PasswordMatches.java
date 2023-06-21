@@ -10,12 +10,15 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import py.podac.tech.agenda.model.validations.PasswordMatchesValidator;
 
-@Target({ElementType.TYPE,ElementType.ANNOTATION_TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PasswordMatchesValidator.class)
 @Documented
+@Constraint(validatedBy = PasswordMatchesValidator.class)
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordMatches {
-    String message() default "Passwords don't match";
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+	
+	String message() default "Passwords don't match";
+
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
 }

@@ -7,7 +7,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import py.podac.tech.agenda.controller.events.OnPasswordResetEvent;
 import py.podac.tech.agenda.controller.events.OnRegistrationCompleteEvent;
+import py.podac.tech.agenda.controller.events.OnResendRegistrationEvent;
+import py.podac.tech.agenda.model.exceptions.InvalidOldPasswordException;
 import py.podac.tech.agenda.model.services.interfaces.IUserService;
 import py.podac.tech.agenda.security.token.Token;
 import py.podac.tech.agenda.security.user.User;
@@ -43,10 +46,11 @@ public class AuthenticationController {
 	private final MessageSource messages;
 
 	// TODO: validar que el correo no se repita
-	@PostMapping("/register")
-	public ResponseEntity<AuthenticationResponse> registrarUsuario(HttpServletRequest request,
-			@RequestBody @Valid User user) throws Exception {
-		AuthenticationResponse response = service.register(user);
+	@PostMapping("/registrar")
+	public ResponseEntity<AuthenticationResponse> registrarUsuario(WebRequest request, @RequestBody User user)
+			throws Exception {
+		System.out.println(user);
+		AuthenticationResponse response = service.registrar(user);
 		String appUrl = request.getContextPath();
 		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(response.getUser(), request.getLocale(), appUrl));
 		return ResponseEntity.ok(response);
@@ -65,10 +69,9 @@ public class AuthenticationController {
 		return ResponseEntity.ok(service.validate(token.getToken()));
 	}
 
-	@GetMapping("/registrationConfirm")
-	public ResponseEntity<Boolean> confirmRegistration(WebRequest request, Model model,
-			@RequestParam("token") String token) throws Exception {
-		boolean response = false;
+	@PostMapping("/registrationConfirm")
+	public ResponseEntity<Boolean> confirmRegistration(WebRequest request, @RequestParam("token") String token)
+			throws Exception {
 		Locale locale = request.getLocale();
 
 		VerificationToken verificationToken = userService.getVerificationToken(token);
@@ -84,50 +87,73 @@ public class AuthenticationController {
 			throw new Exception(message);
 		}
 
-		user.setEnabled(true);
-		userService.saveRegisteredUser(user);
-		response = true;
-		return ResponseEntity.ok(response);
+//		user.setEnabled(true);
+//		userService.saveRegisteredUser(user);
+		userService.activarCuenta(user.getID());
+		return ResponseEntity.ok(Boolean.TRUE);
 	}
 
 	@PostMapping("/user/resetPassword")
 	public ResponseEntity<Boolean> resetPassword(HttpServletRequest request, @RequestParam("email") String userEmail) {
-		boolean response = false;
+
 		User user = userService.buscarPorEmail(userEmail); // SI NO ENCUENTRA ARROJA EXCEPCION
 
 		String appUrl = request.getContextPath();
 		eventPublisher.publishEvent(new OnPasswordResetEvent(user, request.getLocale(), appUrl));
-		response = true;
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(Boolean.TRUE);
 	}
 
 	@GetMapping("/user/changePassword")
-	public ResponseEntity<Boolean> changePassword(Locale locale, Model model, @RequestParam("token") String token)
-			throws Exception {
-		boolean response = false;
+	public ResponseEntity<Boolean> changePassword(Locale locale, @RequestParam("token") String token) throws Exception {
+
 		String result = userService.validatePasswordResetToken(token);
 		if (result != null) {
 			throw new Exception(messages.getMessage(result, null, locale));
 		}
-		response = true;
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(Boolean.TRUE);
 	}
 
 	@PostMapping("/user/savePassword")
 	public ResponseEntity<Boolean> savePassword(final Locale locale, @Valid PasswordResetRequest passwordReset)
 			throws Exception {
 		String result = userService.validatePasswordResetToken(passwordReset.getToken());
-		boolean response = false;
 		if (result != null) {
 			throw new Exception(messages.getMessage(result, null, locale));
 		}
 
 		User user = userService.getUserByPasswordResetToken(passwordReset.getToken());
-		if (user != null) {
-			userService.changeUserPassword(user, passwordReset.getPassword());
-			response = true;
+		if (user == null) {
+			throw new Exception("Usuario que modifica contrasena no se ha encontrado");
 		}
-		return ResponseEntity.ok(response);
+
+		userService.changeUserPassword(user, passwordReset.getPassword());
+		return ResponseEntity.ok(Boolean.TRUE);
+	}
+
+	@GetMapping("/user/resendRegistrationToken")
+	public ResponseEntity<Boolean> resendRegistrationToken(HttpServletRequest request,
+			@RequestParam("token") String existingToken) {
+		VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
+
+		User user = userService.getUser(newToken.getToken());
+		String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+		eventPublisher.publishEvent(new OnResendRegistrationEvent(user, newToken, request.getLocale(), appUrl));
+
+		return ResponseEntity.ok(Boolean.TRUE);
+	}
+
+	@PostMapping("/user/updatePassword")
+	@PreAuthorize("hasRole('READ_PRIVILEGE')")
+	public ResponseEntity<Boolean> changeUserPassword(Locale locale, @RequestParam("password") String password,
+			@RequestParam("oldpassword") String oldPassword) throws Exception {
+		User user = userService.buscarPorEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+
+		if (!userService.checkIfValidOldPassword(user, oldPassword)) {
+			throw new InvalidOldPasswordException();
+		}
+		userService.changeUserPassword(user, password);
+		return ResponseEntity.ok(Boolean.TRUE);
 	}
 
 }

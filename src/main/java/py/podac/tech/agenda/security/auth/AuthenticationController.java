@@ -46,8 +46,8 @@ public class AuthenticationController {
 	private final MessageSource messages;
 
 	// TODO: validar que el correo no se repita
-	@PostMapping("/registrar")
-	public ResponseEntity<AuthenticationResponse> registrarUsuario(WebRequest request, @RequestBody User user)
+	@PostMapping("/register")
+	public ResponseEntity<AuthenticationResponse> register(WebRequest request, @RequestBody User user)
 			throws Exception {
 		System.out.println(user);
 		AuthenticationResponse response = service.registrar(user);
@@ -58,46 +58,37 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/login", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<AuthenticationResponse> ingresarUsuario(@RequestBody @Valid AuthenticationRequest request) {
+	public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid AuthenticationRequest request) {
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 
-	// TODO: devolver el horario cuando se va a vencer el token
 	@PostMapping("/validate")
-	public ResponseEntity<AuthenticationResponse> validarToken(@RequestBody Token token) throws Exception {
-		// Valida si el token esta dentro de la validez
+	public ResponseEntity<AuthenticationResponse> validate(@RequestBody Token token) throws Exception {
 		return ResponseEntity.ok(service.validate(token.getToken()));
 	}
 
 	@PostMapping("/registrationConfirm")
-	public ResponseEntity<Boolean> confirmRegistration(WebRequest request, @RequestParam("token") String token)
+	public ResponseEntity<Boolean> registrationConfirm(WebRequest request, @RequestParam("token") String token)
 			throws Exception {
 		Locale locale = request.getLocale();
-
 		VerificationToken verificationToken = userService.getVerificationToken(token);
 		if (verificationToken == null) {
 			String message = messages.getMessage("auth.message.invalidToken", null, locale);
 			throw new Exception(message);
 		}
-
 		User user = verificationToken.getUser();
 		Calendar cal = Calendar.getInstance();
 		if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
 			String message = messages.getMessage("auth.message.expired", null, locale);
 			throw new Exception(message);
 		}
-
-//		user.setEnabled(true);
-//		userService.saveRegisteredUser(user);
 		userService.activarCuenta(user.getID());
 		return ResponseEntity.ok(Boolean.TRUE);
 	}
 
 	@PostMapping("/user/resetPassword")
 	public ResponseEntity<Boolean> resetPassword(HttpServletRequest request, @RequestParam("email") String userEmail) {
-
-		User user = userService.buscarPorEmail(userEmail); // SI NO ENCUENTRA ARROJA EXCEPCION
-
+		User user = userService.buscarPorEmail(userEmail);
 		String appUrl = request.getContextPath();
 		eventPublisher.publishEvent(new OnPasswordResetEvent(user, request.getLocale(), appUrl));
 		return ResponseEntity.ok(Boolean.TRUE);
@@ -105,7 +96,6 @@ public class AuthenticationController {
 
 	@GetMapping("/user/changePassword")
 	public ResponseEntity<Boolean> changePassword(Locale locale, @RequestParam("token") String token) throws Exception {
-
 		String result = userService.validatePasswordResetToken(token);
 		if (result != null) {
 			throw new Exception(messages.getMessage(result, null, locale));

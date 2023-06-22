@@ -33,8 +33,6 @@ public class UserServiceJPA implements IUserService {
 	@Autowired
 	private PasswordResetTokenRepository passwordTokenRepository;
 
-	// TODO: CAMBIAR EL MODO EN EL QUE SE ENCRIPTA LA CONTRASENA, ESTO DEBE SER
-	// FUERA DEL SERVICE
 //	@Autowired
 //	private PasswordEncoder passwordEncoder;
 
@@ -43,8 +41,8 @@ public class UserServiceJPA implements IUserService {
 		if (existeEmail(user.getEmail())) {
 			throw new UserAlreadyExistException("Ya existe una cuenta con ese correo:" + user.getEmail());
 		}
-		// LLAMAR AL ENCODER ACA GENERA REDUNDANCIA EN EL CONTEXTO DE SPRING
 //		user.setPassword(passwordEncoder.encode(user.getPassword()));
+//		passwordEncoder.matches(user.getMatchingPassword(), user.getPassword());
 		return guardar(user);
 	}
 

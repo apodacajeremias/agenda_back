@@ -6,14 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import py.podac.tech.agenda.model.interfaces.PasswordMatches;
-import py.podac.tech.agenda.model.interfaces.ValidPassword;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@PasswordMatches
 public class PasswordResetRequest {
 
 	@NotNull
@@ -22,11 +19,9 @@ public class PasswordResetRequest {
 
 	@NotNull
 	@NotEmpty
-	@ValidPassword
 	private String password;
 
 	@NotNull
 	@NotEmpty
-	@ValidPassword
 	private String matchingPassword;
 }

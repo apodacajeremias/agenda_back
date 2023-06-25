@@ -32,9 +32,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import py.podac.tech.agenda.model.entities.Persona;
-import py.podac.tech.agenda.model.interfaces.PasswordMatches;
 import py.podac.tech.agenda.model.interfaces.ValidEmail;
-import py.podac.tech.agenda.model.interfaces.ValidPassword;
 import py.podac.tech.agenda.security.token.Token;
 
 @Data
@@ -45,7 +43,6 @@ import py.podac.tech.agenda.security.token.Token;
 @Table(name = "_user")
 @DynamicInsert
 @DynamicUpdate
-@PasswordMatches
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -56,11 +53,9 @@ public class User implements UserDetails {
 	@ValidEmail
 	private String email;
 
-	@ValidPassword
 	private String password;
 
 	@Transient
-	@ValidPassword
 	private String matchingPassword;
 
 	private boolean changePassword;

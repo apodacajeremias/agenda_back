@@ -11,6 +11,7 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -44,7 +45,8 @@ public abstract class ModelCustom<T> {
 	private boolean activo = true;
 
 	@Column(nullable = false)
-	private String nombre = "N/A";
+	@JsonProperty("nombre")
+	private String nombre;
 
 	@CreatedBy
 	@ManyToOne

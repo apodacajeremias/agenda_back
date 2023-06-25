@@ -1,14 +1,27 @@
 package py.podac.tech.agenda.model.services.jpa;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import org.passay.AlphabeticalSequenceRule;
+import org.passay.DigitCharacterRule;
+import org.passay.LengthRule;
+import org.passay.NumericalSequenceRule;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
+import org.passay.QwertySequenceRule;
+import org.passay.RuleResult;
+import org.passay.SpecialCharacterRule;
+import org.passay.UppercaseCharacterRule;
+import org.passay.WhitespaceRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import py.podac.tech.agenda.model.exceptions.UserAlreadyExistException;
@@ -33,16 +46,34 @@ public class UserServiceJPA implements IUserService {
 	@Autowired
 	private PasswordResetTokenRepository passwordTokenRepository;
 
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
+	private PasswordValidator validator = new PasswordValidator(
+			Arrays.asList(new LengthRule(8, 30), new UppercaseCharacterRule(1), new DigitCharacterRule(1),
+					new SpecialCharacterRule(1), new NumericalSequenceRule(3, false),
+					new AlphabeticalSequenceRule(3, false), new QwertySequenceRule(3, false), new WhitespaceRule()));
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public User registrar(User user) throws Exception {
+		// Verifica si correo ya existe
 		if (existeEmail(user.getEmail())) {
 			throw new UserAlreadyExistException("Ya existe una cuenta con ese correo:" + user.getEmail());
 		}
-//		user.setPassword(passwordEncoder.encode(user.getPassword()));
-//		passwordEncoder.matches(user.getMatchingPassword(), user.getPassword());
+
+		// Verificar si password tiene validez
+		RuleResult result = validator.validate(new PasswordData(user.getPassword()));
+		if (!result.isValid()) {
+			throw new Exception("Contrasena invalida -> " + result.getDetails().toString());
+		}
+
+		// Encriptar password
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		// Verificar si password y matchingPassword coinciden
+		if (!passwordEncoder.matches(user.getMatchingPassword(), user.getPassword())) {
+			throw new Exception("Confirmacion de contrasena no coincide con la contrasena");
+		}
+
 		return guardar(user);
 	}
 

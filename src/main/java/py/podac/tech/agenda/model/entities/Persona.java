@@ -44,6 +44,11 @@ import py.podac.tech.agenda.security.user.User;
 @DynamicUpdate
 public class Persona extends ModelCustom<User> {
 
+	@NotNull
+	@NotEmpty
+	@Column(nullable = false, unique = true)
+	private String documentoIdentidad;
+
 	@Column(nullable = false)
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate fechaNacimiento;
@@ -55,11 +60,6 @@ public class Persona extends ModelCustom<User> {
 	@Default
 	@Enumerated(EnumType.STRING)
 	private Genero genero = Genero.OTRO;
-
-	@NotNull
-	@NotEmpty
-	@Column(nullable = false, unique = true)
-	private String documentoIdentidad;
 
 	@Column
 	private String telefono;

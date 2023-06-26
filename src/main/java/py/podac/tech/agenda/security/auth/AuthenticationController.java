@@ -26,7 +26,6 @@ import py.podac.tech.agenda.controller.events.OnRegistrationCompleteEvent;
 import py.podac.tech.agenda.controller.events.OnResendRegistrationEvent;
 import py.podac.tech.agenda.model.exceptions.InvalidOldPasswordException;
 import py.podac.tech.agenda.model.services.interfaces.IUserService;
-import py.podac.tech.agenda.security.token.Token;
 import py.podac.tech.agenda.security.user.User;
 import py.podac.tech.agenda.security.user.VerificationToken;
 import py.podac.tech.agenda.security.user.reset.PasswordResetRequest;
@@ -62,9 +61,9 @@ public class AuthenticationController {
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 
-	@PostMapping("/validate")
-	public ResponseEntity<AuthenticationResponse> validate(@RequestBody Token token) throws Exception {
-		return ResponseEntity.ok(service.validate(token.getToken()));
+	@GetMapping("/validate")
+	public ResponseEntity<AuthenticationResponse> validate(@RequestParam String token) throws Exception {
+		return ResponseEntity.ok(service.validate(token));
 	}
 
 	@PostMapping("/registrationConfirm")

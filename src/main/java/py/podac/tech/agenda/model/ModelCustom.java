@@ -42,6 +42,7 @@ public abstract class ModelCustom<T> {
 
 	@Column(nullable = false)
 	@Default
+	@JsonProperty("activo")
 	private boolean activo = true;
 
 	@Column(nullable = false)

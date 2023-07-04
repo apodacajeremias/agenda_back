@@ -1,13 +1,10 @@
 package py.podac.tech.agenda.model.entities;
 
-import java.util.UUID;
-
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,7 +23,6 @@ import py.podac.tech.agenda.security.user.User;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
-@Table
 @DynamicInsert
 @DynamicUpdate
 public class Colaborador extends ModelCustom<User> {
@@ -41,9 +37,5 @@ public class Colaborador extends ModelCustom<User> {
 
 	@Column
 	private String profesion;
-
-	public Colaborador(UUID ID) {
-		super(ID);
-	}
 
 }

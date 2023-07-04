@@ -2,7 +2,6 @@ package py.podac.tech.agenda.model.entities;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -21,7 +20,6 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -57,9 +55,8 @@ public class Persona extends ModelCustom<User> {
 	private int edad;
 
 	@Column(nullable = false)
-	@Default
 	@Enumerated(EnumType.STRING)
-	private Genero genero = Genero.OTRO;
+	private Genero genero;
 
 	@Column
 	private String telefono;
@@ -79,12 +76,9 @@ public class Persona extends ModelCustom<User> {
 	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Colaborador colaborador;
 
+	@ToString.Exclude
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH }, mappedBy = "personas")
 	private List<Grupo> grupos;
-
-	public Persona(UUID ID) {
-		super(ID);
-	}
 
 	public int getEdad() {
 		return Edad.calcular(fechaNacimiento);

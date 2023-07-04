@@ -23,21 +23,22 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@ToString
 public abstract class ModelCustom<T> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(updatable = false)
+	@ReadOnlyProperty
 	private UUID ID;
 
 	@Column(nullable = false)
@@ -71,57 +72,5 @@ public abstract class ModelCustom<T> {
 	@Column(nullable = true)
 	@ReadOnlyProperty
 	private LocalDateTime fechaModificacion;
-
-	public ModelCustom(UUID ID) {
-		this.ID = ID;
-	}
-
-	public UUID getID() {
-		return ID;
-	}
-
-	public void setID(UUID iD) {
-		ID = iD;
-	}
-
-	public boolean isActivo() {
-		return activo;
-	}
-
-	public void setActivo(boolean activo) {
-		this.activo = activo;
-	}
-
-	public T getCreadoPor() {
-		return creadoPor;
-	}
-
-	public void setCreadoPor(T creadoPor) {
-		this.creadoPor = creadoPor;
-	}
-
-	public T getModificadoPor() {
-		return modificadoPor;
-	}
-
-	public void setModificadoPor(T modificadoPor) {
-		this.modificadoPor = modificadoPor;
-	}
-
-	public LocalDateTime getFechaCreacion() {
-		return fechaCreacion;
-	}
-
-	public void setFechaCreacion(LocalDateTime fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-
-	public LocalDateTime getFechaModificacion() {
-		return fechaModificacion;
-	}
-
-	public void setFechaModificacion(LocalDateTime fechaModificacion) {
-		this.fechaModificacion = fechaModificacion;
-	}
 
 }

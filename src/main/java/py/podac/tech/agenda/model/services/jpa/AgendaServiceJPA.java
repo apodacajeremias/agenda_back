@@ -1,5 +1,6 @@
 package py.podac.tech.agenda.model.services.jpa;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,5 +72,12 @@ public class AgendaServiceJPA implements IAgendaService {
 	@Override
 	public Agenda buscarUltimo() {
 		return this.repo.findTopByOrderByFechaCreacionDesc().orElseThrow();
+	}
+
+	@Override
+	public boolean horarioDisponible(LocalDateTime inicio, LocalDateTime fin) {
+		// Se retorna la inversa del exists (!exists) 
+		// Si existe algun registro entre ese horario que este activo entonces horarioDisponible = false
+		return !this.repo.existsByFechaBetweenAndHoraBetweenAndActivoIsTrue(inicio.toLocalDate(), fin.toLocalDate(), inicio.toLocalTime(), fin.toLocalTime());
 	}
 }

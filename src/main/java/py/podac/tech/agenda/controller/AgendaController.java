@@ -1,5 +1,6 @@
 package py.podac.tech.agenda.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,5 +71,11 @@ public class AgendaController {
 	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
 		System.out.println("Buscando Agenda: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
+	}
+	
+	@GetMapping
+	private ResponseEntity<?> verificarDisponibilidadDeHorario(@RequestParam LocalDateTime inicio, @RequestParam LocalDateTime fin){
+		System.out.println("Verificando disponibilidad de horario entre "+inicio+" y "+fin);
+		return ResponseEntity.ok(service.horarioDisponible(inicio, fin));
 	}
 }

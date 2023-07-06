@@ -14,7 +14,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -48,13 +47,11 @@ public class Agenda extends ModelCustom<User> {
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	@Default
-	private Situacion situacion = Situacion.PENDIENTE;
+	private Situacion situacion;
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	@Default
-	private Prioridad prioridad = Prioridad.BAJA;
+	private Prioridad prioridad;
 
 	@ManyToOne(optional = false)
 	private Colaborador colaborador;

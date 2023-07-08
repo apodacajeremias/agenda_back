@@ -8,7 +8,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,7 +29,6 @@ import py.podac.tech.agenda.security.user.User;
 @DynamicUpdate
 public class Item extends ModelCustom<User> {
 	private double precio;
-	@Default
 	@Enumerated(EnumType.STRING)
-	private TipoTransaccion tipo = TipoTransaccion.VENTA;
+	private TipoTransaccion tipo; // VENTA
 }

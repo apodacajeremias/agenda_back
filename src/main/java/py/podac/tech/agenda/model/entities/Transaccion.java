@@ -12,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -35,9 +34,9 @@ import py.podac.tech.agenda.security.user.User;
 @DynamicInsert
 @DynamicUpdate
 public class Transaccion extends ModelCustom<User> {
-	@Default
+
 	@Enumerated(EnumType.STRING)
-	private TipoTransaccion tipo = TipoTransaccion.VENTA;
+	private TipoTransaccion tipo; // VENTA
 	private double total; // sumatoria - descuento
 	private double descuento; // Ademas del descuento que otorga un grupo
 	private double sumatoria; // Todos los items

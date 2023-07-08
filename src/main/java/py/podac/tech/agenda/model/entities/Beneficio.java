@@ -12,7 +12,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -34,12 +33,11 @@ import py.podac.tech.agenda.security.user.User;
 @DynamicInsert
 @DynamicUpdate
 public class Beneficio extends ModelCustom<User> {
-	@Default
+	
 	@Enumerated(EnumType.STRING)
-	private TipoBeneficio tipo = TipoBeneficio.FAMILIAR;
-	@Default
+	private TipoBeneficio tipo; //FAMILIAR
 	@Enumerated(EnumType.STRING)
-	private TipoDescuento tipoDescuento = TipoDescuento.VALOR;
+	private TipoDescuento tipoDescuento; //VALOR
 	private double descuento;
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "beneficios")
 	private List<Promocion> promociones;

@@ -38,10 +38,10 @@ public class Empresa extends ModelCustom<User> {
 	private LocalDate fechaInauguracion; // Ej: 'Desde 2001' para reportes
 	private String direccion;
 	private String registroContribuyente; // Para emision de facturas y notas
-	@Default @Enumerated(EnumType.STRING)
-	private Moneda moneda = Moneda.GUARANI;
-	@Default @Enumerated(EnumType.STRING)
-	private Idioma idioma = Idioma.CASTELLANO;
 	private String logo;
+	@Enumerated(EnumType.STRING)
+	private Moneda moneda; // GUARANI
+	@Enumerated(EnumType.STRING)
+	private Idioma idioma; // CASTELLANO
 
 }

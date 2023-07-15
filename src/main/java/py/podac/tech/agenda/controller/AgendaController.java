@@ -73,7 +73,7 @@ public class AgendaController {
 		return ResponseEntity.ok(service.buscar(ID));
 	}
 	
-	@GetMapping
+	@GetMapping("/verificarDisponibilidad")
 	private ResponseEntity<?> verificarDisponibilidadDeHorario(@RequestParam LocalDateTime inicio, @RequestParam LocalDateTime fin){
 		System.out.println("Verificando disponibilidad de horario entre "+inicio+" y "+fin);
 		return ResponseEntity.ok(service.horarioDisponible(inicio, fin));

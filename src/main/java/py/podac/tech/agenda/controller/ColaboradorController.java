@@ -36,7 +36,10 @@ public class ColaboradorController {
 
 	@GetMapping
 	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
-		if (activo) {
+		if (activo == null) {
+			System.out.println("Buscando Colaborador: Todos");
+			return ResponseEntity.ok(service.buscarTodos());
+		} else if (activo) {
 			System.out.println("Buscando Colaborador: Solo activos");
 			return ResponseEntity.ok(service.buscarActivos());
 		} else if (!activo) {
@@ -50,8 +53,8 @@ public class ColaboradorController {
 
 	@PutMapping("/{ID}")
 	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Colaborador actualizar) {
-		System.out.println("Actualizando Colaborador: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
-		Colaborador existente = service.buscar(actualizar.getID());
+		System.out.println("Actualizando Colaborador: " + ID + " -> " + actualizar);
+		Colaborador existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}

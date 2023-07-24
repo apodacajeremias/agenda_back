@@ -30,8 +30,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		this.confirmRegistration(event);
 	}
 
-	// TODO: enviar email solamente cuando ya se defina como construir la
-	// infraestructura del servicio y ya haya URL propia
 	private void confirmRegistration(OnRegistrationCompleteEvent event) {
 		Usuario usuario = event.getUser();
 		String token = UUID.randomUUID().toString();

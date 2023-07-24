@@ -107,8 +107,6 @@ public class Usuario implements UserDetails {
 		return true;
 	}
 
-	// TODO: DEVOLVER LA VARIABLE SOLAMENTE CUANDO SE LOGRE ACTIVAR LA CUENTA A
-	// TRAVES DE CORREO DE MANERA OFICIAL Y 100% FUNCIONAL
 	@Override
 	public boolean isEnabled() {
 		return enabled ? true : true;

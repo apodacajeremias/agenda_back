@@ -20,7 +20,6 @@ public class EmpresaServiceJPA implements IEmpresaService {
 
 	@Override
 	public Empresa registrar(Empresa registrar) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -1,7 +1,5 @@
 package py.podac.tech.agenda.model.enums;
 
 public enum TokenType {
-	// TODO: UNIFICIAR VERIFICATIONTOKEN Y PASSWORDRESETTOKEN EN LA ENTIDAD
-	// TOKEN.JAVA
 	BEARER, VERIFICATION, RESET_PASSWORD
 }

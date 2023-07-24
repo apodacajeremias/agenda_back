@@ -65,6 +65,7 @@ public class AuthenticationServiceJPA {
 		var jwtToken = jwtService.generateToken(usuario);
 		revokeAllUserTokens(usuario);
 		saveUserToken(usuario, jwtToken);
+		System.out.println("Autenticacion correcta.");
 		return AuthenticationResponse.builder().token(jwtToken).usuario(usuario).build();
 	}
 

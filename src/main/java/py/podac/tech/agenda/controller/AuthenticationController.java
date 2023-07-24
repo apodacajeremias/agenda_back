@@ -47,7 +47,6 @@ public class AuthenticationController {
 
 	private final MessageSource messages;
 
-	// TODO: validar que el correo no se repita
 	@PostMapping("/register")
 	public ResponseEntity<AuthenticationResponse> register(WebRequest request, @RequestBody Usuario usuario)
 			throws Exception {

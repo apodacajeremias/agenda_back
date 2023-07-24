@@ -29,8 +29,6 @@ public class ResendRegistrationListener implements ApplicationListener<OnResendR
 		this.resendConfirmationToken(event);
 	}
 
-	// TODO: enviar email solamente cuando ya se defina como construir la
-	// infraestructura del servicio y ya haya URL propia
 	private void resendConfirmationToken(OnResendRegistrationEvent event) {
 		Usuario usuario = event.getUser();
 		String token = UUID.randomUUID().toString();

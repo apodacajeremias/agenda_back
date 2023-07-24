@@ -57,8 +57,6 @@ public class PersonaController {
 		}
 	}
 
-	// TODO: VERIFICAR SI USUARIO Y COLABORADOR ESTAN NULOS PARA PODER FUNDIR
-	// CORRECTAMENTE
 	@PutMapping("/{ID}")
 	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Persona actualizar) {
 		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar);

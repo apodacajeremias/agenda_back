@@ -31,8 +31,6 @@ public class PasswordResetListener implements ApplicationListener<OnPasswordRese
 		this.confirmReset(event);
 	}
 
-	// TODO: enviar email solamente cuando ya se defina como construir la
-	// infraestructura del servicio y ya haya URL propia
 	private void confirmReset(OnPasswordResetEvent event) {
 		Usuario usuario = event.getUser();
 		String token = UUID.randomUUID().toString();

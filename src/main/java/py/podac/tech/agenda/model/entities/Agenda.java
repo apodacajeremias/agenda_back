@@ -22,7 +22,6 @@ import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.model.ModelCustom;
 import py.podac.tech.agenda.model.enums.Prioridad;
 import py.podac.tech.agenda.model.enums.Situacion;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -33,7 +32,7 @@ import py.podac.tech.agenda.security.user.User;
 @Entity
 @Table
 @DynamicUpdate
-public class Agenda extends ModelCustom<User> {
+public class Agenda extends ModelCustom<Usuario> {
 
 	@Column
 	@DateTimeFormat(iso = ISO.DATE)

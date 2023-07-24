@@ -7,19 +7,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import py.podac.tech.agenda.security.user.User;
+import py.podac.tech.agenda.model.entities.Usuario;
 
 @Component
-public class AuditorAwareImpl implements AuditorAware<User> {
+public class AuditorAwareImpl implements AuditorAware<Usuario> {
 
 	@Override
-	public Optional<User> getCurrentAuditor() {
+	public Optional<Usuario> getCurrentAuditor() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println(auth.getPrincipal());
 		if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
 			return Optional.empty();
 		}
-		final User USUARIO = (User) auth.getPrincipal();
+		final Usuario USUARIO = (Usuario) auth.getPrincipal();
 		if (USUARIO == null) {
 			return Optional.empty();
 		}

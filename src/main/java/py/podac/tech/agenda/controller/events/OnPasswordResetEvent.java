@@ -4,18 +4,18 @@ import java.util.Locale;
 
 import org.springframework.context.ApplicationEvent;
 
-import py.podac.tech.agenda.security.user.User;
+import py.podac.tech.agenda.model.entities.Usuario;
 
 @SuppressWarnings("serial")
 public class OnPasswordResetEvent extends ApplicationEvent {
 	private String appUrl;
 	private Locale locale;
-	private User user;
+	private Usuario usuario;
 
-	public OnPasswordResetEvent(User user, Locale locale, String appUrl) {
-		super(user);
+	public OnPasswordResetEvent(Usuario usuario, Locale locale, String appUrl) {
+		super(usuario);
 
-		this.user = user;
+		this.usuario = usuario;
 		this.locale = locale;
 		this.appUrl = appUrl;
 	}
@@ -36,12 +36,12 @@ public class OnPasswordResetEvent extends ApplicationEvent {
 		this.locale = locale;
 	}
 
-	public User getUser() {
-		return user;
+	public Usuario getUser() {
+		return usuario;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }

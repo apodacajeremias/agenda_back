@@ -15,7 +15,6 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.model.ModelCustom;
 import py.podac.tech.agenda.model.enums.TipoTransaccion;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -27,7 +26,7 @@ import py.podac.tech.agenda.security.user.User;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Item extends ModelCustom<User> {
+public class Item extends ModelCustom<Usuario> {
 	private double precio;
 	@Enumerated(EnumType.STRING)
 	private TipoTransaccion tipo; // VENTA

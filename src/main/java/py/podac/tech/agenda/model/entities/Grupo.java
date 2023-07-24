@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.model.ModelCustom;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -29,7 +28,7 @@ import py.podac.tech.agenda.security.user.User;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Grupo extends ModelCustom<User> {
+public class Grupo extends ModelCustom<Usuario> {
 
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	private List<Persona> personas;

@@ -20,7 +20,6 @@ import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.model.ModelCustom;
 import py.podac.tech.agenda.model.enums.TipoBeneficio;
 import py.podac.tech.agenda.model.enums.TipoDescuento;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -32,7 +31,7 @@ import py.podac.tech.agenda.security.user.User;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Beneficio extends ModelCustom<User> {
+public class Beneficio extends ModelCustom<Usuario> {
 	
 	@Enumerated(EnumType.STRING)
 	private TipoBeneficio tipo; //FAMILIAR

@@ -28,7 +28,6 @@ import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.controller.utils.Edad;
 import py.podac.tech.agenda.model.ModelCustom;
 import py.podac.tech.agenda.model.enums.Genero;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -40,7 +39,7 @@ import py.podac.tech.agenda.security.user.User;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Persona extends ModelCustom<User> {
+public class Persona extends ModelCustom<Usuario> {
 
 	@NotNull
 	@NotEmpty

@@ -24,21 +24,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import py.podac.tech.agenda.model.entities.Usuario;
 import py.podac.tech.agenda.model.exceptions.UserAlreadyExistException;
-import py.podac.tech.agenda.model.services.interfaces.IUserService;
+import py.podac.tech.agenda.model.services.interfaces.IUsuarioService;
 import py.podac.tech.agenda.model.services.repositories.PasswordResetTokenRepository;
-import py.podac.tech.agenda.model.services.repositories.UserRepository;
+import py.podac.tech.agenda.model.services.repositories.UsuarioRepository;
 import py.podac.tech.agenda.model.services.repositories.VerificationTokenRepository;
-import py.podac.tech.agenda.security.user.User;
-import py.podac.tech.agenda.security.user.VerificationToken;
-import py.podac.tech.agenda.security.user.reset.PasswordResetToken;
+import py.podac.tech.agenda.security.auth.PasswordResetToken;
+import py.podac.tech.agenda.security.auth.VerificationToken;
 
 @Service
 @Primary
-public class UserServiceJPA implements IUserService {
+public class UsuarioServiceJPA implements IUsuarioService {
 
 	@Autowired
-	private UserRepository repo;
+	private UsuarioRepository repo;
 
 	@Autowired
 	private VerificationTokenRepository verificationTokenRepository;
@@ -55,35 +55,35 @@ public class UserServiceJPA implements IUserService {
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public User registrar(User user) throws Exception {
+	public Usuario registrar(Usuario usuario) throws Exception {
 		// Verifica si correo ya existe
-		if (existeEmail(user.getEmail())) {
-			throw new UserAlreadyExistException("Ya existe una cuenta con ese correo:" + user.getEmail());
+		if (existeEmail(usuario.getEmail())) {
+			throw new UserAlreadyExistException("Ya existe una cuenta con ese correo:" + usuario.getEmail());
 		}
 
 		// Verificar si password tiene validez
-		RuleResult result = validator.validate(new PasswordData(user.getPassword()));
+		RuleResult result = validator.validate(new PasswordData(usuario.getPassword()));
 		if (!result.isValid()) {
 			throw new Exception("Contrasena invalida -> " + result.getDetails().toString());
 		}
 
 		// Encriptar password
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 		// Verificar si password y matchingPassword coinciden
-		if (!passwordEncoder.matches(user.getMatchingPassword(), user.getPassword())) {
+		if (!passwordEncoder.matches(usuario.getMatchingPassword(), usuario.getPassword())) {
 			throw new Exception("Confirmacion de contrasena no coincide con la contrasena");
 		}
 
-		return guardar(user);
+		return guardar(usuario);
 	}
 
 	@Override
-	public User guardar(User guardar) {
+	public Usuario guardar(Usuario guardar) {
 		return this.repo.save(guardar);
 	}
 
 	@Override
-	public List<User> guardarTodos(List<User> guardarTodos) {
+	public List<Usuario> guardarTodos(List<Usuario> guardarTodos) {
 		return this.repo.saveAll(guardarTodos);
 	}
 
@@ -112,41 +112,41 @@ public class UserServiceJPA implements IUserService {
 	}
 
 	@Override
-	public List<User> buscarActivos() {
+	public List<Usuario> buscarActivos() {
 		return this.repo.findByEnabledIsTrue();
 	}
 
 	@Override
-	public List<User> buscarInactivos() {
+	public List<Usuario> buscarInactivos() {
 		return this.repo.findByEnabledIsFalse();
 	}
 
 	@Override
-	public List<User> buscarTodos() {
+	public List<Usuario> buscarTodos() {
 		return this.repo.findAll(Sort.by(Sort.Direction.DESC, "fechaCreacion"));
 	}
 
 	@Override
-	public User buscar(UUID ID) {
+	public Usuario buscar(UUID ID) {
 		return this.repo.findById(ID).orElse(null);
 	}
 
 	@Override
-	public User buscarUltimo() {
+	public Usuario buscarUltimo() {
 		System.err.println("FUNCIONA NO IMPLEMENTADA");
 		return null;
 	}
 
 	@Override
-	public User buscarPorEmail(String email) {
+	public Usuario buscarPorEmail(String email) {
 		return this.repo.findByEmail(email)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found by email" + email));
+				.orElseThrow(() -> new UsernameNotFoundException("Usuario not found by email" + email));
 	}
 
 	@Override
-	public User getUser(String verificationToken) {
-		User user = verificationTokenRepository.findByToken(verificationToken).getUser();
-		return user;
+	public Usuario getUsuario(String verificationToken) {
+		Usuario usuario = verificationTokenRepository.findByToken(verificationToken).getUsuario();
+		return usuario;
 	}
 
 	@Override
@@ -155,19 +155,19 @@ public class UserServiceJPA implements IUserService {
 	}
 
 	@Override
-	public void saveRegisteredUser(User user) {
-		this.repo.save(user);
+	public void saveRegisteredUsuario(Usuario usuario) {
+		this.repo.save(usuario);
 	}
 
 	@Override
-	public void createVerificationToken(User user, String token) {
-		VerificationToken myToken = new VerificationToken(token, user);
+	public void createVerificationToken(Usuario usuario, String token) {
+		VerificationToken myToken = new VerificationToken(token, usuario);
 		verificationTokenRepository.save(myToken);
 	}
 
 	@Override
-	public void createPasswordResetTokenForUser(User user, String token) {
-		PasswordResetToken myToken = new PasswordResetToken(token, user);
+	public void createPasswordResetTokenForUsuario(Usuario usuario, String token) {
+		PasswordResetToken myToken = new PasswordResetToken(token, usuario);
 		passwordTokenRepository.save(myToken);
 	}
 
@@ -188,19 +188,19 @@ public class UserServiceJPA implements IUserService {
 	}
 
 	@Override
-	public User getUserByPasswordResetToken(String token) {
-		return this.passwordTokenRepository.findByToken(token).orElseThrow().getUser();
+	public Usuario getUsuarioByPasswordResetToken(String token) {
+		return this.passwordTokenRepository.findByToken(token).orElseThrow().getUsuario();
 	}
 
 	@Override
-	public void changeUserPassword(User user, String password) throws Exception {
-		if (user == null || user.getID() == null) {
+	public void changeUsuarioPassword(Usuario usuario, String password) throws Exception {
+		if (usuario == null || usuario.getID() == null) {
 			throw new Exception("No se ha encontrado el ID del usuario para realizar el cambio de contrasena");
 		}
-		user.setChangePassword(false);
-		user.setLastPasswordChange(LocalDate.now());
+		usuario.setChangePassword(false);
+		usuario.setLastPasswordChange(LocalDate.now());
 //		user.setPassword(passwordEncoder.encode(password));
-		this.repo.save(user);
+		this.repo.save(usuario);
 	}
 
 	@Override
@@ -212,14 +212,14 @@ public class UserServiceJPA implements IUserService {
 	}
 
 	@Override
-	public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
+	public boolean checkIfValidOldPassword(final Usuario usuario, final String oldPassword) {
 //		return passwordEncoder.matches(oldPassword, user.getPassword());
 		return false;
 	}
 
 	@Override
 	public void activarCuenta(UUID ID) throws Exception {
-		this.repo.enableUser(ID);
+		this.repo.enableUsuario(ID);
 	}
 
 }

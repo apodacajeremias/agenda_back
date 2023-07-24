@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import py.podac.tech.agenda.security.token.Token;
+import py.podac.tech.agenda.model.entities.Token;
 
 public interface TokenRepository extends JpaRepository<Token, UUID> {
 

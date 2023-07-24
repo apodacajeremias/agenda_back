@@ -11,14 +11,14 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import py.podac.tech.agenda.controller.events.OnPasswordResetEvent;
-import py.podac.tech.agenda.model.services.interfaces.IUserService;
-import py.podac.tech.agenda.security.user.User;
+import py.podac.tech.agenda.model.entities.Usuario;
+import py.podac.tech.agenda.model.services.interfaces.IUsuarioService;
 
 @Component
 public class PasswordResetListener implements ApplicationListener<OnPasswordResetEvent> {
 
 	@Autowired
-	private IUserService service;
+	private IUsuarioService service;
 
 	@Autowired
 	private MessageSource messages;
@@ -34,24 +34,24 @@ public class PasswordResetListener implements ApplicationListener<OnPasswordRese
 	// TODO: enviar email solamente cuando ya se defina como construir la
 	// infraestructura del servicio y ya haya URL propia
 	private void confirmReset(OnPasswordResetEvent event) {
-		User user = event.getUser();
+		Usuario usuario = event.getUser();
 		String token = UUID.randomUUID().toString();
-		service.createPasswordResetTokenForUser(user, token);
+		service.createPasswordResetTokenForUsuario(usuario, token);
 
-		mailSender.send(constructResetTokenEmail(event.getAppUrl(), event.getLocale(), token, user)); // NO ENVIAR
+		mailSender.send(constructResetTokenEmail(event.getAppUrl(), event.getLocale(), token, usuario)); // NO ENVIAR
 	}
 
-	private SimpleMailMessage constructResetTokenEmail(String contextPath, Locale locale, String token, User user) {
+	private SimpleMailMessage constructResetTokenEmail(String contextPath, Locale locale, String token, Usuario usuario) {
 		String subject = messages.getMessage("password.reset.subject", null, locale);
 		String url = contextPath + "/user/changePassword?token=" + token;
 		String message = messages.getMessage("password.reset.message", null, locale);
 
-		return constructEmail(subject, message + " \r\n" + url, user);
+		return constructEmail(subject, message + " \r\n" + url, usuario);
 	}
 
-	private SimpleMailMessage constructEmail(String subject, String body, User user) {
+	private SimpleMailMessage constructEmail(String subject, String body, Usuario usuario) {
 		SimpleMailMessage email = new SimpleMailMessage();
-		email.setTo(user.getEmail());
+		email.setTo(usuario.getEmail());
 		email.setSubject(subject);
 		email.setText(body);
 		return email;

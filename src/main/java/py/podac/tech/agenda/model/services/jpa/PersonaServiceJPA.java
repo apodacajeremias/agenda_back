@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import py.podac.tech.agenda.model.entities.Persona;
 import py.podac.tech.agenda.model.services.interfaces.IColaboradorService;
 import py.podac.tech.agenda.model.services.interfaces.IPersonaService;
-import py.podac.tech.agenda.model.services.interfaces.IUserService;
+import py.podac.tech.agenda.model.services.interfaces.IUsuarioService;
 import py.podac.tech.agenda.model.services.repositories.PersonaRepository;
 
 @Service
@@ -25,7 +25,7 @@ public class PersonaServiceJPA implements IPersonaService {
 	IColaboradorService colaboradorService;
 
 	@Autowired
-	IUserService userService;
+	IUsuarioService usuarioService;
 
 	@Override
 	public Persona registrar(Persona registrar) throws Exception {

@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.model.ModelCustom;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -25,7 +24,7 @@ import py.podac.tech.agenda.security.user.User;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class TransaccionDetalle extends ModelCustom<User> {
+public class TransaccionDetalle extends ModelCustom<Usuario> {
 	private double valor;
 	private double cantidad;
 	private double subtotal;

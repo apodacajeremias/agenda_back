@@ -18,7 +18,6 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.model.ModelCustom;
 import py.podac.tech.agenda.model.enums.TipoDescuento;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -30,7 +29,7 @@ import py.podac.tech.agenda.security.user.User;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Promocion extends ModelCustom<User> {
+public class Promocion extends ModelCustom<Usuario> {
 	private LocalDate inicio;
 	private LocalDate fin;
 	private double valor;

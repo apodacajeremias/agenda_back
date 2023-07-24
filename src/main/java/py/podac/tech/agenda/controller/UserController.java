@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import py.podac.tech.agenda.controller.utils.Beans;
-import py.podac.tech.agenda.model.services.interfaces.IUserService;
-import py.podac.tech.agenda.security.user.User;
+import py.podac.tech.agenda.model.entities.Usuario;
+import py.podac.tech.agenda.model.services.interfaces.IUsuarioService;
 
 @RestController
 @RequestMapping("/users")
@@ -25,10 +25,10 @@ import py.podac.tech.agenda.security.user.User;
 public class UserController {
 
 	@Autowired
-	IUserService service;
+	IUsuarioService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(@RequestBody User guardar) {
+	private ResponseEntity<?> guardar(@RequestBody Usuario guardar) {
 		System.out.println("Guardando Usuario: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
@@ -40,9 +40,9 @@ public class UserController {
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody User actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Usuario actualizar) {
 		System.out.println("Actualizando Usuario: " + ID + " -> " + actualizar + " ID " + actualizar.getID());
-		User existente = service.buscar(actualizar.getID());
+		Usuario existente = service.buscar(actualizar.getID());
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}

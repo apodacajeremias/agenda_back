@@ -1,22 +1,24 @@
-package py.podac.tech.agenda.security.auth;
+package py.podac.tech.agenda.model.services.jpa;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import py.podac.tech.agenda.model.services.interfaces.IUserService;
+import py.podac.tech.agenda.model.entities.Token;
+import py.podac.tech.agenda.model.entities.Usuario;
+import py.podac.tech.agenda.model.enums.Rol;
+import py.podac.tech.agenda.model.enums.TokenType;
+import py.podac.tech.agenda.model.services.interfaces.IUsuarioService;
 import py.podac.tech.agenda.model.services.repositories.TokenRepository;
+import py.podac.tech.agenda.security.auth.AuthenticationRequest;
+import py.podac.tech.agenda.security.auth.AuthenticationResponse;
 import py.podac.tech.agenda.security.config.JwtService;
-import py.podac.tech.agenda.security.token.Token;
-import py.podac.tech.agenda.security.token.TokenType;
-import py.podac.tech.agenda.security.user.Role;
-import py.podac.tech.agenda.security.user.User;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
-	private final IUserService service;
+public class AuthenticationServiceJPA {
+	private final IUsuarioService service;
 	private final TokenRepository tokenRepository;
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
@@ -32,38 +34,38 @@ public class AuthenticationService {
 	 * @return
 	 * @throws Exception
 	 */
-	public AuthenticationResponse registrar(User user) throws Exception {
+	public AuthenticationResponse registrar(Usuario usuario) throws Exception {
 		// Verificar si posee informacion de Persona
-		if (user.getPersona() == null)
+		if (usuario.getPersona() == null)
 			throw new Exception("El User pretendido para administrador no posee informacion de Persona");
 		// Verificar si Persona posee informacion de Colaborador
-		if (user.getPersona().getColaborador() == null)
+		if (usuario.getPersona().getColaborador() == null)
 			throw new Exception("La Persona pretendida para administrador no posee informacion de Colaborador");
 
 		/*
 		 * El campo ROLE debe ser Role.ADMINISTRADOR, debido al medio por el cual se
 		 * registra
 		 */
-		user.setRole(Role.ADMINISTRADOR);
-		user.setEnabled(false); // Para habilitar por correo
+		usuario.setRol(Rol.ADMINISTRADOR);
+		usuario.setEnabled(false); // Para habilitar por correo
 		// Al guardar el User, se persiste la Persona y al Colaborador
-		var userGuardado = service.registrar(user);
+		var usuarioGuardado = service.registrar(usuario);
 
 		// Generamos el token de acceso
-		var jwtToken = jwtService.generateToken(userGuardado);
-		saveUserToken(userGuardado, jwtToken);
+		var jwtToken = jwtService.generateToken(usuarioGuardado);
+		saveUserToken(usuarioGuardado, jwtToken);
 		System.out.println("Registro exitoso");
-		return AuthenticationResponse.builder().token(jwtToken).user(userGuardado).build();
+		return AuthenticationResponse.builder().token(jwtToken).usuario(usuarioGuardado).build();
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
 		authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-		User user = this.service.buscarPorEmail(request.getEmail());
-		var jwtToken = jwtService.generateToken(user);
-		revokeAllUserTokens(user);
-		saveUserToken(user, jwtToken);
-		return AuthenticationResponse.builder().token(jwtToken).user(user).build();
+		Usuario usuario = this.service.buscarPorEmail(request.getEmail());
+		var jwtToken = jwtService.generateToken(usuario);
+		revokeAllUserTokens(usuario);
+		saveUserToken(usuario, jwtToken);
+		return AuthenticationResponse.builder().token(jwtToken).usuario(usuario).build();
 	}
 
 	public AuthenticationResponse validate(String token) throws Exception {
@@ -77,19 +79,19 @@ public class AuthenticationService {
 		if (encontrado.isRevoked() || encontrado.isExpired()) {
 			throw new Exception("El token indicado ha sido revocado o esta expirado");
 		}
-		return AuthenticationResponse.builder().token(encontrado.getToken()).user(encontrado.getUser()).build();
+		return AuthenticationResponse.builder().token(encontrado.getToken()).usuario(encontrado.getUsuario()).build();
 	}
 
 	// Invalidar otros TOKEN
-	private void saveUserToken(User user, String jwtToken) {
-		revokeAllUserTokens(user);
-		var token = Token.builder().user(user).token(jwtToken).tokenType(TokenType.BEARER).expired(false).revoked(false)
-				.build();
+	private void saveUserToken(Usuario usuario, String jwtToken) {
+		revokeAllUserTokens(usuario);
+		var token = Token.builder().usuario(usuario).token(jwtToken).tokenType(TokenType.BEARER).expired(false)
+				.revoked(false).build();
 		tokenRepository.save(token);
 	}
 
-	private void revokeAllUserTokens(User user) {
-		var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getID());
+	private void revokeAllUserTokens(Usuario usuario) {
+		var validUserTokens = tokenRepository.findAllValidTokenByUser(usuario.getID());
 		if (validUserTokens.isEmpty())
 			return;
 		validUserTokens.forEach(token -> {

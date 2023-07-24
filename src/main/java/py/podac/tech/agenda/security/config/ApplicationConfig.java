@@ -12,13 +12,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.RequiredArgsConstructor;
-import py.podac.tech.agenda.model.services.repositories.UserRepository;
+import py.podac.tech.agenda.model.services.repositories.UsuarioRepository;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-	private final UserRepository repo;
+	private final UsuarioRepository repo;
 
 	@Bean
 	UserDetailsService userDetailsService() {

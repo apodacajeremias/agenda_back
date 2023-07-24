@@ -18,7 +18,6 @@ import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.model.ModelCustom;
 import py.podac.tech.agenda.model.enums.Idioma;
 import py.podac.tech.agenda.model.enums.Moneda;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -30,7 +29,7 @@ import py.podac.tech.agenda.security.user.User;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Empresa extends ModelCustom<User> {
+public class Empresa extends ModelCustom<Usuario> {
 
 	private String celular;
 	private String telefono;

@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.podac.tech.agenda.model.ModelCustom;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -25,7 +24,7 @@ import py.podac.tech.agenda.security.user.User;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-public class Colaborador extends ModelCustom<User> {
+public class Colaborador extends ModelCustom<Usuario> {
 
 	@NotNull
 	@NotEmpty

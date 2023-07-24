@@ -10,19 +10,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import py.podac.tech.agenda.security.user.User;
+import py.podac.tech.agenda.model.entities.Usuario;
 
-public interface UserRepository extends JpaRepository<User, UUID> {
-	Optional<User> findByEmail(String email);
+public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
+	Optional<Usuario> findByEmail(String email);
 
 	boolean existsByEmail(String email);
 
-	List<User> findByEnabledIsTrue();
+	List<Usuario> findByEnabledIsTrue();
 
-	List<User> findByEnabledIsFalse();
+	List<Usuario> findByEnabledIsFalse();
 	
 	@Modifying
 	@Transactional
-	@Query("UPDATE User u SET u.enabled = true WHERE u.id = :id")
-	void enableUser(@Param("id") UUID ID);
+	@Query("UPDATE Usuario u SET u.enabled = true WHERE u.id = :id")
+	void enableUsuario(@Param("id") UUID ID);
 }

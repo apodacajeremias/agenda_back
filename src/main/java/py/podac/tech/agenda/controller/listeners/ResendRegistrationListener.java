@@ -9,14 +9,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
 import py.podac.tech.agenda.controller.events.OnResendRegistrationEvent;
-import py.podac.tech.agenda.model.services.interfaces.IUserService;
-import py.podac.tech.agenda.security.user.User;
+import py.podac.tech.agenda.model.entities.Usuario;
+import py.podac.tech.agenda.model.services.interfaces.IUsuarioService;
 
 @Component
 public class ResendRegistrationListener implements ApplicationListener<OnResendRegistrationEvent> {
 
 	@Autowired
-	private IUserService service;
+	private IUsuarioService service;
 
 	@Autowired
 	private MessageSource messages;
@@ -32,11 +32,11 @@ public class ResendRegistrationListener implements ApplicationListener<OnResendR
 	// TODO: enviar email solamente cuando ya se defina como construir la
 	// infraestructura del servicio y ya haya URL propia
 	private void resendConfirmationToken(OnResendRegistrationEvent event) {
-		User user = event.getUser();
+		Usuario usuario = event.getUser();
 		String token = UUID.randomUUID().toString();
-		service.createVerificationToken(user, token);
+		service.createVerificationToken(usuario, token);
 
-		String recipientAddress = user.getEmail();
+		String recipientAddress = usuario.getEmail();
 		String subject = messages.getMessage("registration.resend.subject", null, event.getLocale());
 		String confirmationUrl = event.getAppUrl() + "/registrationConfirm?token=" + token;
 		String message = messages.getMessage("registration.resend.message", null, event.getLocale());

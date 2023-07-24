@@ -1,4 +1,4 @@
-package py.podac.tech.agenda.security.auth;
+package py.podac.tech.agenda.controller;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -24,11 +24,14 @@ import lombok.RequiredArgsConstructor;
 import py.podac.tech.agenda.controller.events.OnPasswordResetEvent;
 import py.podac.tech.agenda.controller.events.OnRegistrationCompleteEvent;
 import py.podac.tech.agenda.controller.events.OnResendRegistrationEvent;
+import py.podac.tech.agenda.model.entities.Usuario;
 import py.podac.tech.agenda.model.exceptions.InvalidOldPasswordException;
-import py.podac.tech.agenda.model.services.interfaces.IUserService;
-import py.podac.tech.agenda.security.user.User;
-import py.podac.tech.agenda.security.user.VerificationToken;
-import py.podac.tech.agenda.security.user.reset.PasswordResetRequest;
+import py.podac.tech.agenda.model.services.interfaces.IUsuarioService;
+import py.podac.tech.agenda.model.services.jpa.AuthenticationServiceJPA;
+import py.podac.tech.agenda.security.auth.AuthenticationRequest;
+import py.podac.tech.agenda.security.auth.AuthenticationResponse;
+import py.podac.tech.agenda.security.auth.PasswordResetRequest;
+import py.podac.tech.agenda.security.auth.VerificationToken;
 
 @RestController
 @RequestMapping("/auth")
@@ -36,9 +39,9 @@ import py.podac.tech.agenda.security.user.reset.PasswordResetRequest;
 @CrossOrigin
 public class AuthenticationController {
 
-	private final AuthenticationService service;
+	private final AuthenticationServiceJPA service;
 
-	private final IUserService userService;
+	private final IUsuarioService usuarioService;
 
 	private final ApplicationEventPublisher eventPublisher;
 
@@ -46,12 +49,12 @@ public class AuthenticationController {
 
 	// TODO: validar que el correo no se repita
 	@PostMapping("/register")
-	public ResponseEntity<AuthenticationResponse> register(WebRequest request, @RequestBody User user)
+	public ResponseEntity<AuthenticationResponse> register(WebRequest request, @RequestBody Usuario usuario)
 			throws Exception {
-		System.out.println(user);
-		AuthenticationResponse response = service.registrar(user);
+		System.out.println(usuario);
+		AuthenticationResponse response = service.registrar(usuario);
 		String appUrl = request.getContextPath();
-		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(response.getUser(), request.getLocale(), appUrl));
+		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(response.getUsuario(), request.getLocale(), appUrl));
 		return ResponseEntity.ok(response);
 	}
 
@@ -70,32 +73,32 @@ public class AuthenticationController {
 	public ResponseEntity<Boolean> registrationConfirm(WebRequest request, @RequestParam("token") String token)
 			throws Exception {
 		Locale locale = request.getLocale();
-		VerificationToken verificationToken = userService.getVerificationToken(token);
+		VerificationToken verificationToken = usuarioService.getVerificationToken(token);
 		if (verificationToken == null) {
 			String message = messages.getMessage("auth.message.invalidToken", null, locale);
 			throw new Exception(message);
 		}
-		User user = verificationToken.getUser();
+		Usuario usuario = verificationToken.getUsuario();
 		Calendar cal = Calendar.getInstance();
 		if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
 			String message = messages.getMessage("auth.message.expired", null, locale);
 			throw new Exception(message);
 		}
-		userService.activarCuenta(user.getID());
+		usuarioService.activarCuenta(usuario.getID());
 		return ResponseEntity.ok(Boolean.TRUE);
 	}
 
 	@PostMapping("/user/resetPassword")
 	public ResponseEntity<Boolean> resetPassword(HttpServletRequest request, @RequestParam("email") String userEmail) {
-		User user = userService.buscarPorEmail(userEmail);
+		Usuario usuario = usuarioService.buscarPorEmail(userEmail);
 		String appUrl = request.getContextPath();
-		eventPublisher.publishEvent(new OnPasswordResetEvent(user, request.getLocale(), appUrl));
+		eventPublisher.publishEvent(new OnPasswordResetEvent(usuario, request.getLocale(), appUrl));
 		return ResponseEntity.ok(Boolean.TRUE);
 	}
 
 	@GetMapping("/user/changePassword")
 	public ResponseEntity<Boolean> changePassword(Locale locale, @RequestParam("token") String token) throws Exception {
-		String result = userService.validatePasswordResetToken(token);
+		String result = usuarioService.validatePasswordResetToken(token);
 		if (result != null) {
 			throw new Exception(messages.getMessage(result, null, locale));
 		}
@@ -105,29 +108,29 @@ public class AuthenticationController {
 	@PostMapping("/user/savePassword")
 	public ResponseEntity<Boolean> savePassword(final Locale locale, @Valid PasswordResetRequest passwordReset)
 			throws Exception {
-		String result = userService.validatePasswordResetToken(passwordReset.getToken());
+		String result = usuarioService.validatePasswordResetToken(passwordReset.getToken());
 		if (result != null) {
 			throw new Exception(messages.getMessage(result, null, locale));
 		}
 
-		User user = userService.getUserByPasswordResetToken(passwordReset.getToken());
-		if (user == null) {
+		Usuario usuario = usuarioService.getUsuarioByPasswordResetToken(passwordReset.getToken());
+		if (usuario == null) {
 			throw new Exception("Usuario que modifica contrasena no se ha encontrado");
 		}
 
-		userService.changeUserPassword(user, passwordReset.getPassword());
+		usuarioService.changeUsuarioPassword(usuario, passwordReset.getPassword());
 		return ResponseEntity.ok(Boolean.TRUE);
 	}
 
 	@GetMapping("/user/resendRegistrationToken")
 	public ResponseEntity<Boolean> resendRegistrationToken(HttpServletRequest request,
 			@RequestParam("token") String existingToken) {
-		VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
+		VerificationToken newToken = usuarioService.generateNewVerificationToken(existingToken);
 
-		User user = userService.getUser(newToken.getToken());
+		Usuario usuario = usuarioService.getUsuario(newToken.getToken());
 		String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 
-		eventPublisher.publishEvent(new OnResendRegistrationEvent(user, newToken, request.getLocale(), appUrl));
+		eventPublisher.publishEvent(new OnResendRegistrationEvent(usuario, newToken, request.getLocale(), appUrl));
 
 		return ResponseEntity.ok(Boolean.TRUE);
 	}
@@ -136,12 +139,12 @@ public class AuthenticationController {
 	@PreAuthorize("hasRole('READ_PRIVILEGE')")
 	public ResponseEntity<Boolean> changeUserPassword(Locale locale, @RequestParam("password") String password,
 			@RequestParam("oldpassword") String oldPassword) throws Exception {
-		User user = userService.buscarPorEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		Usuario usuario = usuarioService.buscarPorEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
-		if (!userService.checkIfValidOldPassword(user, oldPassword)) {
+		if (!usuarioService.checkIfValidOldPassword(usuario, oldPassword)) {
 			throw new InvalidOldPasswordException();
 		}
-		userService.changeUserPassword(user, password);
+		usuarioService.changeUsuarioPassword(usuario, password);
 		return ResponseEntity.ok(Boolean.TRUE);
 	}
 

@@ -5,13 +5,13 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import py.podac.tech.agenda.security.user.User;
-import py.podac.tech.agenda.security.user.reset.PasswordResetToken;
+import py.podac.tech.agenda.model.entities.Usuario;
+import py.podac.tech.agenda.security.auth.PasswordResetToken;
 
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, UUID> {
 
 	Optional<PasswordResetToken> findByToken(String token);
 
-	Optional<PasswordResetToken> findByUser(User user);
+	Optional<PasswordResetToken> findByUser(Usuario usuario);
 
 }

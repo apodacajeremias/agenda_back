@@ -1,4 +1,4 @@
-package py.podac.tech.agenda.security.user;
+package py.podac.tech.agenda.model.entities;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -26,24 +26,20 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import py.podac.tech.agenda.model.entities.Persona;
+import py.podac.tech.agenda.model.enums.Rol;
 import py.podac.tech.agenda.model.interfaces.ValidEmail;
-import py.podac.tech.agenda.security.token.Token;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
 @DynamicInsert
 @DynamicUpdate
-public class User implements UserDetails {
+public class Usuario implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -65,8 +61,7 @@ public class User implements UserDetails {
 	private LocalDate lastPasswordChange;
 
 	@Enumerated(EnumType.STRING)
-	@Default
-	private Role role = Role.USUARIO;
+	private Rol rol;
 
 	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Persona persona;
@@ -76,7 +71,7 @@ public class User implements UserDetails {
 	@ToString.Exclude
 	private List<Token> tokens;
 
-	public User(UUID iD) {
+	public Usuario(UUID iD) {
 		super();
 		ID = iD;
 	}
@@ -84,7 +79,7 @@ public class User implements UserDetails {
 	@Override
 	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role.name()));
+		return List.of(new SimpleGrantedAuthority(rol.name()));
 	}
 
 	@Override
@@ -116,7 +111,7 @@ public class User implements UserDetails {
 	// TRAVES DE CORREO DE MANERA OFICIAL Y 100% FUNCIONAL
 	@Override
 	public boolean isEnabled() {
-		return enabled == false ? true : true;
+		return enabled ? true : true;
 	}
 
 }

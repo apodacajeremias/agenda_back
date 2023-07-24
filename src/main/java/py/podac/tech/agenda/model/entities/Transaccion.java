@@ -21,7 +21,6 @@ import py.podac.tech.agenda.model.ModelCustom;
 import py.podac.tech.agenda.model.enums.TipoBeneficio;
 import py.podac.tech.agenda.model.enums.TipoDescuento;
 import py.podac.tech.agenda.model.enums.TipoTransaccion;
-import py.podac.tech.agenda.security.user.User;
 
 @Data
 @SuperBuilder
@@ -33,7 +32,7 @@ import py.podac.tech.agenda.security.user.User;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Transaccion extends ModelCustom<User> {
+public class Transaccion extends ModelCustom<Usuario> {
 
 	@Enumerated(EnumType.STRING)
 	private TipoTransaccion tipo; // VENTA

@@ -1,4 +1,4 @@
-package py.podac.tech.agenda.security.user.reset;
+package py.podac.tech.agenda.security.auth;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

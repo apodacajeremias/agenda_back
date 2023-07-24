@@ -1,4 +1,4 @@
-package py.podac.tech.agenda.security.token;
+package py.podac.tech.agenda.model.entities;
 
 import java.util.UUID;
 
@@ -20,7 +20,9 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import py.podac.tech.agenda.security.user.User;
+import py.podac.tech.agenda.model.enums.TokenType;
+
+
 
 @Data
 @Builder
@@ -49,5 +51,5 @@ public class Token {
 	@JoinColumn(name = "user_id")
 	@JsonBackReference
 	@ToString.Exclude
-	public User user;
+	public Usuario usuario;
 }

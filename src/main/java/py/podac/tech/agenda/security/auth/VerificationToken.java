@@ -1,4 +1,4 @@
-package py.podac.tech.agenda.security.user;
+package py.podac.tech.agenda.security.auth;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import py.podac.tech.agenda.model.entities.Usuario;
 
 @Data
 @Builder
@@ -33,16 +34,16 @@ public class VerificationToken {
 
 	private String token;
 
-	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+	@OneToOne(targetEntity = Usuario.class, fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "user_id")
-	private User user;
+	private Usuario usuario;
 
 	private Date expiryDate;
 
-	public VerificationToken(String token, User user) {
+	public VerificationToken(String token, Usuario usuario) {
 		super();
 		this.token = token;
-		this.user = user;
+		this.usuario = usuario;
 		this.expiryDate = calculateExpiryDate(EXPIRATION);
 	}
 

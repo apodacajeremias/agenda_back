@@ -48,7 +48,7 @@ public class Token {
 	public boolean expired;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "usuario_id")
 	@JsonBackReference
 	@ToString.Exclude
 	public Usuario usuario;

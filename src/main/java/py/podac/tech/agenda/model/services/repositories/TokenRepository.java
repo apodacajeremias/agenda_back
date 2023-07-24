@@ -11,11 +11,7 @@ import py.podac.tech.agenda.model.entities.Token;
 
 public interface TokenRepository extends JpaRepository<Token, UUID> {
 
-	@Query(value = """
-			select t from Token t inner join User u\s
-			on t.user.ID = u.ID\s
-			where u.ID = :ID and (t.expired = false or t.revoked = false)\s
-			""")
+	@Query(value = "SELECT t FROM Token t INNER JOIN Usuario u on t.usuario.ID = u.ID WHERE u.ID = :ID and (t.expired = false OR t.revoked = false)")
 	List<Token> findAllValidTokenByUser(UUID ID);
 
 	Optional<Token> findByToken(String token);

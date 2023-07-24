@@ -66,7 +66,7 @@ public class Usuario implements UserDetails {
 	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Persona persona;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "usuario")
 	@JsonManagedReference
 	@ToString.Exclude
 	private List<Token> tokens;

@@ -64,6 +64,7 @@ public class Usuario implements UserDetails {
 	private Rol rol;
 
 	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	@ToString.Exclude
 	private Persona persona;
 
 	@OneToMany(mappedBy = "usuario")

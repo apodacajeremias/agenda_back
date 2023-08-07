@@ -71,14 +71,14 @@ public class AuthenticationServiceJPA {
 
 	public AuthenticationResponse validate(String token) throws Exception {
 		if (jwtService.isTokenExpired(token)) {
-			return null;
+			throw new Exception("El token indicado esta expirado.");
 		}
 		final Token encontrado = this.tokenRepository.findByToken(token).orElse(null);
 		if (token == null) {
-			throw new Exception("El token indicado no ha sido encontrado");
+			throw new Exception("El token indicado no ha sido encontrado.");
 		}
 		if (encontrado.isRevoked() || encontrado.isExpired()) {
-			throw new Exception("El token indicado ha sido revocado o esta expirado");
+			throw new Exception("El token indicado ha sido revocado o esta expirado.");
 		}
 		return AuthenticationResponse.builder().token(encontrado.getToken()).usuario(encontrado.getUsuario()).build();
 	}

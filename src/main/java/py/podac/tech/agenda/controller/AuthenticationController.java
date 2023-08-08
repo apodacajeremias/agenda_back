@@ -65,7 +65,7 @@ public class AuthenticationController {
 
 	@GetMapping("/validate")
 	public ResponseEntity<AuthenticationResponse> validate(@RequestParam String token) throws Exception {
-		return ResponseEntity.ok(service.validate(token));
+		return service.validate(token);
 	}
 
 	@PostMapping("/registrationConfirm")

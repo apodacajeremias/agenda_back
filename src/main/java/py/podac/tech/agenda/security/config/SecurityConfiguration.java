@@ -32,7 +32,7 @@ public class SecurityConfiguration {
 	private final LogoutHandler logoutHandler;
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeHttpRequests()
 		.requestMatchers("/**").permitAll().and()
 //        .headers().addHeaderWriter(
@@ -50,7 +50,7 @@ public class SecurityConfiguration {
 	}
 
 	@Bean("corsConfigurationSource")
-	public CorsConfigurationSource corsConfigurationSource() {
+	CorsConfigurationSource corsConfigurationSource() {
 		final CorsConfiguration config = new CorsConfiguration();
 		config.setAllowedHeaders(Arrays.asList("*"));
 		config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));

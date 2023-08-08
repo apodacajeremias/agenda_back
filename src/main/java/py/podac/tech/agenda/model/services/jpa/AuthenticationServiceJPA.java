@@ -1,5 +1,6 @@
 package py.podac.tech.agenda.model.services.jpa;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class AuthenticationServiceJPA {
 		// Generamos el token de acceso
 		var jwtToken = jwtService.generateToken(usuarioGuardado);
 		saveUserToken(usuarioGuardado, jwtToken);
-		System.out.println("Registro exitoso");
+		System.out.println("Registro exitoso.");
 		return AuthenticationResponse.builder().token(jwtToken).usuario(usuarioGuardado).build();
 	}
 
@@ -69,18 +70,15 @@ public class AuthenticationServiceJPA {
 		return AuthenticationResponse.builder().token(jwtToken).usuario(usuario).build();
 	}
 
-	public AuthenticationResponse validate(String token) throws Exception {
-		if (jwtService.isTokenExpired(token)) {
-			throw new Exception("El token indicado esta expirado.");
-		}
+	public ResponseEntity<AuthenticationResponse> validate(String token) throws Exception {
 		final Token encontrado = this.tokenRepository.findByToken(token).orElse(null);
-		if (token == null) {
-			throw new Exception("El token indicado no ha sido encontrado.");
+		if (token == null || encontrado == null) {
+			return ResponseEntity.notFound().build();
 		}
 		if (encontrado.isRevoked() || encontrado.isExpired()) {
-			throw new Exception("El token indicado ha sido revocado o esta expirado.");
+			return ResponseEntity.notFound().build();
 		}
-		return AuthenticationResponse.builder().token(encontrado.getToken()).usuario(encontrado.getUsuario()).build();
+		return ResponseEntity.ok(AuthenticationResponse.builder().token(encontrado.getToken()).usuario(encontrado.getUsuario()).build());
 	}
 
 	// Invalidar otros TOKEN

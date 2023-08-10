@@ -1,6 +1,5 @@
 package py.podac.tech.agenda.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +28,12 @@ public class AgendaController {
 	@Autowired
 	IAgendaService service;
 
+//	POST 	/orders (post/add a new order in the set of orders)
+//	GET 	/orders (get a list of orders)
+//	PUT 	/orders/{id} (replace an order)
+//	DELETE 	/orders/{id} (delete an order)
+//	GET 	/orders/{id} (get a single order)
+
 	@PostMapping
 	private ResponseEntity<?> guardar(@RequestBody Agenda guardar) {
 		System.out.println("Guardando Agenda: " + guardar.toString());
@@ -36,8 +41,7 @@ public class AgendaController {
 	}
 
 	@GetMapping
-	private ResponseEntity<List<?>> buscarPorEstado(
-			@RequestParam(required = false) Boolean activo) {
+	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
 		if (activo == null) {
 			System.out.println("Buscando Agenda: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
@@ -71,11 +75,5 @@ public class AgendaController {
 	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
 		System.out.println("Buscando Agenda: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
-	}
-	
-	@GetMapping("/verificarDisponibilidad")
-	private ResponseEntity<?> verificarDisponibilidadDeHorario(@RequestParam LocalDateTime inicio, @RequestParam LocalDateTime fin){
-		System.out.println("Verificando disponibilidad de horario entre "+inicio+" y "+fin);
-		return ResponseEntity.ok(service.horarioDisponible(inicio, fin));
 	}
 }

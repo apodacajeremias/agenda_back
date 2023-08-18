@@ -23,6 +23,7 @@ public class PasswordResetListener implements ApplicationListener<OnPasswordRese
 	@Autowired
 	private MessageSource messages;
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -36,9 +37,10 @@ public class PasswordResetListener implements ApplicationListener<OnPasswordRese
 		String token = UUID.randomUUID().toString();
 		service.createPasswordResetTokenForUsuario(usuario, token);
 
-		mailSender.send(constructResetTokenEmail(event.getAppUrl(), event.getLocale(), token, usuario)); // NO ENVIAR
+//		mailSender.send(constructResetTokenEmail(event.getAppUrl(), event.getLocale(), token, usuario)); // NO ENVIAR
 	}
 
+	@SuppressWarnings("unused")
 	private SimpleMailMessage constructResetTokenEmail(String contextPath, Locale locale, String token, Usuario usuario) {
 		String subject = messages.getMessage("password.reset.subject", null, locale);
 		String url = contextPath + "/user/changePassword?token=" + token;

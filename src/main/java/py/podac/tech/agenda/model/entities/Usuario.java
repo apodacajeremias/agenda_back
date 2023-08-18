@@ -52,6 +52,8 @@ public class Usuario implements UserDetails {
 	private String password;
 
 	@Transient
+	@ToString.Exclude
+	@JsonIgnore
 	private String matchingPassword;
 
 	private boolean changePassword;

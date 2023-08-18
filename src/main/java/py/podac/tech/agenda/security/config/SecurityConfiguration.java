@@ -33,13 +33,7 @@ public class SecurityConfiguration {
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().authorizeHttpRequests()
-		.requestMatchers("/**").permitAll().and()
-//        .headers().addHeaderWriter(
-//        new StaticHeadersWriter("Access-Control-Allow-Origin", "*")).and()
-//				.authorizeHttpRequests().requestMatchers("/auth/**", "/**").permitAll().and()
-//				.anyRequest().authenticated()
-//				.and()
+		http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers("/**").permitAll().and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).logout()
@@ -55,7 +49,6 @@ public class SecurityConfiguration {
 		config.setAllowedHeaders(Arrays.asList("*"));
 		config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
 		config.setAllowedOrigins(Arrays.asList("*"));
-//		config.addAllowedHeader("Content-Type");
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
 

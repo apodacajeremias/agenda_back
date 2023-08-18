@@ -70,6 +70,6 @@ public class EmpresaServiceJPA implements IEmpresaService {
 
 	@Override
 	public Empresa buscarUltimo() {
-		return this.repo.findTopByOrderByFechaCreacionDesc().orElseThrow();
+		return this.repo.findTopByOrderByFechaCreacionDesc().orElse(null);
 	}
 }

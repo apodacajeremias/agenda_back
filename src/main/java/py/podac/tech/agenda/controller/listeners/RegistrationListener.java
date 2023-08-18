@@ -22,6 +22,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 	@Autowired
 	private MessageSource messages;
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -44,6 +45,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		email.setTo(recipientAddress);
 		email.setSubject(subject);
 		email.setText(message + "\r\n" + "http://localhost:8080" + confirmationUrl);
-		mailSender.send(email); //NO ENVIAR
+//		mailSender.send(email); //NO ENVIAR
 	}
 }

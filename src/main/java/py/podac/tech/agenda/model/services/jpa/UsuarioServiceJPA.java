@@ -73,7 +73,7 @@ public class UsuarioServiceJPA implements IUsuarioService {
 		if (!passwordEncoder.matches(usuario.getMatchingPassword(), usuario.getPassword())) {
 			throw new Exception("Confirmacion de contrasena no coincide con la contrasena");
 		}
-
+		usuario.setMatchingPassword(null);
 		return guardar(usuario);
 	}
 

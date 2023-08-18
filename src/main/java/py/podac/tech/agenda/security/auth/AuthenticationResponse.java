@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import py.podac.tech.agenda.model.entities.Empresa;
 import py.podac.tech.agenda.model.entities.Usuario;
 
 @Data
@@ -15,4 +16,6 @@ public class AuthenticationResponse {
 	private String token;
 
 	private Usuario usuario;
+	
+	private Empresa empresa;
 }

@@ -58,4 +58,11 @@ public class UserController {
 		System.out.println("Buscando Usuario: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}
+	
+	// Username = Email
+	@GetMapping("/existeEmail/{email}")
+	private ResponseEntity<Boolean> existeEmail(@PathVariable String email){
+		System.out.println("Verificando disponibilidad de email: " + email);
+		return ResponseEntity.ok(service.existeEmail(email));
+	}
 }

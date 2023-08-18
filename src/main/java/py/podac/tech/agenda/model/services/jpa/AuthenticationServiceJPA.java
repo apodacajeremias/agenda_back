@@ -10,6 +10,7 @@ import py.podac.tech.agenda.model.entities.Token;
 import py.podac.tech.agenda.model.entities.Usuario;
 import py.podac.tech.agenda.model.enums.Rol;
 import py.podac.tech.agenda.model.enums.TokenType;
+import py.podac.tech.agenda.model.services.interfaces.IEmpresaService;
 import py.podac.tech.agenda.model.services.interfaces.IUsuarioService;
 import py.podac.tech.agenda.model.services.repositories.TokenRepository;
 import py.podac.tech.agenda.security.auth.AuthenticationRequest;
@@ -23,7 +24,7 @@ public class AuthenticationServiceJPA {
 	private final TokenRepository tokenRepository;
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
-//	private final PasswordEncoder passwordEncoder;
+	private final IEmpresaService empresaService;
 
 	/**
 	 * Se recibe un objeto User para guardar en la base de datos, estas
@@ -37,26 +38,26 @@ public class AuthenticationServiceJPA {
 	 */
 	public AuthenticationResponse registrar(Usuario usuario) throws Exception {
 		// Verificar si posee informacion de Persona
-		if (usuario.getPersona() == null)
-			throw new Exception("El User pretendido para administrador no posee informacion de Persona");
+//		if (usuario.getPersona() == null)
+//			throw new Exception("El User pretendido para administrador no posee informacion de Persona");
 		// Verificar si Persona posee informacion de Colaborador
-		if (usuario.getPersona().getColaborador() == null)
-			throw new Exception("La Persona pretendida para administrador no posee informacion de Colaborador");
+//		if (usuario.getPersona().getColaborador() == null)
+//			throw new Exception("La Persona pretendida para administrador no posee informacion de Colaborador");
 
 		/*
 		 * El campo ROLE debe ser Role.ADMINISTRADOR, debido al medio por el cual se
 		 * registra
 		 */
 		usuario.setRol(Rol.ADMINISTRADOR);
-		usuario.setEnabled(false); // Para habilitar por correo
+		usuario.setEnabled(true); // Para habilitar por correo
 		// Al guardar el User, se persiste la Persona y al Colaborador
 		var usuarioGuardado = service.registrar(usuario);
-
+		
 		// Generamos el token de acceso
 		var jwtToken = jwtService.generateToken(usuarioGuardado);
 		saveUserToken(usuarioGuardado, jwtToken);
 		System.out.println("Registro exitoso.");
-		return AuthenticationResponse.builder().token(jwtToken).usuario(usuarioGuardado).build();
+		return AuthenticationResponse.builder().token(jwtToken).usuario(usuarioGuardado).empresa(empresaService.buscarUltimo()).build();
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -67,7 +68,7 @@ public class AuthenticationServiceJPA {
 		revokeAllUserTokens(usuario);
 		saveUserToken(usuario, jwtToken);
 		System.out.println("Autenticacion correcta.");
-		return AuthenticationResponse.builder().token(jwtToken).usuario(usuario).build();
+		return AuthenticationResponse.builder().token(jwtToken).usuario(usuario).empresa(empresaService.buscarUltimo()).build();
 	}
 
 	public ResponseEntity<AuthenticationResponse> validate(String token) throws Exception {
@@ -78,10 +79,10 @@ public class AuthenticationServiceJPA {
 		if (encontrado.isRevoked() || encontrado.isExpired()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(AuthenticationResponse.builder().token(encontrado.getToken()).usuario(encontrado.getUsuario()).build());
+		return ResponseEntity.ok(AuthenticationResponse.builder().token(encontrado.getToken()).usuario(encontrado.getUsuario()).empresa(empresaService.buscarUltimo()).build());
 	}
 
-	// Invalidar otros TOKEN
+
 	private void saveUserToken(Usuario usuario, String jwtToken) {
 		revokeAllUserTokens(usuario);
 		var token = Token.builder().usuario(usuario).token(jwtToken).tokenType(TokenType.BEARER).expired(false)

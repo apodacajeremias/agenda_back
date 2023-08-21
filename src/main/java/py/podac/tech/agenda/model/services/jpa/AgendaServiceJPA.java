@@ -76,8 +76,6 @@ public class AgendaServiceJPA implements IAgendaService {
 
 	@Override
 	public boolean horarioDisponible(LocalDateTime inicio, LocalDateTime fin) {
-		// Se retorna la inversa del exists (!exists) 
-		// Si existe algun registro entre ese horario que este activo entonces horarioDisponible = false
-		return !this.repo.existsByFechaBetweenAndHoraBetweenAndActivoIsTrue(inicio.toLocalDate(), fin.toLocalDate(), inicio.toLocalTime(), fin.toLocalTime());
+		return false;
 	}
 }

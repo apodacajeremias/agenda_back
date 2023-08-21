@@ -1,12 +1,12 @@
 package py.podac.tech.agenda.model.entities;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,15 +34,16 @@ import py.podac.tech.agenda.model.enums.Situacion;
 @DynamicUpdate
 public class Agenda extends ModelCustom<Usuario> {
 
-	@Column
-	@DateTimeFormat(iso = ISO.DATE)
-	private LocalDate fecha;
+	@Column(nullable = false)
+	@DateTimeFormat(iso = ISO.DATE_TIME)
+	private LocalDateTime inicio;
 
-	@Column
-	@DateTimeFormat(iso = ISO.TIME)
-	private LocalTime hora;
+	@Column(nullable = false)
+	@DateTimeFormat(iso = ISO.DATE_TIME)
+	private LocalDateTime fin;
 	
-	private String observacion;
+	@Column
+	private boolean diaCompleto;
 
 	@Column
 	@Enumerated(EnumType.STRING)
@@ -52,10 +53,10 @@ public class Agenda extends ModelCustom<Usuario> {
 	@Enumerated(EnumType.STRING)
 	private Prioridad prioridad;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = CascadeType.MERGE)
 	private Colaborador colaborador;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = CascadeType.MERGE)
 	private Persona persona;
 	
 

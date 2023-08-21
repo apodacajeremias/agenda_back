@@ -36,7 +36,7 @@ public class AgendaController {
 
 	@PostMapping
 	private ResponseEntity<?> guardar(@RequestBody Agenda guardar) {
-		guardar.setNombre(guardar.getObservacion());
+		guardar.setNombre("Cita");
 		System.out.println("Guardando Agenda: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}

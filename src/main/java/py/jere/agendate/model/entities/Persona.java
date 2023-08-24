@@ -8,6 +8,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -73,6 +75,7 @@ public class Persona extends ModelCustom<Usuario> {
 	private String fotoPerfil;
 
 	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JsonManagedReference
 	private Colaborador colaborador;
 
 	@ToString.Exclude

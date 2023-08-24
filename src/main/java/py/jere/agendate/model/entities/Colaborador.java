@@ -3,8 +3,11 @@ package py.jere.agendate.model.entities;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -36,5 +39,17 @@ public class Colaborador extends ModelCustom<Usuario> {
 
 	@Column
 	private String profesion;
+	
+	@OneToOne(mappedBy = "colaborador")
+	@JsonBackReference
+	private Persona persona;
+	
+	@Override
+	public String getNombre() {
+		if(this.persona != null) {
+			return this.persona.getNombre();			
+		}
+		return null;
+	}
 
 }

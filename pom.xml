@@ -9,7 +9,7 @@
 		<version>3.0.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>py.podac.tech</groupId>
+	<groupId>py.jere.agendate</groupId>
 	<artifactId>agenda_back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>

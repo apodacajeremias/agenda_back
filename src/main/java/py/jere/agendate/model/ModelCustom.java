@@ -22,7 +22,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -42,9 +41,8 @@ public abstract class ModelCustom<T> {
 	private UUID ID;
 
 	@Column(nullable = false)
-	@Default
 	@JsonProperty("activo")
-	private boolean activo = true;
+	private boolean activo;
 
 	@Column(nullable = false)
 	@JsonProperty("nombre")

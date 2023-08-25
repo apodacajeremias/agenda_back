@@ -51,7 +51,7 @@ public class ApplicationConfig {
 		}
 		return "\\xampp\\agendate";
 	}
-	
+
 	private boolean isWindows() {
 		return System.getProperty("os.name").contains("Windows");
 	}

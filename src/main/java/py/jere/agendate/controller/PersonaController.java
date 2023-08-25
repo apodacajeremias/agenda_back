@@ -28,25 +28,15 @@ public class PersonaController {
 	@Autowired
 	IPersonaService service;
 
-//	POST 	/orders (post/add a new order in the set of orders)
-//	GET 	/orders (get a list of orders)
-//	PUT 	/orders/{id} (replace an order)
-//	DELETE 	/orders/{id} (delete an order)
-//	GET 	/orders/{id} (get a single order)
-
 	@PostMapping
 	private ResponseEntity<?> guardar(@RequestBody Persona guardar) {
 		System.out.println("Guardando Persona: " + guardar.toString());
-		if (guardar.getFotoPerfil() != null) {
-			System.out.println("foto perfil llega");
-		} else {
-			System.out.println("foto perfil NO llega");
-		}
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
-	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
+	private ResponseEntity<List<?>> buscarPorEstado(
+			@RequestParam(required = false) Boolean activo) {
 		if (activo == null) {
 			System.out.println("Buscando Persona: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
@@ -62,14 +52,9 @@ public class PersonaController {
 		}
 	}
 
-	@PutMapping(value = "/{ID}")
+	@PutMapping("/{ID}")
 	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Persona actualizar) {
-		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar.getNombre());
-		if (actualizar.getAvatar() != null) {
-			System.out.println("foto perfil llega");
-		} else {
-			System.out.println("foto perfil NO llega");
-		}
+		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar);
 		Persona existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
@@ -86,5 +71,4 @@ public class PersonaController {
 		System.out.println("Buscando Persona: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}
-
 }

@@ -37,6 +37,11 @@ public class PersonaController {
 	@PostMapping
 	private ResponseEntity<?> guardar(@RequestBody Persona guardar) {
 		System.out.println("Guardando Persona: " + guardar.toString());
+		if (guardar.getFotoPerfil() != null) {
+			System.out.println("foto perfil llega");
+		} else {
+			System.out.println("foto perfil NO llega");
+		}
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
@@ -57,9 +62,14 @@ public class PersonaController {
 		}
 	}
 
-	@PutMapping("/{ID}")
+	@PutMapping(value = "/{ID}")
 	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Persona actualizar) {
-		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar);
+		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar.getNombre());
+		if (actualizar.getAvatar() != null) {
+			System.out.println("foto perfil llega");
+		} else {
+			System.out.println("foto perfil NO llega");
+		}
 		Persona existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
@@ -76,4 +86,5 @@ public class PersonaController {
 		System.out.println("Buscando Persona: " + ID);
 		return ResponseEntity.ok(service.buscar(ID));
 	}
+
 }

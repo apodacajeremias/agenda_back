@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -49,7 +50,7 @@ public class Persona extends ModelCustom<Usuario> {
 	private String documentoIdentidad;
 
 	@Column(nullable = false)
-	@DateTimeFormat(iso = ISO.DATE)
+	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private LocalDate fechaNacimiento;
 
 	@Transient
@@ -73,6 +74,9 @@ public class Persona extends ModelCustom<Usuario> {
 
 	@Column
 	private String fotoPerfil;
+
+	@Transient
+	private MultipartFile avatar;
 
 	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JsonManagedReference

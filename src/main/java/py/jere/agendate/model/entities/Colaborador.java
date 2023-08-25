@@ -42,6 +42,8 @@ public class Colaborador extends ModelCustom<Usuario> {
 	
 	@OneToOne(mappedBy = "colaborador")
 	@JsonBackReference
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	private Persona persona;
 	
 	@Override

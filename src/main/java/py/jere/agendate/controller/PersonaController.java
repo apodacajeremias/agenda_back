@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import py.jere.agendate.controller.utils.Beans;
 import py.jere.agendate.model.entities.Persona;
@@ -29,14 +29,16 @@ public class PersonaController {
 	IPersonaService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(@RequestBody Persona guardar) {
+	private ResponseEntity<?> guardar(Persona guardar, @RequestParam("file") MultipartFile file) {
+		if (file != null) {
+			System.out.println("llega file");
+		}
 		System.out.println("Guardando Persona: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
 
 	@GetMapping
-	private ResponseEntity<List<?>> buscarPorEstado(
-			@RequestParam(required = false) Boolean activo) {
+	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
 		if (activo == null) {
 			System.out.println("Buscando Persona: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
@@ -53,7 +55,11 @@ public class PersonaController {
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Persona actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Persona actualizar,
+			@RequestParam("file") MultipartFile file) {
+		if (file != null) {
+			System.out.println("llega file");
+		}
 		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar);
 		Persona existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos

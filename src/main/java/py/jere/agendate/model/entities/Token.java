@@ -17,10 +17,10 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;
-import py.jere.agendate.model.enums.TokenType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import py.jere.agendate.model.enums.TokenType;
 
 
 

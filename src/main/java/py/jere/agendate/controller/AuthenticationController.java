@@ -3,9 +3,9 @@ package py.jere.agendate.controller;
 import java.util.Calendar;
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,15 +13,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import py.jere.agendate.controller.events.OnPasswordResetEvent;
 import py.jere.agendate.controller.events.OnRegistrationCompleteEvent;
 import py.jere.agendate.controller.events.OnResendRegistrationEvent;
@@ -36,31 +33,33 @@ import py.jere.agendate.security.auth.VerificationToken;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
 @CrossOrigin
 public class AuthenticationController {
 
-	private final AuthenticationServiceJPA service;
+	@Autowired
+	private AuthenticationServiceJPA service;
 
-	private final IUsuarioService usuarioService;
+	@Autowired
+	private IUsuarioService usuarioService;
 
-	private final ApplicationEventPublisher eventPublisher;
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
 
-	private final MessageSource messages;
+	@Autowired
+	private MessageSource messages;
 
 	@PostMapping("/register")
-	public ResponseEntity<AuthenticationResponse> register(WebRequest request, @RequestBody Usuario usuario)
-			throws Exception {
+	public ResponseEntity<AuthenticationResponse> register(WebRequest request, Usuario usuario) throws Exception {
 		System.out.println(usuario);
 		AuthenticationResponse response = service.registrar(usuario);
 		String appUrl = request.getContextPath();
-		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(response.getUsuario(), request.getLocale(), appUrl));
+		eventPublisher
+				.publishEvent(new OnRegistrationCompleteEvent(response.getUsuario(), request.getLocale(), appUrl));
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping(value = "/login", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid AuthenticationRequest request) {
+	@PostMapping("/login")
+	public ResponseEntity<AuthenticationResponse> login(AuthenticationRequest request) {
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 
@@ -106,7 +105,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/user/savePassword")
-	public ResponseEntity<Boolean> savePassword(final Locale locale, @Valid PasswordResetRequest passwordReset)
+	public ResponseEntity<Boolean> savePassword(final Locale locale, PasswordResetRequest passwordReset)
 			throws Exception {
 		String result = usuarioService.validatePasswordResetToken(passwordReset.getToken());
 		if (result != null) {
@@ -139,7 +138,8 @@ public class AuthenticationController {
 	@PreAuthorize("hasRole('READ_PRIVILEGE')")
 	public ResponseEntity<Boolean> changeUserPassword(Locale locale, @RequestParam("password") String password,
 			@RequestParam("oldpassword") String oldPassword) throws Exception {
-		Usuario usuario = usuarioService.buscarPorEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		Usuario usuario = usuarioService
+				.buscarPorEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
 		if (!usuarioService.checkIfValidOldPassword(usuario, oldPassword)) {
 			throw new InvalidOldPasswordException();

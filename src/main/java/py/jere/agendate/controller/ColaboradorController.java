@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +29,7 @@ public class ColaboradorController {
 	IColaboradorService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(@RequestBody Colaborador guardar) {
+	private ResponseEntity<?> guardar(Colaborador guardar) {
 		System.out.println("Guardando Colaborador: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
@@ -52,7 +52,7 @@ public class ColaboradorController {
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Colaborador actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Colaborador actualizar) {
 		System.out.println("Actualizando Colaborador: " + ID + " -> " + actualizar);
 		Colaborador existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos

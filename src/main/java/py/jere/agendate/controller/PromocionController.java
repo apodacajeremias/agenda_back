@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +35,7 @@ public class PromocionController {
 //	GET 	/orders/{id} (get a single order)
 
 	@PostMapping
-	private ResponseEntity<?> guardar(@RequestBody Promocion guardar) {
+	private ResponseEntity<?> guardar(Promocion guardar) {
 		System.out.println("Guardando Promocion: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
@@ -58,7 +58,7 @@ public class PromocionController {
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Promocion actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Promocion actualizar) {
 		System.out.println("Actualizando Promocion: " + ID + " -> " + actualizar);
 		Promocion existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +29,7 @@ public class BeneficioController {
 	IBeneficioService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(@RequestBody Beneficio guardar) {
+	private ResponseEntity<?> guardar(Beneficio guardar) {
 		System.out.println("Guardando Beneficio: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
@@ -53,7 +53,7 @@ public class BeneficioController {
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Beneficio actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Beneficio actualizar) {
 		System.out.println("Actualizando Beneficio: " + ID + " -> " + actualizar);
 		Beneficio existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos

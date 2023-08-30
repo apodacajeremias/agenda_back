@@ -29,7 +29,7 @@ public class PersonaController {
 	IPersonaService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(Persona guardar, @RequestParam("file") MultipartFile file) {
+	private ResponseEntity<?> guardar(Persona guardar, @RequestParam(name = "file", required = false) MultipartFile file) {
 		if (file != null) {
 			System.out.println("llega file");
 		}
@@ -56,7 +56,7 @@ public class PersonaController {
 
 	@PutMapping("/{ID}")
 	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Persona actualizar,
-			@RequestParam("file") MultipartFile file) {
+			@RequestParam(name = "file", required = false) MultipartFile file) {
 		if (file != null) {
 			System.out.println("llega file");
 		}

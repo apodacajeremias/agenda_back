@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +35,7 @@ public class AgendaController {
 //	GET 	/orders/{id} (get a single order)
 
 	@PostMapping
-	private ResponseEntity<?> guardar(@RequestBody Agenda guardar) {
+	private ResponseEntity<?> guardar(Agenda guardar) {
 		guardar.setNombre("Cita");
 		System.out.println("Guardando Agenda: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
@@ -59,7 +59,7 @@ public class AgendaController {
 	}
 
 	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, @RequestBody Agenda actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Agenda actualizar) {
 		System.out.println("Actualizando Agenda: " + ID + " -> " + actualizar);
 		Agenda existente = service.buscar(ID);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos

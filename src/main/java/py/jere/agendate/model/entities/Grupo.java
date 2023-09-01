@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.jere.agendate.model.ModelCustom;
+import py.jere.agendate.security.user.User;
 
 @Data
 @SuperBuilder
@@ -28,7 +29,7 @@ import py.jere.agendate.model.ModelCustom;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Grupo extends ModelCustom<Usuario> {
+public class Grupo extends ModelCustom<User> {
 
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	private List<Persona> personas;

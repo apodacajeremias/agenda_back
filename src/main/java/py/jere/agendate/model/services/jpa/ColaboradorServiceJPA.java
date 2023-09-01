@@ -44,10 +44,10 @@ public class ColaboradorServiceJPA implements IColaboradorService {
 	}
 
 	@Override
-	public boolean eliminar(UUID ID) {
+	public boolean eliminar(UUID id) {
 		try {
-			this.repo.deleteById(ID);
-			if (existe(ID))
+			this.repo.deleteById(id);
+			if (existe(id))
 				return false;
 			else
 				return true;
@@ -58,8 +58,8 @@ public class ColaboradorServiceJPA implements IColaboradorService {
 	}
 
 	@Override
-	public boolean existe(UUID ID) {
-		return this.repo.existsById(ID);
+	public boolean existe(UUID id) {
+		return this.repo.existsById(id);
 	}
 
 	@Override
@@ -88,8 +88,8 @@ public class ColaboradorServiceJPA implements IColaboradorService {
 	}
 
 	@Override
-	public Colaborador buscar(UUID ID) {
-		return this.repo.findById(ID).orElseThrow();
+	public Colaborador buscar(UUID id) {
+		return this.repo.findById(id).orElseThrow();
 	}
 
 	@Override

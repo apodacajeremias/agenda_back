@@ -38,7 +38,7 @@ public abstract class ModelCustom<T> {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(updatable = false)
 	@ReadOnlyProperty
-	private UUID ID;
+	private UUID id;
 
 	@Column(nullable = false)
 	@JsonProperty("activo")

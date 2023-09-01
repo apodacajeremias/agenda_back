@@ -18,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 import py.jere.agendate.model.ModelCustom;
 import py.jere.agendate.model.enums.Idioma;
 import py.jere.agendate.model.enums.Moneda;
+import py.jere.agendate.security.user.User;
 
 @Data
 @SuperBuilder
@@ -29,7 +30,7 @@ import py.jere.agendate.model.enums.Moneda;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Empresa extends ModelCustom<Usuario> {
+public class Empresa extends ModelCustom<User> {
 
 	private String celular;
 	private String telefono;

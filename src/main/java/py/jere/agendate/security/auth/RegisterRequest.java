@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import py.jere.agendate.security.user.Role;
 
 @Data
 @Builder
@@ -13,7 +13,7 @@ import lombok.ToString;
 public class RegisterRequest {
 
 	private String email;
-	@ToString.Exclude
 	private String password;
-	private boolean changePassword;
+	private String matchingPassword;
+	private Role role;
 }

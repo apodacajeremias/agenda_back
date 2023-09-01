@@ -18,6 +18,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.jere.agendate.model.ModelCustom;
 import py.jere.agendate.model.enums.TipoDescuento;
+import py.jere.agendate.security.user.User;
 
 @Data
 @SuperBuilder
@@ -29,7 +30,7 @@ import py.jere.agendate.model.enums.TipoDescuento;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Promocion extends ModelCustom<Usuario> {
+public class Promocion extends ModelCustom<User> {
 	private LocalDate inicio;
 	private LocalDate fin;
 	private double valor;

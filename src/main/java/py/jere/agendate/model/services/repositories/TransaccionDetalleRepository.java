@@ -12,8 +12,8 @@ import py.jere.agendate.model.services.RepositoryCustom;
 @Repository
 public interface TransaccionDetalleRepository
 		extends JpaRepository<TransaccionDetalle, UUID>, RepositoryCustom<TransaccionDetalle> {
-	Optional<TransaccionDetalle> findByTransaccionIDAndID(UUID IDTransaccion, UUID IDDetalle);
-	void deleteByTransaccionIDAndID(UUID IDTransaccion, UUID IDDetalle);
-	boolean existsByTransaccionIDAndID(UUID IDTransaccion, UUID IDDetalle);
+	Optional<TransaccionDetalle> findByTransaccionIdAndId(UUID idTransaccion, UUID id);
+	void deleteByTransaccionIdAndId(UUID idTransaccion, UUID id);
+	boolean existsByTransaccionIdAndId(UUID vTransaccion, UUID id);
 	
 }

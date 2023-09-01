@@ -4,15 +4,15 @@ import java.util.Locale;
 
 import org.springframework.context.ApplicationEvent;
 
-import py.jere.agendate.model.entities.Usuario;
+import py.jere.agendate.security.user.User;
 
 @SuppressWarnings("serial")
 public class OnPasswordResetEvent extends ApplicationEvent {
 	private String appUrl;
 	private Locale locale;
-	private Usuario usuario;
+	private User usuario;
 
-	public OnPasswordResetEvent(Usuario usuario, Locale locale, String appUrl) {
+	public OnPasswordResetEvent(User usuario, Locale locale, String appUrl) {
 		super(usuario);
 
 		this.usuario = usuario;
@@ -36,11 +36,11 @@ public class OnPasswordResetEvent extends ApplicationEvent {
 		this.locale = locale;
 	}
 
-	public Usuario getUser() {
+	public User getUser() {
 		return usuario;
 	}
 
-	public void setUser(Usuario usuario) {
+	public void setUser(User usuario) {
 		this.usuario = usuario;
 	}
 

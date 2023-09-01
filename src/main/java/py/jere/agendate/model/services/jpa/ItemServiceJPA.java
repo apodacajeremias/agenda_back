@@ -34,18 +34,18 @@ public class ItemServiceJPA implements IItemService {
 	}
 
 	@Override
-	public boolean eliminar(UUID ID) {
+	public boolean eliminar(UUID id) {
 		try {
-			this.repo.deleteById(ID);
-			return !this.existe(ID);
+			this.repo.deleteById(id);
+			return !this.existe(id);
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
 	@Override
-	public boolean existe(UUID ID) {
-		return this.repo.existsById(ID);
+	public boolean existe(UUID id) {
+		return this.repo.existsById(id);
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class ItemServiceJPA implements IItemService {
 	}
 
 	@Override
-	public Item buscar(UUID ID) {
-		return this.repo.findById(ID).orElseThrow();
+	public Item buscar(UUID id) {
+		return this.repo.findById(id).orElseThrow();
 	}
 
 	@Override

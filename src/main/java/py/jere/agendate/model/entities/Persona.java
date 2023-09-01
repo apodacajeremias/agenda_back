@@ -30,6 +30,7 @@ import lombok.experimental.SuperBuilder;
 import py.jere.agendate.controller.utils.Edad;
 import py.jere.agendate.model.ModelCustom;
 import py.jere.agendate.model.enums.Genero;
+import py.jere.agendate.security.user.User;
 
 @Data
 @SuperBuilder
@@ -41,7 +42,7 @@ import py.jere.agendate.model.enums.Genero;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Persona extends ModelCustom<Usuario> {
+public class Persona extends ModelCustom<User> {
 
 	@NotNull
 	@NotEmpty
@@ -79,6 +80,7 @@ public class Persona extends ModelCustom<Usuario> {
 	private Colaborador colaborador;
 
 	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH }, mappedBy = "personas")
 	private List<Grupo> grupos;
 

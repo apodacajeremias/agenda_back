@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.jere.agendate.model.ModelCustom;
+import py.jere.agendate.security.user.User;
 
 @Data
 @SuperBuilder
@@ -24,7 +25,7 @@ import py.jere.agendate.model.ModelCustom;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class TransaccionDetalle extends ModelCustom<Usuario> {
+public class TransaccionDetalle extends ModelCustom<User> {
 	private double valor;
 	private double cantidad;
 	private double subtotal;

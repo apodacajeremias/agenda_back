@@ -1,6 +1,5 @@
 package py.jere.agendate.security.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,48 +11,37 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import py.jere.agendate.model.services.repositories.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
+import py.jere.agendate.security.user.UserRepository;
 
 @Configuration
+@RequiredArgsConstructor
 public class ApplicationConfig {
 
-	@Autowired
-	private UsuarioRepository repo;
+  private final UserRepository repository;
 
-	@Bean
-	UserDetailsService userDetailsService() {
-		return username -> this.repo.findByEmail(username)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found by email: " + username));
-	}
+  @Bean
+  UserDetailsService userDetailsService() {
+    return username -> repository.findByEmail(username)
+        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado."));
+  }
 
-	@Bean
-	AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setUserDetailsService(userDetailsService());
-		authProvider.setPasswordEncoder(passwordEncoder());
-		return authProvider;
-	}
+  @Bean
+  AuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setUserDetailsService(userDetailsService());
+    authProvider.setPasswordEncoder(passwordEncoder());
+    return authProvider;
+  }
 
-	@Bean
-	AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-		return config.getAuthenticationManager();
-	}
+  @Bean
+  AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    return config.getAuthenticationManager();
+  }
 
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	String carpeta() {
-		if (isWindows()) {
-			return "C:\\xampp\\agendate";
-		}
-		return "\\xampp\\agendate";
-	}
-
-	private boolean isWindows() {
-		return System.getProperty("os.name").contains("Windows");
-	}
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
 }

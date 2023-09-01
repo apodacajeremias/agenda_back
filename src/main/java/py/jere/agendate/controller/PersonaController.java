@@ -29,9 +29,15 @@ public class PersonaController {
 	IPersonaService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(Persona guardar, @RequestParam(name = "file", required = false) MultipartFile file) {
+	private ResponseEntity<?> guardar(Persona guardar,
+			@RequestParam(name = "file", required = false) MultipartFile file) {
+		// Guardar archivo si llega
 		if (file != null) {
-			System.out.println("llega file");
+			System.out.println(file.toString());
+			System.out.println(file.getContentType());
+			System.out.println(file.getName());
+			System.out.println(file.getOriginalFilename());
+			System.out.println(file.getSize());
 		}
 		System.out.println("Guardando Persona: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
@@ -54,27 +60,31 @@ public class PersonaController {
 		}
 	}
 
-	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Persona actualizar,
+	@PutMapping("/{id}")
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Persona actualizar,
 			@RequestParam(name = "file", required = false) MultipartFile file) {
 		if (file != null) {
-			System.out.println("llega file");
+			System.out.println(file.toString());
+			System.out.println(file.getContentType());
+			System.out.println(file.getName());
+			System.out.println(file.getOriginalFilename()); // Captura de pantalla (1).png
+			System.out.println(file.getSize());
 		}
-		System.out.println("Actualizando Persona: " + ID + " -> " + actualizar);
-		Persona existente = service.buscar(ID);
+		System.out.println("Actualizando Persona: " + id + " -> " + actualizar);
+		Persona existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
-	@DeleteMapping("/{ID}")
-	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.out.println("Eliminando Persona: " + ID);
-		return ResponseEntity.ok(service.eliminar(ID));
+	@DeleteMapping("/{id}")
+	private ResponseEntity<Boolean> eliminar(@PathVariable UUID id) {
+		System.out.println("Eliminando Persona: " + id);
+		return ResponseEntity.ok(service.eliminar(id));
 	}
 
-	@GetMapping("/{ID}")
-	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
-		System.out.println("Buscando Persona: " + ID);
-		return ResponseEntity.ok(service.buscar(ID));
+	@GetMapping("/{id}")
+	private ResponseEntity<?> buscar(@PathVariable UUID id) {
+		System.out.println("Buscando Persona: " + id);
+		return ResponseEntity.ok(service.buscar(id));
 	}
 }

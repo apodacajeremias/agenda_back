@@ -27,9 +27,9 @@ public interface ServiceCustom<T> {
 
 	List<T> guardarTodos(List<T> guardarTodos);
 
-	boolean eliminar(UUID ID);
+	boolean eliminar(UUID id);
 
-	boolean existe(UUID ID);
+	boolean existe(UUID id);
 
 	List<T> buscarActivos();
 
@@ -37,7 +37,7 @@ public interface ServiceCustom<T> {
 
 	List<T> buscarTodos();
 
-	T buscar(UUID ID);
+	T buscar(UUID id);
 
 	T buscarUltimo();
 }

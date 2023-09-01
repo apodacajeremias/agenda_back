@@ -15,6 +15,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.jere.agendate.model.ModelCustom;
 import py.jere.agendate.model.enums.TipoTransaccion;
+import py.jere.agendate.security.user.User;
 
 @Data
 @SuperBuilder
@@ -26,7 +27,7 @@ import py.jere.agendate.model.enums.TipoTransaccion;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Item extends ModelCustom<Usuario> {
+public class Item extends ModelCustom<User> {
 	private double precio;
 	@Enumerated(EnumType.STRING)
 	private TipoTransaccion tipo; // VENTA

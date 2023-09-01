@@ -20,6 +20,7 @@ import lombok.experimental.SuperBuilder;
 import py.jere.agendate.model.ModelCustom;
 import py.jere.agendate.model.enums.TipoBeneficio;
 import py.jere.agendate.model.enums.TipoDescuento;
+import py.jere.agendate.security.user.User;
 
 @Data
 @SuperBuilder
@@ -31,7 +32,7 @@ import py.jere.agendate.model.enums.TipoDescuento;
 @Table
 @DynamicInsert
 @DynamicUpdate
-public class Beneficio extends ModelCustom<Usuario> {
+public class Beneficio extends ModelCustom<User> {
 	
 	@Enumerated(EnumType.STRING)
 	private TipoBeneficio tipo; //FAMILIAR

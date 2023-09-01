@@ -35,18 +35,18 @@ public class AgendaServiceJPA implements IAgendaService {
 	}
 
 	@Override
-	public boolean eliminar(UUID ID) {
+	public boolean eliminar(UUID id) {
 		try {
-			this.repo.deleteById(ID);
-			return !this.existe(ID);
+			this.repo.deleteById(id);
+			return !this.existe(id);
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
 	@Override
-	public boolean existe(UUID ID) {
-		return this.repo.existsById(ID);
+	public boolean existe(UUID id) {
+		return this.repo.existsById(id);
 	}
 
 	@Override
@@ -65,8 +65,8 @@ public class AgendaServiceJPA implements IAgendaService {
 	}
 
 	@Override
-	public Agenda buscar(UUID ID) {
-		return this.repo.findById(ID).orElseThrow();
+	public Agenda buscar(UUID id) {
+		return this.repo.findById(id).orElseThrow();
 	}
 
 	@Override

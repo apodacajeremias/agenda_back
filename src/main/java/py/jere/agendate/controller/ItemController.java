@@ -50,23 +50,23 @@ public class ItemController {
 		}
 	}
 
-	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Item actualizar) {
-		System.out.println("Actualizando Item: " + ID + " -> " + actualizar);
-		Item existente = service.buscar(ID);
+	@PutMapping("/{id}")
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Item actualizar) {
+		System.out.println("Actualizando Item: " + id + " -> " + actualizar);
+		Item existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
-	@DeleteMapping("/{ID}")
-	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.out.println("Eliminando Item: " + ID);
-		return ResponseEntity.ok(service.eliminar(ID));
+	@DeleteMapping("/{id}")
+	private ResponseEntity<Boolean> eliminar(@PathVariable UUID id) {
+		System.out.println("Eliminando Item: " + id);
+		return ResponseEntity.ok(service.eliminar(id));
 	}
 
-	@GetMapping("/{ID}")
-	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
-		System.out.println("Buscando Item: " + ID);
-		return ResponseEntity.ok(service.buscar(ID));
+	@GetMapping("/{id}")
+	private ResponseEntity<?> buscar(@PathVariable UUID id) {
+		System.out.println("Buscando Item: " + id);
+		return ResponseEntity.ok(service.buscar(id));
 	}
 }

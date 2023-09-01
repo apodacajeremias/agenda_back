@@ -34,33 +34,33 @@ public class TransaccionDetalleServiceJPA implements ITransaccionDetalleService 
 	}
 
 	@Override
-	public boolean eliminar(UUID ID) {
+	public boolean eliminar(UUID id) {
 		try {
-			this.repo.deleteById(ID);
-			return !this.existe(ID);
+			this.repo.deleteById(id);
+			return !this.existe(id);
 		} catch (Exception e) {
 			return false;
 		}
 	}
 	
 	@Override
-	public boolean eliminar(UUID IDTransaccion, UUID IDDetalle) {
+	public boolean eliminar(UUID idTransaccion, UUID id) {
 		try {
-			this.repo.deleteByTransaccionIDAndID(IDTransaccion, IDDetalle);
-			return !this.existe(IDTransaccion, IDDetalle);
+			this.repo.deleteByTransaccionIdAndId(idTransaccion, id);
+			return !this.existe(idTransaccion, id);
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
 	@Override
-	public boolean existe(UUID ID) {
-		return this.repo.existsById(ID);
+	public boolean existe(UUID id) {
+		return this.repo.existsById(id);
 	}
 	
 	@Override
-	public boolean existe(UUID IDTransaccion, UUID IDDetalle) {
-		return this.repo.existsByTransaccionIDAndID(IDTransaccion, IDDetalle);
+	public boolean existe(UUID idTransaccion, UUID id) {
+		return this.repo.existsByTransaccionIdAndId(idTransaccion, id);
 	}
 
 	@Override
@@ -79,13 +79,13 @@ public class TransaccionDetalleServiceJPA implements ITransaccionDetalleService 
 	}
 
 	@Override
-	public TransaccionDetalle buscar(UUID ID) {
-		return this.repo.findById(ID).orElseThrow();
+	public TransaccionDetalle buscar(UUID id) {
+		return this.repo.findById(id).orElseThrow();
 	}
 
 	@Override
-	public TransaccionDetalle buscar(UUID IDTransaccion, UUID IDDetalle) {
-		return this.repo.findByTransaccionIDAndID(IDTransaccion, IDDetalle).orElseThrow();
+	public TransaccionDetalle buscar(UUID idTransaccion, UUID id) {
+		return this.repo.findByTransaccionIdAndId(idTransaccion, id).orElseThrow();
 	}
 
 	@Override

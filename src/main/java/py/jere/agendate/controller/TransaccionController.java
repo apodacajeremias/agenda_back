@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,32 +55,32 @@ public class TransaccionController {
 		}
 	}
 
-	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Transaccion actualizar) {
-		System.out.println("Actualizando Transaccion: " + ID + " -> " + actualizar);
-		Transaccion existente = service.buscar(ID);
+	@PutMapping("/{id}")
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Transaccion actualizar) {
+		System.out.println("Actualizando Transaccion: " + id + " -> " + actualizar);
+		Transaccion existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
-	@DeleteMapping("/{ID}")
-	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.out.println("Eliminando Transaccion: " + ID);
-		return ResponseEntity.ok(service.eliminar(ID));
+	@DeleteMapping("/{id}")
+	private ResponseEntity<Boolean> eliminar(@PathVariable UUID id) {
+		System.out.println("Eliminando Transaccion: " + id);
+		return ResponseEntity.ok(service.eliminar(id));
 	}
 
-	@GetMapping("/{ID}")
-	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
-		System.out.println("Buscando Transaccion: " + ID);
-		return ResponseEntity.ok(service.buscar(ID));
+	@GetMapping("/{id}")
+	private ResponseEntity<?> buscar(@PathVariable UUID id) {
+		System.out.println("Buscando Transaccion: " + id);
+		return ResponseEntity.ok(service.buscar(id));
 	}
 
 	/////////////////
 
-	@PostMapping("/{IDTransaccion}/detalles")
-	private ResponseEntity<?> guardarDetalle(@PathVariable UUID IDTransaccion,
+	@PostMapping("/{idTransaccion}/detalles")
+	private ResponseEntity<?> guardarDetalle(@PathVariable UUID idTransaccion,
 			TransaccionDetalle guardar) {
-		guardar.setTransaccion(Transaccion.builder().ID(IDTransaccion).build());
+		guardar.setTransaccion(Transaccion.builder().id(idTransaccion).build());
 		System.out.println("Guardando Transaccion Detalle: " + guardar.toString());
 		return ResponseEntity.ok(serviceDetalle.guardar(guardar));
 	}
@@ -103,25 +102,25 @@ public class TransaccionController {
 		}
 	}
 
-	@PutMapping("/{IDTransaccion}/detalles/{IDDetalle}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID IDTransaccion, @PathVariable UUID IDDetalle,
+	@PutMapping("/{idTransaccion}/detalles/{idDetalle}")
+	private ResponseEntity<?> actualizar(@PathVariable UUID idTransaccion, @PathVariable UUID idDetalle,
 			TransaccionDetalle actualizar) {
-		System.out.println("Actualizando Transaccion Detalle ->" + IDDetalle);
+		System.out.println("Actualizando Transaccion Detalle ->" + idDetalle);
 		System.out.println("Actualizando -> " + actualizar);
-		TransaccionDetalle existente = serviceDetalle.buscar(IDTransaccion, IDDetalle);
+		TransaccionDetalle existente = serviceDetalle.buscar(idTransaccion, idDetalle);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(serviceDetalle.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
-	@DeleteMapping("/{IDTransaccion}/detalles/{IDDetalle}")
-	private ResponseEntity<Boolean> eliminar(@PathVariable UUID IDTransaccion, @PathVariable UUID IDDetalle) {
-		System.out.println("Eliminando Transaccion: " + IDTransaccion);
-		return ResponseEntity.ok(serviceDetalle.eliminar(IDTransaccion, IDDetalle));
+	@DeleteMapping("/{idTransaccion}/detalles/{idDetalle}")
+	private ResponseEntity<Boolean> eliminar(@PathVariable UUID idTransaccion, @PathVariable UUID idDetalle) {
+		System.out.println("Eliminando Transaccion: " + idTransaccion);
+		return ResponseEntity.ok(serviceDetalle.eliminar(idTransaccion, idDetalle));
 	}
 
-	@GetMapping("/{IDTransaccion}/detalles/{IDDetalle}")
-	private ResponseEntity<?> buscar(@PathVariable UUID IDTransaccion, @PathVariable UUID IDDetalle) {
-		System.out.println("Buscando Transaccion Detalle: " + IDDetalle);
-		return ResponseEntity.ok(serviceDetalle.buscar(IDTransaccion, IDDetalle));
+	@GetMapping("/{idTransaccion}/detalles/{idDetalle}")
+	private ResponseEntity<?> buscar(@PathVariable UUID idTransaccion, @PathVariable UUID idDetalle) {
+		System.out.println("Buscando Transaccion Detalle: " + idDetalle);
+		return ResponseEntity.ok(serviceDetalle.buscar(idTransaccion, idDetalle));
 	}
 }

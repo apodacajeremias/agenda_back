@@ -22,6 +22,7 @@ import lombok.experimental.SuperBuilder;
 import py.jere.agendate.model.ModelCustom;
 import py.jere.agendate.model.enums.Prioridad;
 import py.jere.agendate.model.enums.Situacion;
+import py.jere.agendate.security.user.User;
 
 @Data
 @SuperBuilder
@@ -32,7 +33,7 @@ import py.jere.agendate.model.enums.Situacion;
 @Entity
 @Table
 @DynamicUpdate
-public class Agenda extends ModelCustom<Usuario> {
+public class Agenda extends ModelCustom<User> {
 
 	@Column(nullable = false)
 	@DateTimeFormat(iso = ISO.DATE_TIME)

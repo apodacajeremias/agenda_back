@@ -35,10 +35,10 @@ public class PromocionServiceJPA implements IPromocionService {
 	}
 
 	@Override
-	public boolean eliminar(UUID ID) {
+	public boolean eliminar(UUID id) {
 		try {
-			this.repo.deleteById(ID);
-			if (existe(ID))
+			this.repo.deleteById(id);
+			if (existe(id))
 				return false;
 			else
 				return true;
@@ -49,8 +49,8 @@ public class PromocionServiceJPA implements IPromocionService {
 	}
 
 	@Override
-	public boolean existe(UUID ID) {
-		return this.repo.existsById(ID);
+	public boolean existe(UUID id) {
+		return this.repo.existsById(id);
 	}
 
 	@Override
@@ -69,8 +69,8 @@ public class PromocionServiceJPA implements IPromocionService {
 	}
 
 	@Override
-	public Promocion buscar(UUID ID) {
-		return this.repo.findById(ID).orElseThrow();
+	public Promocion buscar(UUID id) {
+		return this.repo.findById(id).orElseThrow();
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.jere.agendate.model.ModelCustom;
+import py.jere.agendate.security.user.User;
 
 @Data
 @SuperBuilder
@@ -27,7 +28,7 @@ import py.jere.agendate.model.ModelCustom;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-public class Colaborador extends ModelCustom<Usuario> {
+public class Colaborador extends ModelCustom<User> {
 
 	@NotNull
 	@NotEmpty

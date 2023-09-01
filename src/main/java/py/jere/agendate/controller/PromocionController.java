@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,23 +56,23 @@ public class PromocionController {
 		}
 	}
 
-	@PutMapping("/{ID}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID ID, Promocion actualizar) {
-		System.out.println("Actualizando Promocion: " + ID + " -> " + actualizar);
-		Promocion existente = service.buscar(ID);
+	@PutMapping("/{id}")
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Promocion actualizar) {
+		System.out.println("Actualizando Promocion: " + id + " -> " + actualizar);
+		Promocion existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
 		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
 	}
 
-	@DeleteMapping("/{ID}")
-	private ResponseEntity<Boolean> eliminar(@PathVariable UUID ID) {
-		System.out.println("Eliminando Promocion: " + ID);
-		return ResponseEntity.ok(service.eliminar(ID));
+	@DeleteMapping("/{id}")
+	private ResponseEntity<Boolean> eliminar(@PathVariable UUID id) {
+		System.out.println("Eliminando Promocion: " + id);
+		return ResponseEntity.ok(service.eliminar(id));
 	}
 
-	@GetMapping("/{ID}")
-	private ResponseEntity<?> buscar(@PathVariable UUID ID) {
-		System.out.println("Buscando Promocion: " + ID);
-		return ResponseEntity.ok(service.buscar(ID));
+	@GetMapping("/{id}")
+	private ResponseEntity<?> buscar(@PathVariable UUID id) {
+		System.out.println("Buscando Promocion: " + id);
+		return ResponseEntity.ok(service.buscar(id));
 	}
 }

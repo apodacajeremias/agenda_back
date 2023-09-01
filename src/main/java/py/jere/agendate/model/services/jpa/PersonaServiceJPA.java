@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import py.jere.agendate.model.entities.Persona;
 import py.jere.agendate.model.services.interfaces.IColaboradorService;
 import py.jere.agendate.model.services.interfaces.IPersonaService;
-import py.jere.agendate.model.services.interfaces.IUsuarioService;
 import py.jere.agendate.model.services.repositories.PersonaRepository;
 
 @Service
@@ -23,9 +22,6 @@ public class PersonaServiceJPA implements IPersonaService {
 
 	@Autowired
 	IColaboradorService colaboradorService;
-
-	@Autowired
-	IUsuarioService usuarioService;
 
 	@Override
 	public Persona registrar(Persona registrar) throws Exception {
@@ -57,10 +53,10 @@ public class PersonaServiceJPA implements IPersonaService {
 	}
 
 	@Override
-	public boolean eliminar(UUID ID) {
+	public boolean eliminar(UUID id) {
 		try {
-			this.repo.deleteById(ID);
-			if (existe(ID))
+			this.repo.deleteById(id);
+			if (existe(id))
 				return false;
 			else
 				return true;
@@ -71,8 +67,8 @@ public class PersonaServiceJPA implements IPersonaService {
 	}
 
 	@Override
-	public boolean existe(UUID ID) {
-		return this.repo.existsById(ID);
+	public boolean existe(UUID id) {
+		return this.repo.existsById(id);
 	}
 
 	@Override
@@ -91,8 +87,8 @@ public class PersonaServiceJPA implements IPersonaService {
 	}
 
 	@Override
-	public Persona buscar(UUID ID) {
-		return this.repo.findById(ID).orElseThrow();
+	public Persona buscar(UUID id) {
+		return this.repo.findById(id).orElseThrow();
 	}
 
 	@Override

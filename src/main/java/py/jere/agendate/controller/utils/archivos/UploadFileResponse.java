@@ -17,4 +17,12 @@ public class UploadFileResponse {
         this.fileType = fileType;
         this.size = size;
     }
+
+	@Override
+	public String toString() {
+		return "{\"fileName\":\"" + fileName + "\", \"fileDownloadUri\":\"" + fileDownloadUri + "\", \"fileType\":\""
+				+ fileType + "\", \"size\":\"" + size + "\"}";
+	}
+    
+    
 }

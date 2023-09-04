@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import py.jere.agendate.controller.utils.Beans;
+import py.jere.agendate.controller.utils.archivos.FileController;
+import py.jere.agendate.controller.utils.archivos.UploadFileResponse;
 import py.jere.agendate.model.entities.Persona;
 import py.jere.agendate.model.services.interfaces.IPersonaService;
 
@@ -27,18 +29,19 @@ public class PersonaController {
 
 	@Autowired
 	IPersonaService service;
+	
+	@Autowired
+	private FileController storage;
 
 	@PostMapping
 	private ResponseEntity<?> guardar(Persona guardar,
 			@RequestParam(name = "file", required = false) MultipartFile file) {
-		// Guardar archivo si llega
-		if (file != null) {
-			System.out.println(file.toString());
-			System.out.println(file.getContentType());
-			System.out.println(file.getName());
-			System.out.println(file.getOriginalFilename());
-			System.out.println(file.getSize());
+		if(file != null) {
+			UploadFileResponse fileResponse = storage.uploadFile(file);
+			System.out.println(fileResponse);
+			guardar.setFotoPerfil(fileResponse.getFileName());
 		}
+		guardar.setActivo(true);
 		System.out.println("Guardando Persona: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
@@ -63,12 +66,10 @@ public class PersonaController {
 	@PutMapping("/{id}")
 	private ResponseEntity<?> actualizar(@PathVariable UUID id, Persona actualizar,
 			@RequestParam(name = "file", required = false) MultipartFile file) {
-		if (file != null) {
-			System.out.println(file.toString());
-			System.out.println(file.getContentType());
-			System.out.println(file.getName());
-			System.out.println(file.getOriginalFilename()); // Captura de pantalla (1).png
-			System.out.println(file.getSize());
+		if(file != null) {
+			UploadFileResponse fileResponse = storage.uploadFile(file);
+			System.out.println(fileResponse);
+			actualizar.setFotoPerfil(fileResponse.getFileName());
 		}
 		System.out.println("Actualizando Persona: " + id + " -> " + actualizar);
 		Persona existente = service.buscar(id);

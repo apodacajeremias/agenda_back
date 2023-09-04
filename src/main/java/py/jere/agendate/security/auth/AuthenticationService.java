@@ -45,10 +45,10 @@ public class AuthenticationService {
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
     return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
-        .refreshToken(refreshToken)
-//        .user(savedUser)
-        .build();
+    		.accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .persona(user.getPersona())
+            .build();
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -69,6 +69,17 @@ public class AuthenticationService {
         .refreshToken(refreshToken)
         .persona(user.getPersona())
         .build();
+  }
+  
+  public AuthenticationResponse findToken(String token) throws Exception {
+	  var tkn = tokenRepository.findByToken(token).orElseThrow();
+	  if(tkn.isExpired() || tkn.isRevoked()) {
+		  throw new Exception("Expirado o revocado.");
+	  }
+	  return AuthenticationResponse.builder()
+		    	.accessToken(tkn.getToken())
+		        .persona(tkn.getUser().getPersona())
+		        .build();
   }
 
   private void saveUserToken(User user, String jwtToken) {

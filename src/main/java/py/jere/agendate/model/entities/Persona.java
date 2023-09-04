@@ -81,6 +81,7 @@ public class Persona extends ModelCustom<User> {
 
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
+	@JsonManagedReference
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH }, mappedBy = "personas")
 	private List<Grupo> grupos;
 

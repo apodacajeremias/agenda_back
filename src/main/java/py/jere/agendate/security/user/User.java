@@ -10,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -60,6 +63,10 @@ public class User implements UserDetails {
 	private Persona persona;
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	@JsonManagedReference
 	private List<Token> tokens;
 
 	@Override

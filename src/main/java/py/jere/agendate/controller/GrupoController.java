@@ -29,6 +29,7 @@ public class GrupoController {
 
 	@PostMapping
 	private ResponseEntity<?> guardar(Grupo guardar) {
+		guardar.setActivo(true);
 		System.out.println("Guardando Grupo: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}

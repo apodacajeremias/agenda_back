@@ -5,6 +5,8 @@ import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
@@ -32,6 +34,7 @@ import py.jere.agendate.security.user.User;
 public class Grupo extends ModelCustom<User> {
 
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	@JsonBackReference
 	private List<Persona> personas;
 
 	@ManyToOne

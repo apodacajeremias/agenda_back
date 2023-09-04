@@ -42,9 +42,9 @@ public class Transaccion extends ModelCustom<User> {
 	private double sumatoria; // Todos los items
 	private boolean aplicarPromocion;
 	@Enumerated(EnumType.STRING)
-	private TipoBeneficio tipoBeneficio;
+	private TipoBeneficio tipoBeneficio; // Definido por Grupo
 	@Enumerated(EnumType.STRING)
-	private TipoDescuento tipoDescuento;
+	private TipoDescuento tipoDescuento; // Definido por Grupo
 	@ManyToOne(optional = false)
 	private Persona persona;
 	@ManyToOne(optional = true)

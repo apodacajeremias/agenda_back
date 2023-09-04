@@ -2,6 +2,8 @@ package py.jere.agendate.security.token;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,17 +32,19 @@ public class Token {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 
-  @Column(unique = true)
-  public String token;
+	@Column(unique = true)
+	public String token;
 
-  @Enumerated(EnumType.STRING) @Default
-  public TokenType tokenType = TokenType.BEARER;
+	@Enumerated(EnumType.STRING)
+	@Default
+	public TokenType tokenType = TokenType.BEARER;
 
-  public boolean revoked;
+	public boolean revoked;
 
-  public boolean expired;
+	public boolean expired;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  public User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	@JsonBackReference
+	public User user;
 }

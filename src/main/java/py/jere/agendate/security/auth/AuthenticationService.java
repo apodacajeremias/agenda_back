@@ -1,7 +1,19 @@
 package py.jere.agendate.security.auth;
 
 import java.io.IOException;
+import java.util.Arrays;
 
+import org.passay.AlphabeticalSequenceRule;
+import org.passay.DigitCharacterRule;
+import org.passay.LengthRule;
+import org.passay.NumericalSequenceRule;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
+import org.passay.QwertySequenceRule;
+import org.passay.RuleResult;
+import org.passay.SpecialCharacterRule;
+import org.passay.UppercaseCharacterRule;
+import org.passay.WhitespaceRule;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,10 +40,21 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private PasswordValidator validator = new PasswordValidator(
+			Arrays.asList(new LengthRule(8, 30), new UppercaseCharacterRule(1), new DigitCharacterRule(1),
+					new SpecialCharacterRule(1), new NumericalSequenceRule(3, false),
+					new AlphabeticalSequenceRule(3, false), new QwertySequenceRule(3, false), new WhitespaceRule()));
 
   public AuthenticationResponse register(RegisterRequest request) throws Exception {
+	  RuleResult result = validator.validate(new PasswordData(request.getPassword()));
+		if (!result.isValid()) {
+			throw new Exception("Contrasena invalida: " + result.getDetails().toString());
+		}
 	  if(!request.getPassword().equals(request.getMatchingPassword())) {
 		  throw new Exception("Las contraseñas no coinciden.");
+	  }
+	  if(repository.existsByEmail(request.getEmail())) {
+		  throw new Exception("El correo no esta disponible.");
 	  }
     var user = User.builder()
         .email(request.getEmail())

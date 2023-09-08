@@ -10,16 +10,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
-  Optional<User> findByEmail(String email);
-  
-  boolean existsByEmail(String email);
+	Optional<User> findByEmail(String email);
+
+	boolean existsByEmail(String email);
 
 	List<User> findByEnabledIsTrue();
 
 	List<User> findByEnabledIsFalse();
-	
+
 	@Modifying
 	@Transactional
 	@Query("UPDATE User u SET u.enabled = true WHERE u.id = :id")

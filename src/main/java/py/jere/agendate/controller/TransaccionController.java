@@ -34,6 +34,8 @@ public class TransaccionController {
 
 	@PostMapping
 	private ResponseEntity<?> guardar(Transaccion guardar) {
+		guardar.setNombre("");
+		guardar.setActivo(true);
 		System.out.println("Guardando Transaccion: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}

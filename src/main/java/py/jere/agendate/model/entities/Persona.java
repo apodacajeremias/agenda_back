@@ -16,6 +16,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -84,6 +85,21 @@ public class Persona extends ModelCustom<User> {
 	@JsonManagedReference
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH }, mappedBy = "personas")
 	private List<Grupo> grupos;
+	
+	
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	@JsonManagedReference
+	@OneToMany(mappedBy = "persona")
+	private List<Agenda> agendas;
+	
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	@JsonManagedReference
+	@OneToMany(mappedBy = "persona")
+	private List<Transaccion> transacciones;
+	
+	
 
 	public int getEdad() {
 		return Edad.calcular(fechaNacimiento);

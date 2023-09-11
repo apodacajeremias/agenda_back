@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import py.jere.agendate.controller.utils.Beans;
 import py.jere.agendate.model.entities.Colaborador;
+import py.jere.agendate.model.services.interfaces.IAgendaService;
 import py.jere.agendate.model.services.interfaces.IColaboradorService;
 
 @RestController
@@ -26,6 +27,9 @@ public class ColaboradorController {
 
 	@Autowired
 	IColaboradorService service;
+	
+	@Autowired
+	IAgendaService agendaService;
 
 	@PostMapping
 	private ResponseEntity<?> guardar(Colaborador guardar) {
@@ -68,5 +72,11 @@ public class ColaboradorController {
 	private ResponseEntity<?> buscar(@PathVariable UUID id) {
 		System.out.println("Buscando Colaborador: " + id);
 		return ResponseEntity.ok(service.buscar(id));
+	}
+	
+	@GetMapping("/{id}/agendas")
+	private ResponseEntity<?> buscarAgendas(@PathVariable UUID id) {
+		System.out.println("Buscando agendamientos de Colaborador: " + id);
+		return ResponseEntity.ok(agendaService.buscarPorColaborador(id));
 	}
 }

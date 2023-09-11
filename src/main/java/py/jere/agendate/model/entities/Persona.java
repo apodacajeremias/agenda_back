@@ -16,7 +16,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -26,6 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import py.jere.agendate.controller.utils.Edad;
@@ -85,23 +85,10 @@ public class Persona extends ModelCustom<User> {
 	@JsonManagedReference
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH }, mappedBy = "personas")
 	private List<Grupo> grupos;
-	
-	
-	@ToString.Exclude
-	@EqualsAndHashCode.Exclude
-	@JsonManagedReference
-	@OneToMany(mappedBy = "persona")
-	private List<Agenda> agendas;
-	
-	@ToString.Exclude
-	@EqualsAndHashCode.Exclude
-	@JsonManagedReference
-	@OneToMany(mappedBy = "persona")
-	private List<Transaccion> transacciones;
-	
-	
 
+	@SneakyThrows
 	public int getEdad() {
 		return Edad.calcular(fechaNacimiento);
 	}
+
 }

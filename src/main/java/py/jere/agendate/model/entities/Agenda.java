@@ -6,8 +6,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -59,7 +57,7 @@ public class Agenda extends ModelCustom<User> {
 	@ManyToOne(optional = false, cascade = CascadeType.MERGE)
 	private Colaborador colaborador;
 
-	@ManyToOne(optional = false, cascade = CascadeType.MERGE) @JsonBackReference
+	@ManyToOne(optional = false, cascade = CascadeType.MERGE)
 	private Persona persona;
 	
 

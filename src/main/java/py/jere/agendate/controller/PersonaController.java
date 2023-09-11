@@ -20,7 +20,9 @@ import py.jere.agendate.controller.utils.Beans;
 import py.jere.agendate.controller.utils.archivos.FileController;
 import py.jere.agendate.controller.utils.archivos.UploadFileResponse;
 import py.jere.agendate.model.entities.Persona;
+import py.jere.agendate.model.services.interfaces.IAgendaService;
 import py.jere.agendate.model.services.interfaces.IPersonaService;
+import py.jere.agendate.model.services.interfaces.ITransaccionService;
 
 @RestController
 @RequestMapping("/personas")
@@ -29,14 +31,20 @@ public class PersonaController {
 
 	@Autowired
 	IPersonaService service;
-	
+
+	@Autowired
+	IAgendaService agendaService;
+
+	@Autowired
+	ITransaccionService transaccionService;
+
 	@Autowired
 	private FileController storage;
 
 	@PostMapping
 	private ResponseEntity<?> guardar(Persona guardar,
 			@RequestParam(name = "file", required = false) MultipartFile file) {
-		if(file != null) {
+		if (file != null) {
 			UploadFileResponse fileResponse = storage.uploadFile(file);
 			System.out.println(fileResponse);
 			guardar.setFotoPerfil(fileResponse.getFileName());
@@ -66,7 +74,7 @@ public class PersonaController {
 	@PutMapping("/{id}")
 	private ResponseEntity<?> actualizar(@PathVariable UUID id, Persona actualizar,
 			@RequestParam(name = "file", required = false) MultipartFile file) {
-		if(file != null) {
+		if (file != null) {
 			UploadFileResponse fileResponse = storage.uploadFile(file);
 			System.out.println(fileResponse);
 			actualizar.setFotoPerfil(fileResponse.getFileName());
@@ -88,4 +96,18 @@ public class PersonaController {
 		System.out.println("Buscando Persona: " + id);
 		return ResponseEntity.ok(service.buscar(id));
 	}
+	
+	@GetMapping("/{id}/agendas")
+	private ResponseEntity<?> buscarAgendas(@PathVariable UUID id) {
+		System.out.println("Buscando agendamientos de Persona: " + id);
+		return ResponseEntity.ok(agendaService.buscarPorPersona(id));
+	}
+
+	@GetMapping("/{id}/transacciones")
+	private ResponseEntity<?> buscarTransacciones(@PathVariable UUID id) {
+		System.out.println("Buscando transacciones de Persona: " + id);
+		return ResponseEntity.ok(transaccionService.buscarPorPersona(id));
+	}
+
+	
 }

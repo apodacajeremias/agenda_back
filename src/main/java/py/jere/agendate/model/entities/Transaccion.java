@@ -5,8 +5,6 @@ import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,7 +46,7 @@ public class Transaccion extends ModelCustom<User> {
 	private TipoBeneficio tipoBeneficio; // Definido por Grupo
 	@Enumerated(EnumType.STRING)
 	private TipoDescuento tipoDescuento; // Definido por Grupo
-	@ManyToOne(optional = false, cascade = CascadeType.MERGE) @JsonBackReference
+	@ManyToOne(optional = false, cascade = CascadeType.MERGE)
 	private Persona persona;
 	@ManyToOne(optional = true, cascade = CascadeType.MERGE)
 	private Grupo grupo;

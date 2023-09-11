@@ -78,4 +78,14 @@ public class AgendaServiceJPA implements IAgendaService {
 	public boolean horarioDisponible(LocalDateTime inicio, LocalDateTime fin) {
 		return false;
 	}
+
+	@Override
+	public List<Agenda> buscarPorColaborador(UUID idColaborador) {
+		return this.repo.findByColaboradorId(idColaborador);
+	}
+
+	@Override
+	public List<Agenda> buscarPorPersona(UUID idPersona) {
+		return this.repo.findByPersonaId(idPersona);
+	}
 }

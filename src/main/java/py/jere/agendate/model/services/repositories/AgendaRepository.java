@@ -1,5 +1,6 @@
 package py.jere.agendate.model.services.repositories;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,5 +11,6 @@ import py.jere.agendate.model.services.RepositoryCustom;
 
 @Repository
 public interface AgendaRepository extends JpaRepository<Agenda, UUID>, RepositoryCustom<Agenda> {
-
+	List<Agenda> findByColaboradorId(UUID idColaborador);
+	List<Agenda> findByPersonaId(UUID idPersona);
 }

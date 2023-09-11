@@ -72,4 +72,9 @@ public class TransaccionServiceJPA implements ITransaccionService {
 	public Transaccion buscarUltimo() {
 		return this.repo.findTopByOrderByFechaCreacionDesc().orElseThrow();
 	}
+
+	@Override
+	public List<Transaccion> buscarPorPersona(UUID idPersona) {
+		return this.repo.findByPersonaId(idPersona);
+	}
 }

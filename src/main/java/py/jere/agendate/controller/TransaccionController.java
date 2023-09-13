@@ -39,7 +39,7 @@ public class TransaccionController {
 		System.out.println("Guardando Transaccion: " + guardar.toString());
 		return ResponseEntity.ok(service.guardar(guardar));
 	}
-
+	
 	@GetMapping
 	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
 		if (activo == null) {

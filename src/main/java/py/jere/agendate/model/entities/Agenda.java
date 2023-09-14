@@ -46,11 +46,11 @@ public class Agenda extends ModelCustom<User> {
 	@Column
 	private boolean diaCompleto;
 
-	@Column
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Situacion situacion;
 
-	@Column
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Prioridad prioridad;
 

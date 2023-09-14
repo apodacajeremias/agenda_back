@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,6 +37,7 @@ import py.jere.agendate.security.user.User;
 @DynamicUpdate
 public class Transaccion extends ModelCustom<User> {
 
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private TipoTransaccion tipo; // VENTA
 	private double total; // sumatoria - descuento

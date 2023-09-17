@@ -10,12 +10,12 @@ import py.jere.agendate.security.user.User;
 public class OnPasswordResetEvent extends ApplicationEvent {
 	private String appUrl;
 	private Locale locale;
-	private User usuario;
+	private User user;
 
-	public OnPasswordResetEvent(User usuario, Locale locale, String appUrl) {
-		super(usuario);
+	public OnPasswordResetEvent(User user, Locale locale, String appUrl) {
+		super(user);
 
-		this.usuario = usuario;
+		this.user = user;
 		this.locale = locale;
 		this.appUrl = appUrl;
 	}
@@ -37,11 +37,11 @@ public class OnPasswordResetEvent extends ApplicationEvent {
 	}
 
 	public User getUser() {
-		return usuario;
+		return user;
 	}
 
-	public void setUser(User usuario) {
-		this.usuario = usuario;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

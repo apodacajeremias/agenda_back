@@ -32,8 +32,8 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public boolean eliminar(UUID id) {
-			this.repo.deleteById(id);
-			return !this.existe(id);
+		this.repo.deleteById(id);
+		return !this.existe(id);
 	}
 
 	@Override
@@ -80,6 +80,11 @@ public class UserServiceJPA implements IUserService {
 	@Override
 	public void activarCuenta(UUID id) throws Exception {
 		this.repo.enableUser(id);
+	}
+
+	@Override
+	public void activarCambioContrasena(UUID id) {
+		this.repo.changePassword(id);
 	}
 
 }

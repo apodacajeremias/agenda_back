@@ -21,5 +21,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	@Transactional
 	@Query("UPDATE User u SET u.enabled = true WHERE u.id = :id")
 	void enableUser(@Param("id") UUID id);
+	@Modifying
+	@Transactional
+	@Query("UPDATE User u SET u.changePassword = true WHERE u.id = :id")
+	void changePassword(@Param("id") UUID id);
 
 }

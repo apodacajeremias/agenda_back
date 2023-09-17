@@ -15,7 +15,9 @@ import org.springframework.web.context.request.WebRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import py.jere.agendate.controller.events.OnPasswordResetEvent;
 import py.jere.agendate.controller.events.OnRegistrationCompleteEvent;
+import py.jere.agendate.security.user.User;
 
 @RestController
 @RequestMapping("/auth")
@@ -49,9 +51,9 @@ public class AuthenticationController {
 	}
 
 	@GetMapping("register/confirm/{id}")
-	public ResponseEntity<?> registrationConfirm(WebRequest request, @PathVariable UUID id) throws Exception {
+	public void registrationConfirm(WebRequest request, @PathVariable UUID id) throws Exception {
 		service.registrationConfirm(id);
-		return ResponseEntity.ok().build();
+		
 	}
 
 	@PostMapping("/authenticate")
@@ -62,6 +64,24 @@ public class AuthenticationController {
 	@PostMapping("/refreshToken")
 	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		service.refreshToken(request, response);
+	}
+	
+	@PostMapping("/password/reset/{email}")
+	public void resetPassword(HttpServletRequest request, 
+			  @PathVariable("email") String email) {
+		User user = service.resetPassword(email);
+		eventPublisher.publishEvent(
+				new OnPasswordResetEvent(user, request.getLocale(), request.getContextPath()));
+	}
+	
+	@GetMapping("/password/change/{id}")
+	public void changePassword(HttpServletRequest request, @PathVariable UUID id) throws Exception {
+		service.validatePasswordResetToken(id);
+	}
+	
+	@PostMapping("/password/save")
+	public void savePassword(PasswordRequest request) throws Exception {
+		service.savePassword(request);
 	}
 
 }

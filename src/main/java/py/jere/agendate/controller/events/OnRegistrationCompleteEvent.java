@@ -10,12 +10,12 @@ import py.jere.agendate.security.user.User;
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
 	private String appUrl;
 	private Locale locale;
-	private User usuario;
+	private User user;
 
-	public OnRegistrationCompleteEvent(User usuario, Locale locale, String appUrl) {
-		super(usuario);
+	public OnRegistrationCompleteEvent(User user, Locale locale, String appUrl) {
+		super(user);
 
-		this.usuario = usuario;
+		this.user = user;
 		this.locale = locale;
 		this.appUrl = appUrl;
 	}
@@ -37,11 +37,11 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
 	}
 
 	public User getUser() {
-		return usuario;
+		return user;
 	}
 
 	public void setUser(User usuario) {
-		this.usuario = usuario;
+		this.user = usuario;
 	}
 
 }

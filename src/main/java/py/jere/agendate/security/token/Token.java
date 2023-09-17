@@ -16,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import py.jere.agendate.security.user.User;
@@ -36,8 +35,7 @@ public class Token {
 	public String token;
 
 	@Enumerated(EnumType.STRING)
-	@Default
-	public TokenType tokenType = TokenType.BEARER;
+	public TokenType type;
 
 	public boolean revoked;
 

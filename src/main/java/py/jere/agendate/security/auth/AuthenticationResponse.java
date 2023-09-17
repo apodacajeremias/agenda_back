@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import py.jere.agendate.model.entities.Persona;
+import py.jere.agendate.model.entities.Empresa;
+import py.jere.agendate.security.user.User;
 
 @Data
 @Builder
@@ -14,6 +15,6 @@ public class AuthenticationResponse {
  
   private String accessToken;
   private String refreshToken;
-  private Persona persona;
-//  private Empresa empresa;
+  private User user; 
+  private Empresa empresa;
 }

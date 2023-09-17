@@ -16,8 +16,7 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public User registrar(User registrar) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.save(registrar);
 	}
 
 	@Override
@@ -28,36 +27,28 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public List<User> guardarTodos(List<User> guardarTodos) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.saveAll(guardarTodos);
 	}
 
 	@Override
 	public boolean eliminar(UUID id) {
-		try {
 			this.repo.deleteById(id);
 			return !this.existe(id);
-		} catch (Exception e) {
-			return false;
-		}
 	}
 
 	@Override
 	public boolean existe(UUID id) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.repo.existsById(id);
 	}
 
 	@Override
 	public List<User> buscarActivos() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.findByEnabledIsTrue();
 	}
 
 	@Override
 	public List<User> buscarInactivos() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.findByEnabledIsFalse();
 	}
 
 	@Override
@@ -67,8 +58,7 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public User buscar(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.findById(id).orElseThrow();
 	}
 
 	@Override
@@ -79,20 +69,17 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public User buscarPorEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.findByEmail(email).orElseThrow();
 	}
 
 	@Override
 	public boolean existeEmail(String email) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.repo.existsByEmail(email);
 	}
 
 	@Override
 	public void activarCuenta(UUID id) throws Exception {
-		// TODO Auto-generated method stub
-
+		this.repo.enableUser(id);
 	}
 
 }

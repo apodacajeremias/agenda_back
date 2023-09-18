@@ -1,6 +1,5 @@
 package py.jere.agendate.security.auth;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -26,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import py.jere.agendate.model.exceptions.InvalidOldPasswordException;
 import py.jere.agendate.model.exceptions.UserAlreadyExistException;
 import py.jere.agendate.security.config.JwtService;
 import py.jere.agendate.security.token.ITokenService;
@@ -127,7 +127,7 @@ public class AuthenticationService {
 		revokeAllUserTokens(user, TokenType.PASSWORD_RESET);
 		return user;
 	}
-	
+
 	public void changePassword(UUID idToken) throws Exception {
 		validateToken(idToken, TokenType.PASSWORD_RESET);
 	}
@@ -140,13 +140,30 @@ public class AuthenticationService {
 		if (!request.getPassword().equals(request.getMatchingPassword())) {
 			throw new Exception("Las contraseñas no coinciden.");
 		}
-		Token t = validateToken(idToken, TokenType.PASSWORD_RESET);
-		User user = t.getUser();
-		user.setChangePassword(false);
-		user.setLastPasswordChange(LocalDate.now());
-		user.setPassword(passwordEncoder.encode(request.getMatchingPassword()));
-		this.userService.registrar(user);
+		final Token t = validateToken(idToken, TokenType.PASSWORD_RESET);
+		final User user = t.getUser();
+		final String encodedNewPassword = passwordEncoder.encode(request.getMatchingPassword());
+		this.userService.cambiarContrasena(user, encodedNewPassword);
 		revokeAllUserTokens(user, TokenType.PASSWORD_RESET);
+	}
+
+	public void updatePassword(UUID idUser, PasswordRequest request) throws Exception {
+		RuleResult result = validator.validate(new PasswordData(request.getPassword()));
+		User user = this.userService.buscar(idUser);
+		if (!validateOldPassword(request.getOldPassword(), user)) {
+			throw new InvalidOldPasswordException();
+		}
+		if (!result.isValid()) {
+			throw new Exception("Contrasena invalida: " + result.getDetails().toString());
+		}
+		if (!request.getPassword().equals(request.getMatchingPassword())) {
+			throw new Exception("Las contraseñas no coinciden.");
+		}
+		
+		final String encodedNewPassword = passwordEncoder.encode(request.getMatchingPassword());
+		this.userService.cambiarContrasena(user, encodedNewPassword);
+		revokeAllUserTokens(user, TokenType.PASSWORD_RESET);
+
 	}
 
 	/////
@@ -161,6 +178,7 @@ public class AuthenticationService {
 		tokenService.inactivarTodosLosTokensPorUserPorTipo(user.getId(), type);
 	}
 
+	// TODO: Validar si revoked o expired en BD, hay casos que no requieren esta verificacion
 	private Token validateToken(UUID idToken, TokenType type) throws Exception {
 		Token t = tokenService.buscar(idToken);
 		if (!t.type.equals(type)) {
@@ -170,6 +188,10 @@ public class AuthenticationService {
 			throw new Exception("El Token no es valido.");
 		}
 		return t;
+	}
+
+	private boolean validateOldPassword(String oldPassword, User user) {
+		return passwordEncoder.matches(oldPassword, user.getPassword());
 	}
 
 }

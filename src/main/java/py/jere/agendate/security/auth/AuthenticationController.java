@@ -62,7 +62,7 @@ public class AuthenticationController {
 		service.registrationConfirm(id);
 	}
 
-	@GetMapping("register/resend/{id}")
+	@GetMapping("/register/resend/{id}")
 	public void registrationResend(WebRequest request, @PathVariable UUID id) {
 		try {
 			Token response = service.registrationResend(id);
@@ -92,6 +92,12 @@ public class AuthenticationController {
 	@PostMapping("/password/save/{id}")
 	public void savePassword(PasswordRequest request, @PathVariable UUID id) throws Exception {
 		service.savePassword(id, request);
+	}
+
+	@PostMapping("/password/update/{id}")
+//	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_USER')")
+	public void updatePassword(@PathVariable UUID id, PasswordRequest request) throws Exception {
+		service.updatePassword(id, request);
 	}
 
 }

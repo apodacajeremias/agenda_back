@@ -9,4 +9,5 @@ public interface IUserService extends ServiceCustom<User> {
 	boolean existeEmail(String email);
 	void activarCuenta(UUID id) throws Exception;
 	void activarCambioContrasena(UUID id);
+	void cambiarContrasena(User user, String newPassword) throws Exception;
 }

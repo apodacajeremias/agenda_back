@@ -1,5 +1,6 @@
 package py.jere.agendate.security.user;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,7 +64,6 @@ public class UserServiceJPA implements IUserService {
 
 	@Override
 	public User buscarUltimo() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -85,6 +85,14 @@ public class UserServiceJPA implements IUserService {
 	@Override
 	public void activarCambioContrasena(UUID id) {
 		this.repo.changePassword(id);
+	}
+
+	@Override
+	public void cambiarContrasena(User user, String encodedNewPassword) throws Exception {
+		user.setChangePassword(false);
+		user.setLastPasswordChange(LocalDate.now());
+		user.setPassword(encodedNewPassword);
+		this.registrar(user);
 	}
 
 }

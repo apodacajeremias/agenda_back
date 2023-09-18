@@ -151,7 +151,7 @@ public class AuthenticationService {
 		RuleResult result = validator.validate(new PasswordData(request.getPassword()));
 		User user = this.userService.buscar(idUser);
 		if (!validateOldPassword(request.getOldPassword(), user)) {
-			throw new InvalidOldPasswordException();
+			throw new InvalidOldPasswordException("Contraseña anterior no válida.");
 		}
 		if (!result.isValid()) {
 			throw new Exception("Contrasena invalida: " + result.getDetails().toString());

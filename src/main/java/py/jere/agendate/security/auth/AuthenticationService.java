@@ -69,19 +69,20 @@ public class AuthenticationService {
 
 	public void registrationConfirm(UUID idToken) throws Exception {
 		TokenType type = TokenType.VERIFICATION;
-		Token v = validateToken(idToken, type);
+		Token v = validateTokenById(idToken, type);
 		userService.activarCuenta(v.getUser().getId());
 		revokeAllUserTokens(v.getUser(), type);
 	}
 
 	public Token registrationResend(UUID existingToken) throws Exception {
 		TokenType type = TokenType.VERIFICATION;
-		Token v = validateToken(existingToken, type);
+		Token v = validateTokenById(existingToken, type);
 		revokeAllUserTokens(v.getUser(), type);
 		return v;
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) throws Exception {
+		System.out.println("Autenticando...");
 		authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 		var user = userService.buscarPorEmail(request.getEmail());
@@ -89,15 +90,24 @@ public class AuthenticationService {
 		var refreshToken = jwtService.generateRefreshToken(user);
 		revokeAllUserTokens(user, TokenType.BEARER);
 		saveUserToken(user, jwtToken);
+		System.out.println("Autenticado!");
 		return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).user(user).build();
 	}
 
-	public AuthenticationResponse findToken(String token) throws Exception {
-		var t = tokenService.buscarPorToken(token);
-		if (t.isExpired() || t.isRevoked()) {
-			throw new Exception("Expirado o revocado.");
-		}
-		return AuthenticationResponse.builder().accessToken(t.getToken()).user(t.getUser()).build();
+	/**
+	 * Se utiliza para validar token de tipo BEARER, solo para acceso
+	 * 
+	 * @param token
+	 * @throws Exception
+	 */
+	public AuthenticationResponse validateToken(String token) throws Exception {
+		System.out.println("Validando token...");
+		Token t = validateTokenByValue(token, TokenType.BEARER);
+		var user = t.getUser();
+		var jwtToken = t.getToken();
+		var refreshToken = jwtService.generateRefreshToken(user);
+		System.out.println("Token válido!");
+		return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).user(user).build();
 	}
 
 	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -129,7 +139,7 @@ public class AuthenticationService {
 	}
 
 	public void changePassword(UUID idToken) throws Exception {
-		validateToken(idToken, TokenType.PASSWORD_RESET);
+		validateTokenById(idToken, TokenType.PASSWORD_RESET);
 	}
 
 	public void savePassword(UUID idToken, PasswordRequest request) throws Exception {
@@ -140,7 +150,7 @@ public class AuthenticationService {
 		if (!request.getPassword().equals(request.getMatchingPassword())) {
 			throw new Exception("Las contraseñas no coinciden.");
 		}
-		final Token t = validateToken(idToken, TokenType.PASSWORD_RESET);
+		final Token t = validateTokenById(idToken, TokenType.PASSWORD_RESET);
 		final User user = t.getUser();
 		final String encodedNewPassword = passwordEncoder.encode(request.getMatchingPassword());
 		this.userService.cambiarContrasena(user, encodedNewPassword);
@@ -159,7 +169,7 @@ public class AuthenticationService {
 		if (!request.getPassword().equals(request.getMatchingPassword())) {
 			throw new Exception("Las contraseñas no coinciden.");
 		}
-		
+
 		final String encodedNewPassword = passwordEncoder.encode(request.getMatchingPassword());
 		this.userService.cambiarContrasena(user, encodedNewPassword);
 		revokeAllUserTokens(user, TokenType.PASSWORD_RESET);
@@ -168,6 +178,14 @@ public class AuthenticationService {
 
 	/////
 
+	/**
+	 * Guardar el token de acceso generado y asocia el usuario. TokenType.BEARER por
+	 * defecto
+	 * 
+	 * @param user
+	 * @param jwtToken
+	 * @throws Exception
+	 */
 	private void saveUserToken(User user, String jwtToken) throws Exception {
 		var token = Token.builder().user(user).token(jwtToken).type(TokenType.BEARER).expired(false).revoked(false)
 				.build();
@@ -178,14 +196,50 @@ public class AuthenticationService {
 		tokenService.inactivarTodosLosTokensPorUserPorTipo(user.getId(), type);
 	}
 
-	// TODO: Validar si revoked o expired en BD, hay casos que no requieren esta verificacion
-	private Token validateToken(UUID idToken, TokenType type) throws Exception {
+	/**
+	 * Busca el token por ID
+	 * 
+	 * @param idToken
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
+	private Token validateTokenById(UUID idToken, TokenType type) throws Exception {
 		Token t = tokenService.buscar(idToken);
 		if (!t.type.equals(type)) {
 			throw new Exception("El tipo del Token no es correcto. Tipo -> " + t.getType());
 		}
 		if (!jwtService.isTokenValid(t.getToken(), t.getUser())) {
 			throw new Exception("El Token no es valido.");
+		}
+		if (type.equals(TokenType.BEARER)) {
+			if (t.isExpired() || t.isRevoked()) {
+				throw new Exception("El Token es invalido.");
+			}
+		}
+		return t;
+	}
+
+	/**
+	 * Busca el token por su valor
+	 * 
+	 * @param token
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
+	private Token validateTokenByValue(String token, TokenType type) throws Exception {
+		Token t = tokenService.buscarPorToken(token);
+		if (!t.type.equals(type)) {
+			throw new Exception("El tipo del Token no es correcto. Tipo -> " + t.getType());
+		}
+		if (!jwtService.isTokenValid(t.getToken(), t.getUser())) {
+			throw new Exception("El Token no es valido.");
+		}
+		if (type.equals(TokenType.BEARER)) {
+			if (t.isExpired() || t.isRevoked()) {
+				throw new Exception("El Token es invalido.");
+			}
 		}
 		return t;
 	}

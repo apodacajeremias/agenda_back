@@ -9,12 +9,13 @@ import py.jere.agendate.security.user.User;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class AuthenticationResponse {
- 
-  private String accessToken;
-  private String refreshToken;
-  private User user; 
-  private Empresa empresa;
+
+	private String accessToken;
+	private String refreshToken;
+	private User user;
+	private Empresa empresa;
+
 }

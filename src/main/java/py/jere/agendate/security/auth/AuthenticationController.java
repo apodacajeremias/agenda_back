@@ -33,8 +33,8 @@ public class AuthenticationController {
 	private ApplicationEventPublisher eventPublisher;
 
 	@GetMapping("/{token}")
-	public ResponseEntity<AuthenticationResponse> findToken(@PathVariable String token) throws Exception {
-		return ResponseEntity.ok(service.findToken(token));
+	public ResponseEntity<AuthenticationResponse> validateToken(@PathVariable String token) throws Exception {
+		return ResponseEntity.ok(service.validateToken(token));
 	}
 
 	@PostMapping("/refreshToken")
@@ -95,7 +95,6 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/password/update/{id}")
-//	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_USER')")
 	public void updatePassword(@PathVariable UUID id, PasswordRequest request) throws Exception {
 		service.updatePassword(id, request);
 	}

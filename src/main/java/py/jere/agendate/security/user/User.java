@@ -2,16 +2,12 @@ package py.jere.agendate.security.user;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,7 +17,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -32,7 +27,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import py.jere.agendate.model.entities.Persona;
 import py.jere.agendate.model.interfaces.ValidEmail;
-import py.jere.agendate.security.token.Token;
 
 @Data
 @Builder
@@ -63,13 +57,6 @@ public class User implements UserDetails {
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	private Persona persona;
-
-	@OneToMany(mappedBy = "user")
-	@JsonIgnore
-	@ToString.Exclude
-	@EqualsAndHashCode.Exclude
-	@JsonManagedReference
-	private List<Token> tokens;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -68,15 +68,17 @@ public class AuthenticationService {
 	}
 
 	public void registrationConfirm(UUID idToken) throws Exception {
-		Token v = tokenService.buscar(idToken);
-		if (!v.type.equals(TokenType.VERIFICATION)) {
-			throw new Exception("El tipo del Token no es correcto. Tipo -> " + v.getType());
-		}
-		if (!jwtService.isTokenValid(v.getToken(), v.getUser())) {
-			throw new Exception("El Token no es valido.");
-		}
+		TokenType type = TokenType.VERIFICATION;
+		Token v = validateToken(idToken, type);
 		userService.activarCuenta(v.getUser().getId());
-		revokeAllUserTokens(v.getUser(), TokenType.VERIFICATION);
+		revokeAllUserTokens(v.getUser(), type);
+	}
+
+	public Token registrationResend(UUID existingToken) throws Exception {
+		TokenType type = TokenType.VERIFICATION;
+		Token v = validateToken(existingToken, type);
+		revokeAllUserTokens(v.getUser(), type);
+		return v;
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) throws Exception {
@@ -119,25 +121,18 @@ public class AuthenticationService {
 			}
 		}
 	}
-	
+
 	public User resetPassword(String email) {
 		User user = this.userService.buscarPorEmail(email);
 		revokeAllUserTokens(user, TokenType.PASSWORD_RESET);
 		return user;
 	}
 	
-	public Token validatePasswordResetToken(UUID idToken) throws Exception {
-		Token t = tokenService.buscar(idToken);
-		if (!t.type.equals(TokenType.PASSWORD_RESET)) {
-			throw new Exception("El tipo del Token no es correcto. Tipo -> " + t.getType());
-		}
-		if (!jwtService.isTokenValid(t.getToken(), t.getUser())) {
-			throw new Exception("El Token no es valido.");
-		}
-		return t;
+	public void changePassword(UUID idToken) throws Exception {
+		validateToken(idToken, TokenType.PASSWORD_RESET);
 	}
-	
-	public void savePassword(PasswordRequest request) throws Exception {
+
+	public void savePassword(UUID idToken, PasswordRequest request) throws Exception {
 		RuleResult result = validator.validate(new PasswordData(request.getPassword()));
 		if (!result.isValid()) {
 			throw new Exception("Contrasena invalida: " + result.getDetails().toString());
@@ -145,7 +140,7 @@ public class AuthenticationService {
 		if (!request.getPassword().equals(request.getMatchingPassword())) {
 			throw new Exception("Las contraseñas no coinciden.");
 		}
-		Token t = validatePasswordResetToken(request.getToken());
+		Token t = validateToken(idToken, TokenType.PASSWORD_RESET);
 		User user = t.getUser();
 		user.setChangePassword(false);
 		user.setLastPasswordChange(LocalDate.now());
@@ -164,6 +159,17 @@ public class AuthenticationService {
 
 	private void revokeAllUserTokens(User user, TokenType type) {
 		tokenService.inactivarTodosLosTokensPorUserPorTipo(user.getId(), type);
+	}
+
+	private Token validateToken(UUID idToken, TokenType type) throws Exception {
+		Token t = tokenService.buscar(idToken);
+		if (!t.type.equals(type)) {
+			throw new Exception("El tipo del Token no es correcto. Tipo -> " + t.getType());
+		}
+		if (!jwtService.isTokenValid(t.getToken(), t.getUser())) {
+			throw new Exception("El Token no es valido.");
+		}
+		return t;
 	}
 
 }

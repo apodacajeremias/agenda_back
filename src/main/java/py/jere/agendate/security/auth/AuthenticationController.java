@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import py.jere.agendate.controller.events.OnPasswordResetEvent;
 import py.jere.agendate.controller.events.OnRegistrationCompleteEvent;
+import py.jere.agendate.controller.events.OnResendRegistrationEvent;
+import py.jere.agendate.security.token.Token;
 import py.jere.agendate.security.user.User;
 
 @RestController
@@ -35,6 +37,11 @@ public class AuthenticationController {
 		return ResponseEntity.ok(service.findToken(token));
 	}
 
+	@PostMapping("/refreshToken")
+	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		service.refreshToken(request, response);
+	}
+
 	@PostMapping("/register")
 	public ResponseEntity<AuthenticationResponse> register(RegisterRequest register, HttpServletRequest request)
 			throws Exception {
@@ -50,10 +57,20 @@ public class AuthenticationController {
 		}
 	}
 
-	@GetMapping("register/confirm/{id}")
+	@GetMapping("/register/confirm/{id}")
 	public void registrationConfirm(WebRequest request, @PathVariable UUID id) throws Exception {
 		service.registrationConfirm(id);
-		
+	}
+
+	@GetMapping("register/resend/{id}")
+	public void registrationResend(WebRequest request, @PathVariable UUID id) {
+		try {
+			Token response = service.registrationResend(id);
+			eventPublisher.publishEvent(
+					new OnResendRegistrationEvent(response.getUser(), request.getLocale(), request.getContextPath()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@PostMapping("/authenticate")
@@ -61,27 +78,20 @@ public class AuthenticationController {
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 
-	@PostMapping("/refreshToken")
-	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		service.refreshToken(request, response);
-	}
-	
 	@PostMapping("/password/reset/{email}")
-	public void resetPassword(HttpServletRequest request, 
-			  @PathVariable("email") String email) {
+	public void resetPassword(HttpServletRequest request, @PathVariable("email") String email) {
 		User user = service.resetPassword(email);
-		eventPublisher.publishEvent(
-				new OnPasswordResetEvent(user, request.getLocale(), request.getContextPath()));
+		eventPublisher.publishEvent(new OnPasswordResetEvent(user, request.getLocale(), request.getContextPath()));
 	}
-	
+
 	@GetMapping("/password/change/{id}")
 	public void changePassword(HttpServletRequest request, @PathVariable UUID id) throws Exception {
-		service.validatePasswordResetToken(id);
+		service.changePassword(id);
 	}
-	
-	@PostMapping("/password/save")
-	public void savePassword(PasswordRequest request) throws Exception {
-		service.savePassword(request);
+
+	@PostMapping("/password/save/{id}")
+	public void savePassword(PasswordRequest request, @PathVariable UUID id) throws Exception {
+		service.savePassword(id, request);
 	}
 
 }

@@ -21,12 +21,7 @@ public class AgendaServiceJPA implements IAgendaService {
 
 	@Override
 	public Agenda registrar(Agenda registrar) throws Exception {
-		return guardar(registrar);
-	}
-
-	@Override
-	public Agenda guardar(Agenda guardar) {
-		return this.repo.save(guardar);
+		return this.repo.save(registrar);
 	}
 
 	@Override

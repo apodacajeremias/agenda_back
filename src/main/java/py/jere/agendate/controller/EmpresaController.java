@@ -28,14 +28,13 @@ public class EmpresaController {
 	IEmpresaService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(Empresa guardar) {
+	private ResponseEntity<?> guardar(Empresa guardar) throws Exception {
 		System.out.println("Guardando Empresa: " + guardar.toString());
-		return ResponseEntity.ok(service.guardar(guardar));
+		return ResponseEntity.ok(service.registrar(guardar));
 	}
 
 	@GetMapping
-	private ResponseEntity<List<?>> buscarPorEstado(
-			@RequestParam(required = false) Boolean activo) {
+	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
 		if (activo == null) {
 			System.out.println("Buscando Empresa: Todos");
 			return ResponseEntity.ok(service.buscarTodos());
@@ -52,11 +51,11 @@ public class EmpresaController {
 	}
 
 	@PutMapping("/{id}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID id, Empresa actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Empresa actualizar) throws Exception {
 		System.out.println("Actualizando Empresa: " + id + " -> " + actualizar);
 		Empresa existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(service.registrar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{id}")

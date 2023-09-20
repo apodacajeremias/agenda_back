@@ -21,12 +21,7 @@ public class PromocionServiceJPA implements IPromocionService {
 
 	@Override
 	public Promocion registrar(Promocion registrar) throws Exception {
-		return guardar(registrar);
-	}
-
-	@Override
-	public Promocion guardar(Promocion guardar) {
-		return this.repo.save(guardar);
+		return this.repo.save(registrar);
 	}
 
 	@Override

@@ -33,13 +33,13 @@ public class TransaccionController {
 	ITransaccionDetalleService serviceDetalle;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(Transaccion guardar) {
+	private ResponseEntity<?> guardar(Transaccion guardar) throws Exception {
 		guardar.setNombre("");
 		guardar.setActivo(true);
 		System.out.println("Guardando Transaccion: " + guardar.toString());
-		return ResponseEntity.ok(service.guardar(guardar));
+		return ResponseEntity.ok(service.registrar(guardar));
 	}
-	
+
 	@GetMapping
 	private ResponseEntity<List<?>> buscarPorEstado(@RequestParam(required = false) Boolean activo) {
 		if (activo == null) {
@@ -58,11 +58,11 @@ public class TransaccionController {
 	}
 
 	@PutMapping("/{id}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID id, Transaccion actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Transaccion actualizar) throws Exception {
 		System.out.println("Actualizando Transaccion: " + id + " -> " + actualizar);
 		Transaccion existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(service.registrar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{id}")
@@ -80,11 +80,11 @@ public class TransaccionController {
 	/////////////////
 
 	@PostMapping("/{idTransaccion}/detalles")
-	private ResponseEntity<?> guardarDetalle(@PathVariable UUID idTransaccion,
-			TransaccionDetalle guardar) {
+	private ResponseEntity<?> guardarDetalle(@PathVariable UUID idTransaccion, TransaccionDetalle guardar)
+			throws Exception {
 		guardar.setTransaccion(Transaccion.builder().id(idTransaccion).build());
 		System.out.println("Guardando Transaccion Detalle: " + guardar.toString());
-		return ResponseEntity.ok(serviceDetalle.guardar(guardar));
+		return ResponseEntity.ok(serviceDetalle.registrar(guardar));
 	}
 
 	@GetMapping("/detalles")
@@ -106,12 +106,12 @@ public class TransaccionController {
 
 	@PutMapping("/{idTransaccion}/detalles/{idDetalle}")
 	private ResponseEntity<?> actualizar(@PathVariable UUID idTransaccion, @PathVariable UUID idDetalle,
-			TransaccionDetalle actualizar) {
+			TransaccionDetalle actualizar) throws Exception {
 		System.out.println("Actualizando Transaccion Detalle ->" + idDetalle);
 		System.out.println("Actualizando -> " + actualizar);
 		TransaccionDetalle existente = serviceDetalle.buscar(idTransaccion, idDetalle);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(serviceDetalle.guardar(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(serviceDetalle.registrar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{idTransaccion}/detalles/{idDetalle}")

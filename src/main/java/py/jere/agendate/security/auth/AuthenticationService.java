@@ -48,6 +48,7 @@ public class AuthenticationService {
 					new AlphabeticalSequenceRule(3, false), new QwertySequenceRule(3, false), new WhitespaceRule()));
 
 	public AuthenticationResponse register(RegisterRequest request) throws Exception {
+		System.out.println("Registrando...");
 		RuleResult result = validator.validate(new PasswordData(request.getPassword()));
 		if (!result.isValid()) {
 			throw new Exception("Contrasena invalida: " + result.getDetails().toString());
@@ -64,6 +65,7 @@ public class AuthenticationService {
 		var jwtToken = jwtService.generateToken(user);
 		var refreshToken = jwtService.generateRefreshToken(user);
 		saveUserToken(savedUser, jwtToken);
+		System.out.println("Registrado!");
 		return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).user(user).build();
 	}
 
@@ -175,6 +177,8 @@ public class AuthenticationService {
 		revokeAllUserTokens(user, TokenType.PASSWORD_RESET);
 
 	}
+
+
 
 	/////
 

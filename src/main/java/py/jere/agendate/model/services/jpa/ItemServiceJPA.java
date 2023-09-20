@@ -20,12 +20,7 @@ public class ItemServiceJPA implements IItemService {
 
 	@Override
 	public Item registrar(Item registrar) throws Exception {
-		return guardar(registrar);
-	}
-
-	@Override
-	public Item guardar(Item guardar) {
-		return this.repo.save(guardar);
+		return this.repo.save(registrar);
 	}
 
 	@Override

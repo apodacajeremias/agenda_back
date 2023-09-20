@@ -20,12 +20,6 @@ public class TokenServiceJPA implements ITokenService {
 	}
 
 	@Override
-	public Token guardar(Token guardar) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Token> guardarTodos(List<Token> guardarTodos) {
 		return this.repo.saveAll(guardarTodos);
 	}
@@ -45,7 +39,7 @@ public class TokenServiceJPA implements ITokenService {
 	public List<Token> buscarActivos() {
 		return this.repo.findByRevokedIsFalseAndExpiredIsFalse();
 	}
-	
+
 	@Override
 	public List<Token> buscarInactivos() {
 		return this.repo.findByRevokedIsTrueOrExpiredIsTrue();
@@ -87,11 +81,9 @@ public class TokenServiceJPA implements ITokenService {
 		return this.repo.findByUserIdAndTypeAndRevokedIsFalseAndExpiredIsFalse(id, tipo);
 	}
 
-
 	@Override
 	public void inactivarTodosLosTokensPorUserPorTipo(UUID id, TokenType tipo) {
 		this.repo.revokeAndExpireByIdAndType(id, tipo);
 	}
 
-	
 }

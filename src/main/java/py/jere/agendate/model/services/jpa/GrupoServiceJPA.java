@@ -20,12 +20,7 @@ public class GrupoServiceJPA implements IGrupoService {
 
 	@Override
 	public Grupo registrar(Grupo registrar) throws Exception {
-		return guardar(registrar);
-	}
-
-	@Override
-	public Grupo guardar(Grupo guardar) {
-		return this.repo.save(guardar);
+		return this.repo.save(registrar);
 	}
 
 	@Override

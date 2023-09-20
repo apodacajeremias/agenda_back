@@ -28,9 +28,9 @@ public class ItemController {
 	IItemService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(Item guardar) {
+	private ResponseEntity<?> guardar(Item guardar)  throws Exception {
 		System.out.println("Guardando Item: " + guardar.toString());
-		return ResponseEntity.ok(service.guardar(guardar));
+		return ResponseEntity.ok(service.registrar(guardar));
 	}
 
 	@GetMapping
@@ -51,11 +51,11 @@ public class ItemController {
 	}
 
 	@PutMapping("/{id}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID id, Item actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Item actualizar) throws Exception  {
 		System.out.println("Actualizando Item: " + id + " -> " + actualizar);
 		Item existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(service.registrar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{id}")

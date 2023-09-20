@@ -76,14 +76,15 @@ public class Persona extends ModelCustom<User> {
 	@Column
 	private String fotoPerfil;
 
-	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JsonManagedReference
 	private Colaborador colaborador;
 
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	@JsonManagedReference
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH }, mappedBy = "personas")
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+			CascadeType.REFRESH }, mappedBy = "personas")
 	private List<Grupo> grupos;
 
 	@SneakyThrows

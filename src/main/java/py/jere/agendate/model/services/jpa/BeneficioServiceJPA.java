@@ -20,12 +20,7 @@ public class BeneficioServiceJPA implements IBeneficioService {
 
 	@Override
 	public Beneficio registrar(Beneficio registrar) throws Exception {
-		return guardar(registrar);
-	}
-
-	@Override
-	public Beneficio guardar(Beneficio guardar) {
-		return this.repo.save(guardar);
+		return this.repo.save(registrar);
 	}
 
 	@Override

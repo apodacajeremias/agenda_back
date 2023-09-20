@@ -28,10 +28,10 @@ public class GrupoController {
 	IGrupoService service;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(Grupo guardar) {
+	private ResponseEntity<?> guardar(Grupo guardar)  throws Exception {
 		guardar.setActivo(true);
 		System.out.println("Guardando Grupo: " + guardar.toString());
-		return ResponseEntity.ok(service.guardar(guardar));
+		return ResponseEntity.ok(service.registrar(guardar));
 	}
 
 	@GetMapping
@@ -53,11 +53,11 @@ public class GrupoController {
 	}
 
 	@PutMapping("/{id}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID id, Grupo actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Grupo actualizar) throws Exception  {
 		System.out.println("Actualizando Grupo: " + id + " -> " + actualizar);
 		Grupo existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(service.registrar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{id}")

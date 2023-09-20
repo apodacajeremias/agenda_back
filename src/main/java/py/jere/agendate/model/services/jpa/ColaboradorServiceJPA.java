@@ -30,12 +30,7 @@ public class ColaboradorServiceJPA implements IColaboradorService {
 		if (registrar.getRegistroProfesional() != null && existeRegistroProfesional(registrar.getRegistroProfesional()))
 			throw new DuplicatedFieldException("El registro de profesional ya pertenece a otro colaborador -> "
 					+ registrar.getRegistroProfesional());
-		return guardar(registrar);
-	}
-
-	@Override
-	public Colaborador guardar(Colaborador guardar) {
-		return this.repo.save(guardar);
+		return this.repo.save(registrar);
 	}
 
 	@Override

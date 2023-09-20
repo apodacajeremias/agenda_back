@@ -20,12 +20,7 @@ public class TransaccionDetalleServiceJPA implements ITransaccionDetalleService 
 
 	@Override
 	public TransaccionDetalle registrar(TransaccionDetalle registrar) throws Exception {
-		return guardar(registrar);
-	}
-
-	@Override
-	public TransaccionDetalle guardar(TransaccionDetalle guardar) {
-		return this.repo.save(guardar);
+		return this.repo.save(registrar);
 	}
 
 	@Override

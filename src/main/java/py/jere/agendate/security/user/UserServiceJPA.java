@@ -21,12 +21,6 @@ public class UserServiceJPA implements IUserService {
 	}
 
 	@Override
-	public User guardar(User guardar) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<User> guardarTodos(List<User> guardarTodos) {
 		return this.repo.saveAll(guardarTodos);
 	}

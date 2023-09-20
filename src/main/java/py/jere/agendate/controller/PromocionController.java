@@ -34,9 +34,9 @@ public class PromocionController {
 //	GET 	/orders/{id} (get a single order)
 
 	@PostMapping
-	private ResponseEntity<?> guardar(Promocion guardar) {
+	private ResponseEntity<?> guardar(Promocion guardar) throws Exception {
 		System.out.println("Guardando Promocion: " + guardar.toString());
-		return ResponseEntity.ok(service.guardar(guardar));
+		return ResponseEntity.ok(service.registrar(guardar));
 	}
 
 	@GetMapping
@@ -57,11 +57,11 @@ public class PromocionController {
 	}
 
 	@PutMapping("/{id}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID id, Promocion actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Promocion actualizar)  throws Exception {
 		System.out.println("Actualizando Promocion: " + id + " -> " + actualizar);
 		Promocion existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(service.registrar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{id}")

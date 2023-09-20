@@ -27,14 +27,14 @@ public class ColaboradorController {
 
 	@Autowired
 	IColaboradorService service;
-	
+
 	@Autowired
 	IAgendaService agendaService;
 
 	@PostMapping
-	private ResponseEntity<?> guardar(Colaborador guardar) {
+	private ResponseEntity<?> guardar(Colaborador guardar) throws Exception {
 		System.out.println("Guardando Colaborador: " + guardar.toString());
-		return ResponseEntity.ok(service.guardar(guardar));
+		return ResponseEntity.ok(service.registrar(guardar));
 	}
 
 	@GetMapping
@@ -55,11 +55,11 @@ public class ColaboradorController {
 	}
 
 	@PutMapping("/{id}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID id, Colaborador actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, Colaborador actualizar) throws Exception {
 		System.out.println("Actualizando Colaborador: " + id + " -> " + actualizar);
 		Colaborador existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(service.registrar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{id}")
@@ -73,7 +73,7 @@ public class ColaboradorController {
 		System.out.println("Buscando Colaborador: " + id);
 		return ResponseEntity.ok(service.buscar(id));
 	}
-	
+
 	@GetMapping("/{id}/agendas")
 	private ResponseEntity<?> buscarAgendas(@PathVariable UUID id) {
 		System.out.println("Buscando agendamientos de Colaborador: " + id);

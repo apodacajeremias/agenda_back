@@ -43,15 +43,15 @@ public class PersonaController {
 
 	@PostMapping
 	private ResponseEntity<?> guardar(Persona guardar,
-			@RequestParam(name = "file", required = false) MultipartFile file) {
-		if (file != null) {
+			@RequestParam(name = "file", required = false) MultipartFile file)  throws Exception {
+		if (file != null && !file.isEmpty()) {
 			UploadFileResponse fileResponse = storage.uploadFile(file);
 			System.out.println(fileResponse);
 			guardar.setFotoPerfil(fileResponse.getFileName());
 		}
 		guardar.setActivo(true);
 		System.out.println("Guardando Persona: " + guardar.toString());
-		return ResponseEntity.ok(service.guardar(guardar));
+		return ResponseEntity.ok(service.registrar(guardar));
 	}
 
 	@GetMapping
@@ -73,8 +73,8 @@ public class PersonaController {
 
 	@PutMapping("/{id}")
 	private ResponseEntity<?> actualizar(@PathVariable UUID id, Persona actualizar,
-			@RequestParam(name = "file", required = false) MultipartFile file) {
-		if (file != null) {
+			@RequestParam(name = "file", required = false) MultipartFile file) throws Exception  {
+		if (file != null && !file.isEmpty()) {
 			UploadFileResponse fileResponse = storage.uploadFile(file);
 			System.out.println(fileResponse);
 			actualizar.setFotoPerfil(fileResponse.getFileName());
@@ -82,7 +82,7 @@ public class PersonaController {
 		System.out.println("Actualizando Persona: " + id + " -> " + actualizar);
 		Persona existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(service.registrar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@DeleteMapping("/{id}")

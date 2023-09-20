@@ -14,18 +14,6 @@ public interface ServiceCustom<T> {
 	 */
 	T registrar(T registrar) throws Exception;
 
-	// TODO: QUITAR ESTE METODO, no tiene sentido
-	/**
-	 * Se usa para ejecutar el guardado del registro en la base de datos, se
-	 * recomienda no usar este metodo directamente a pesar de estar disponible. Ya
-	 * que preferentemente se debe guardar el registro a traves del metodo
-	 * registrar(T registrar) porque el mismo valida y arroja excepciones
-	 * 
-	 * @param guardar
-	 * @return
-	 */
-	T guardar(T guardar);
-
 	List<T> guardarTodos(List<T> guardarTodos);
 
 	boolean eliminar(UUID id);

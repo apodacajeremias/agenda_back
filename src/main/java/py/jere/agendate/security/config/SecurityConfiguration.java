@@ -32,9 +32,8 @@ public class SecurityConfiguration {
     	.cors().and()
         .csrf().disable()
         .authorizeHttpRequests()
-        .requestMatchers(
-        		"/auth/**"
-        ).permitAll()
+        .requestMatchers("/auth/**")
+        	.permitAll()
 
         /*
         .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())

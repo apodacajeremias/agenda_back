@@ -20,12 +20,7 @@ public class EmpresaServiceJPA implements IEmpresaService {
 
 	@Override
 	public Empresa registrar(Empresa registrar) throws Exception {
-		return null;
-	}
-
-	@Override
-	public Empresa guardar(Empresa guardar) {
-		return this.repo.save(guardar);
+		return this.repo.save(registrar);
 	}
 
 	@Override

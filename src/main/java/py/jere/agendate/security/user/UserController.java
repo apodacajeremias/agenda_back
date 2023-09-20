@@ -29,9 +29,9 @@ public class UserController {
 
 	@Secured(value = {"ROLE_ADMIN", "admin:create"})
 	@PostMapping
-	private ResponseEntity<?> guardar(User guardar) {
+	private ResponseEntity<?> guardar(User guardar) throws Exception {
 		System.out.println("Guardando User: " + guardar.toString());
-		return ResponseEntity.ok(service.guardar(guardar));
+		return ResponseEntity.ok(service.registrar(guardar));
 	}
 
 	@Secured(value = {"ROLE_ADMIN", "ROLE_MANAGER"})
@@ -54,11 +54,11 @@ public class UserController {
 
 	@Secured(value = {"ROLE_ADMIN", "ROLE_MANAGER"})
 	@PutMapping("/{id}")
-	private ResponseEntity<?> actualizar(@PathVariable UUID id, User actualizar) {
+	private ResponseEntity<?> actualizar(@PathVariable UUID id, User actualizar) throws Exception {
 		System.out.println("Actualizando User: " + id + " -> " + actualizar);
 		User existente = service.buscar(id);
 		Beans.copyNonNullProperties(actualizar, existente); // Funde los datos
-		return ResponseEntity.ok(service.guardar(existente)); // Hibernate solo cambia datos modificados
+		return ResponseEntity.ok(service.registrar(existente)); // Hibernate solo cambia datos modificados
 	}
 
 	@Secured(value = {"ROLE_ADMIN"})

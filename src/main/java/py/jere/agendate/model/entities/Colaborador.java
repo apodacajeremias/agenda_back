@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
@@ -41,7 +42,7 @@ public class Colaborador extends ModelCustom<User> {
 	@Column
 	private String profesion;
 	
-	@OneToOne(mappedBy = "colaborador")
+	@OneToOne(mappedBy = "colaborador", cascade = CascadeType.MERGE)
 	@JsonBackReference
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude

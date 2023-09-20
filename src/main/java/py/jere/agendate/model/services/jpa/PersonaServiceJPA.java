@@ -39,12 +39,7 @@ public class PersonaServiceJPA implements IPersonaService {
 //			registrar.setUser(new User(usuarioGuardado.getID()));
 //
 //		}
-		return guardar(registrar);
-	}
-
-	@Override
-	public Persona guardar(Persona guardar) {
-		return this.repo.save(guardar);
+		return this.repo.save(registrar);
 	}
 
 	@Override

@@ -1,0 +1,10 @@
+Transaccion:
+Si tipo = VENTA, los pagos son por VENTA
+
+Pago:
+Si field se llama 'motivo' entonces se usa TipoTransaccion
+Si field se llama 'tipo' entonces nuevo enum TipoPago
+	TipoPago:
+	- COBRO
+	- PAGO
+	Si hay enum TipoPago entonces entidad se llamara Movimiento

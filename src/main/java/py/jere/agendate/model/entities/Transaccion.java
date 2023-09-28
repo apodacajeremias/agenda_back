@@ -25,6 +25,7 @@ import py.jere.agendate.model.enums.TipoDescuento;
 import py.jere.agendate.model.enums.TipoTransaccion;
 import py.jere.agendate.security.user.User;
 
+// Segun la RAE: Trato, convenio, negocio
 @Data
 @SuperBuilder
 @NoArgsConstructor
